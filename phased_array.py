@@ -27,3 +27,22 @@ def compute_wave_pattern(N, f, dir_angle, distance, grid, t=0):
     Rs = np.sqrt((X[:, :, None] - positions) ** 2 + Y[:, :, None] ** 2)
     Z = np.sum(np.cos(k * Rs + omega * t + dphi * np.arange(N)), axis=2)
     return Z, positions
+
+
+
+def compute_beam_profile(N, f, distance, dir_angle):
+    w = ultrasound_v_air / f  # Wavelength
+    k = 2 * np.pi / w  # Wave number
+    angles = np.linspace(-90, 90, 500)  # Array of angles in degrees
+    dir_rad = np.radians(dir_angle)  # Convert steering angle to radians
+
+    # Compute array factor for each angle
+    array_factor = np.zeros_like(angles, dtype=np.complex128)
+    for n in range(N):
+        # Calculate phase shift for each emitter based on the steering direction
+        phase_shift = k * distance * np.sin(np.radians(angles - dir_angle)) * n  # Adjust for steering direction
+        array_factor += np.exp(1j * phase_shift)
+
+    array_factor = np.abs(array_factor)  # Get the magnitude
+    array_factor /= np.max(array_factor)  # Normalize
+    return angles, 20 * np.log10(array_factor)  # Convert to dB scale
