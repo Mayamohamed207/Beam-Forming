@@ -24,28 +24,33 @@ class BeamForming:
        
         self.update_wave_pattern()
 
+
     def update_wave_pattern(self):
         # Update Constructive/Destructive Map
         self.Z, self.positions = compute_wave_pattern(
-            self.state['N'], self.state['f'], self.state['dir'], self.state['distance'], self.grid
+            self.state['N'], self.state['f'], self.state['dir'], self.state['distance'],
+            self.grid, geometry=self.state['geometry'], arc_radius=self.state.get('curvature', 1.0)
         )
         self.plot_simulation()
 
         # Update Beam Profile
         angles, beam_profile = compute_beam_profile(
-            self.state['N'], self.state['f'], self.state['distance'], self.state['dir']
+            self.state['N'], self.state['f'], self.state['distance'], self.state['dir'],
+            geometry=self.state['geometry'], arc_radius=self.state.get('curvature', 1.0)
         )
         self.plot_beam_profile(angles, beam_profile)
+
 
     def plot_simulation(self):
         self.map_ax.clear()
         self.map_ax.set_facecolor(darkColor)
         self.fig.patch.set_facecolor(darkColor)
-        x_min = np.min(self.grid[0])
-        x_max = np.max(self.grid[0])
-        self.map_ax.set_xticks(np.arange(x_min, x_max, 1))
+        self.map_ax.set_xticks(np.arange(np.min(self.grid[0]), np.max(self.grid[0]), 1))
+        self.map_ax.set_xlim(np.min(self.grid[0]), np.max(self.grid[0]))
+        self.map_ax.set_ylim(np.min(self.grid[1]), np.max(self.grid[1]))
+
         self.map_ax.contourf(self.grid[0], self.grid[1], self.Z, levels=50, cmap='viridis',extend='both')
-        self.map_ax.plot(self.positions, [0] * len(self.positions),  'o', color=purpleColor, markersize=10)
+        self.map_ax.plot(self.positions[:, 0], self.positions[:, 1], 'o', color=purpleColor, markersize=10)
         self.map_ax.set_xlabel("X Position (m)",color=greenColor)
         self.map_ax.set_ylabel("Y Position (m)",color=greenColor)
         self.map_ax.tick_params(axis='both', colors=greenColor) 

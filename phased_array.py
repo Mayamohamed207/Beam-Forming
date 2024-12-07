@@ -14,23 +14,38 @@ def initialize_simulation_grid(N, f, d, max_size=100):
     y = np.arange(0, size, dx)
     return np.meshgrid(x, y), w
 
-def compute_wave_pattern(N, f, dir_angle, distance, grid, t=0):
+def compute_wave_pattern(N, f, dir_angle, distance, grid, t=0, geometry="Linear", arc_radius=1.0):
     w = ultrasound_v_air / f  # Wavelength
     k = 2 * np.pi / w  # Wave number
     omega = 2 * np.pi * f  # Angular frequency
-    dir_rad = np.radians(dir_angle)  # Direction in radians
-    dphi = 2 * np.pi * distance * np.sin(dir_rad) / w  # Phase difference
-    positions = np.linspace(-(N - 1) * distance / 2, (N - 1) * distance / 2, N)
+    dir_rad = np.radians(dir_angle)  # Steering angle in radians
 
-    # Precompute distances from each emitter
+    if geometry == "Curved":
+        # Positions along a circular arc
+        angles = np.linspace(-np.pi / 4, np.pi / 4, N)
+        positions = arc_radius * np.stack((np.sin(angles), np.cos(angles)), axis=1)
+        dphi = k * arc_radius * np.sin(np.linspace(-np.pi / 4, np.pi / 4, N)) * np.sin(dir_rad)
+    else:
+        # Linear positions: N emitters spaced along X-axis
+        positions = np.linspace(-(N - 1) * distance / 2, (N - 1) * distance / 2, N)
+        positions = np.column_stack((positions, np.zeros_like(positions)))  # Add Y=0 for Linear mode
+
+        # Phase shift per emitter due to steering
+        dphi_per_distance = 2 * np.pi * distance * np.sin(dir_rad) / w
+        dphi = np.arange(-(N - 1) / 2, (N - 1) / 2 + 1) * dphi_per_distance
+
+    # Precompute distances from emitters
     X, Y = grid
-    Rs = np.sqrt((X[:, :, None] - positions) ** 2 + Y[:, :, None] ** 2)
-    Z = np.sum(np.cos(k * Rs + omega * t + dphi * np.arange(N)), axis=2)
+    Rs = np.sqrt((X[:, :, None] - positions[:, 0]) ** 2 + (Y[:, :, None] - positions[:, 1]) ** 2)
+
+    # Apply phase shifts
+    phase_shifts = k * Rs + omega * t + dphi[None, None, :]
+    Z = np.sum(np.cos(phase_shifts), axis=2)
     return Z, positions
 
 
 
-def compute_beam_profile(N, f, distance, dir_angle):
+def compute_beam_profile(N, f, distance, dir_angle, geometry="Linear", arc_radius=1.0):
     w = ultrasound_v_air / f  # Wavelength
     k = 2 * np.pi / w  # Wave number
     angles = np.linspace(-90, 90, 500)  # Array of angles in degrees
@@ -38,10 +53,20 @@ def compute_beam_profile(N, f, distance, dir_angle):
 
     # Compute array factor for each angle
     array_factor = np.zeros_like(angles, dtype=np.complex128)
-    for n in range(N):
-        # Calculate phase shift for each emitter based on the steering direction
-        phase_shift = k * distance * np.sin(np.radians(angles - dir_angle)) * n  # Adjust for steering direction
-        array_factor += np.exp(1j * phase_shift)
+
+    if geometry == "Curved":
+        # Curved geometry: emitter positions on a circular arc
+        emit_angles = np.linspace(-np.pi / 4, np.pi / 4, N)  # Spread emitters over a quarter-circle
+        positions = arc_radius * np.array([np.sin(emit_angles), np.cos(emit_angles)]).T  # Emitter positions
+        for pos in positions:
+            r_angle = np.arctan2(pos[1], pos[0])  # Relative angle of the emitter
+            phase_shift = k * distance * np.sin(np.radians(angles) - dir_rad) + r_angle
+            array_factor += np.exp(1j * phase_shift)
+    else:
+        # Linear geometry: emitters spaced along X-axis
+        for n in range(N):
+            phase_shift = k * distance * np.sin(np.radians(angles - dir_angle)) * n
+            array_factor += np.exp(1j * phase_shift)
 
     array_factor = np.abs(array_factor)  # Get the magnitude
     array_factor /= np.max(array_factor)  # Normalize

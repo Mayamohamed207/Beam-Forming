@@ -29,6 +29,21 @@ sliderStyle = f"""
         border-radius: 6px;
     }}
 """
+sliderDisabledStyle = f"""
+    QSlider::groove:horizontal {{
+        background: lightgray;
+        height: 6px;
+        border-radius: 3px;
+    }}
+    QSlider::handle:horizontal {{
+        background: lightgray;
+        border: 1px solid lightgray;
+        width: 12px;
+        height: 12px;
+        margin: -3px 0;
+        border-radius: 6px;
+    }}
+"""
 
 groupBoxStyle = f"""
     QGroupBox {{
