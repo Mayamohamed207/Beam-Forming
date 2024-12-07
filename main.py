@@ -349,8 +349,8 @@ class Main(QMainWindow):
         self.load_scenario_button = QPushButton("Load Scenario")
         self.load_scenario_button.setStyleSheet("background-color: lightblue; font-weight: bold")
 
-        self.constructive_map_canvas = FigureCanvas(plt.figure(figsize=(7, 4)))  # Larger canvas for Beam Profile
-        self.beam_profile_canvas = FigureCanvas(plt.figure(figsize=(7, 2)))  # Smaller canvas for secondary graph
+        self.constructive_map_canvas = FigureCanvas(plt.figure(figsize=(7, 4))) 
+        self.beam_profile_canvas = FigureCanvas(plt.figure(figsize=(7, 4))) 
 
     def layoutSet(self):
         controlBar_layout = QVBoxLayout()
@@ -380,6 +380,8 @@ class Main(QMainWindow):
 
         # Graphs Layout
         graphsBar_layout = QVBoxLayout()
+        graphsBar_layout.setSpacing(1)  
+        graphsBar_layout.setContentsMargins(0, 0, 0, 0)
         graphsBar_layout.addWidget(QLabel("Constructive/Destructive Map"))
         graphsBar_layout.addWidget(self.constructive_map_canvas)
         graphsBar_layout.addWidget(QLabel("Beam Profile Viewer"))
@@ -408,6 +410,9 @@ class Main(QMainWindow):
         self.geometry_dropdown.setStyleSheet(comboBoxStyle)
         self.scenario_dropdown.setStyleSheet(comboBoxStyle)
         self.load_scenario_button.setStyleSheet(buttonStyle)
+        self.constructive_map_canvas.figure.set_facecolor(darkColor) 
+        self.beam_profile_canvas.figure.set_facecolor(darkColor) 
+         
 
     def createGroupBox(self, title, widgets):
         groupbox = QGroupBox(title)
