@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from BeamFormingSystem import BeamForming
 import numpy as np
 from mainStyle import sliderStyle
-from mainStyle import  sliderStyle, groupBoxStyle , buttonStyle, spinBoxStyle, comboBoxStyle
+from mainStyle import mainStyle, sliderStyle, groupBoxStyle , buttonStyle, spinBoxStyle, comboBoxStyle,darkColor
 
 
 # class Main(QMainWindow):
@@ -323,7 +323,7 @@ class Main(QMainWindow):
 
         self.distance_label = QLabel("Position of Emitters:")
         self.distance_slider = QSlider(Qt.Horizontal)
-        self.distance_slider.setRange(1, 50)
+        self.distance_slider.setRange(1,100)
         self.distance_slider.setValue(10)
         self.distance_value = QLabel("0.10")
         self.distance_slider.setToolTip("Adjust distance between emitters")
@@ -398,7 +398,8 @@ class Main(QMainWindow):
         self.setCentralWidget(central_widget)
 
     def styleUi(self):
-        self.setStyleSheet(groupBoxStyle)
+        self.centralWidget().setStyleSheet(mainStyle)
+        self.setStyleSheet(groupBoxStyle)  
         self.frequency_slider.setStyleSheet(sliderStyle)
         self.phase_slider.setStyleSheet(sliderStyle)
         self.distance_slider.setStyleSheet(sliderStyle)
@@ -406,6 +407,7 @@ class Main(QMainWindow):
         self.emitters_spinbox.setStyleSheet(spinBoxStyle)
         self.geometry_dropdown.setStyleSheet(comboBoxStyle)
         self.scenario_dropdown.setStyleSheet(comboBoxStyle)
+        self.load_scenario_button.setStyleSheet(buttonStyle)
 
     def createGroupBox(self, title, widgets):
         groupbox = QGroupBox(title)

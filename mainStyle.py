@@ -1,92 +1,107 @@
-# sliderStyle = """
-#     QSlider::groove:horizontal {
-#         background: #B83777;
-#         height: 6px;
-#         border-radius: 3px;
-#     }
-#     QSlider::handle:horizontal {
-#         background: #F7775E;
-#         border: 1px solid #B83777;
-#         width: 12px;
-#         height: 12px;
-#         margin: -3px 0;
-#         border-radius: 6px;
-#     }
-# """
+greenColor = "#03efb0"
+# greenColor="#2BAF7E"
+darkColor = "#2D2D2D"
+purpleColor="#472B79"
+greenColorHover = "#0A6950"
 
-sliderStyle = """
-    QSlider::groove:horizontal {
-        background: #ddd;
+mainStyle = f"""
+    QMainWindow, QWidget {{
+        background-color: {darkColor};
+    }}
+    QLabel {{
+        color: {greenColor};
+        font-weight: bold; /* Optional for emphasis */
+    }} 
+"""
+
+sliderStyle = f"""
+    QSlider::groove:horizontal {{
+        background: {greenColor};
         height: 6px;
         border-radius: 3px;
-    }
-    QSlider::handle:horizontal {
-        background: #ddd;
-        border: 1px solid #ddd;
+    }}
+    QSlider::handle:horizontal {{
+        background: {greenColor};
+        border: 1px solid {greenColor};
         width: 12px;
         height: 12px;
         margin: -3px 0;
         border-radius: 6px;
-    }
+    }}
 """
 
-groupBoxStyle = """
-    QGroupBox {
-        border: 2px solid #a0a0a0;
+groupBoxStyle = f"""
+    QGroupBox {{
+        border: 2px solid {greenColor};
         border-radius: 10px;
         margin-top: 10px;
-        background-color: #f5f5f5;
+        background-color: #d39232;
         padding: 10px;
-    }
-    QGroupBox::title {
+    }}
+    QGroupBox::title {{
         subcontrol-origin: margin;
         subcontrol-position: top center;
         padding: 0 3px;
-        color: #333; /* Darker title color for better visibility */
+        color: {greenColor}; 
         font-weight: bold;
-    }
+    }}
 """
 
-buttonStyle = """
-    QPushButton {
-        background-color: #0078d7;
-        color: white;
+buttonStyle = f"""
+    QPushButton {{
+        background-color: {greenColor};
+        color: {purpleColor};
         font-weight: bold;
         border: none;
         padding: 8px 16px;
         border-radius: 8px;
-    }
-    QPushButton:hover {
-        background-color: #0053a4;
-    }
+    }}
+    QPushButton:hover {{
+        background-color: {greenColorHover};
+        color:white;
+    }}
 """
 
-# Style for spin boxes
-spinBoxStyle = """
-    QSpinBox {
-        background-color: #ffffff;
-        border: 1px solid #a0a0a0;
+spinBoxStyle = f"""
+    QSpinBox {{
+        background-color: {darkColor};  /* Match the dark color background */
+        border: 1px solid {greenColor};  /* Green border */
         border-radius: 5px;
         padding: 2px 6px;
         font-size: 14px;
-    }
+        color: {greenColor};  /* Green text color */
+    }}
+
+    QSpinBox:hover {{
+        border: 1px solid {greenColor};  /* Highlight border on hover */
+    }}
+
   
-    QSpinBox::up-button:hover, QSpinBox::down-button:hover {
-        background-color: #d0d0d0;
-    }
+
+  
+
 """
 
-# Style for combo boxes
-comboBoxStyle = """
-    QComboBox {
-        background-color: #ffffff;
-        border: 1px solid #a0a0a0;
+comboBoxStyle = f"""
+    QComboBox {{
+        background-color: {darkColor};  /* Match the dark color background */
+        border: 1px solid {greenColor};
         border-radius: 5px;
         padding: 2px 6px;
         font-size: 14px;
-    }
+        color: {greenColor};  /* Text color matches the green */
+    }}
    
-    QComboBox:hover {
-        border: 1px solid #0053a4;
-    }
+
+    
+    QComboBox QAbstractItemView {{
+        background-color: {darkColor};  /* Dark background for the dropdown items */
+        color: {greenColor};  /* Green text for the dropdown items */
+        border: 1px solid {greenColor};  /* Border color for the dropdown list */
+    }}
+
+    QComboBox QAbstractItemView::item:hover {{
+        background-color: {greenColor};  /* Highlight background when hovering over items */
+        color: {darkColor};  /* Change text color to dark on hover */
+    }}
 """
