@@ -11,6 +11,7 @@ from BeamFormingSystem import BeamForming
 import numpy as np
 from mainStyle import sliderStyle
 from mainStyle import mainStyle, sliderStyle, groupBoxStyle , buttonStyle, spinBoxStyle, comboBoxStyle,darkColor,sliderDisabledStyle
+from phased_array import set_speed, SPEED_OF_LIGHT, SPEED_OF_SOUND_TISSUE, SPEED_OF_SOUND_AIR
 
 
 
@@ -52,9 +53,9 @@ class Main(QMainWindow):
 
         self.frequency_label = QLabel("Frequency (Hz):")
         self.frequency_slider = QSlider(Qt.Horizontal)
-        self.frequency_slider.setRange(500, 5000)
-        self.frequency_slider.setValue(2000)
-        self.frequency_value = QLabel("2000")
+        self.frequency_slider.setRange(5000, 5000000)
+        self.frequency_slider.setValue(500000)
+        self.frequency_value = QLabel("500000")
         self.frequency_slider.setToolTip("Adjust frequency between 500Hz and 5000Hz")
 
         self.phase_label = QLabel("Phase Shift (°):")
@@ -73,7 +74,7 @@ class Main(QMainWindow):
 
         self.emitters_label = QLabel("Transmitters Number:")
         self.emitters_spinbox = QSpinBox()
-        self.emitters_spinbox.setRange(2, 16)
+        self.emitters_spinbox.setRange(2, 64)
         self.emitters_spinbox.setValue(8)
 
         self.geometry_label = QLabel("Geometry:")
@@ -83,7 +84,7 @@ class Main(QMainWindow):
         self.curvature_label = QLabel("Curvature:")
         self.curvature_slider = QSlider(Qt.Horizontal)
         self.curvature_slider.setRange(0, 50)
-        self.curvature_slider.setValue(0)
+        self.curvature_slider.setValue(1)
         self.curvature_value = QLabel("0.0")
         self.curvature_slider.setEnabled(False)
 
@@ -208,7 +209,7 @@ class Main(QMainWindow):
             self.frequency_widget.setParent(None)  
             self.distance_label.setText("Receiver Position:")
             self.emitters_label.setText("Receivers Number:")
-            self.emitters_spinbox.setRange(1, 16)
+            self.emitters_spinbox.setRange(1, 64)
             self.geometry_box.setVisible(False)
             
             self.distance_slider.setEnabled(True)
@@ -219,7 +220,7 @@ class Main(QMainWindow):
             self.parameters_box.insertWidget(0, self.frequency_widget)  
             self.distance_label.setText("Transmitter Position:")
             self.emitters_label.setText("Transmitters Number:")
-            self.emitters_spinbox.setRange(2, 16)
+            self.emitters_spinbox.setRange(2, 64)
             self.geometry_box.setVisible(True)
             if self.geometry_dropdown.currentText()== "Curved":
                 self.distance_slider.setEnabled(False)
@@ -270,27 +271,43 @@ class Main(QMainWindow):
             self.distance_slider.setEnabled(False)
             self.distance_slider.setStyleSheet(sliderDisabledStyle)  
         
-        self.update_plot()  
+        self.update_plot()
 
-        
     def load_scenario(self):
         scenario = self.scenario_dropdown.currentText()
         print(f"Loaded scenario: {scenario}")
+
         if scenario == "5G":
-            self.frequency_slider.setValue(28000)
-            self.phase_slider.setValue(45)
-            self.distance_slider.setValue(15)
-            self.emitters_spinbox.setValue(12)
-        elif scenario == "Ultrasound":
-            self.frequency_slider.setValue(2000)
-            self.phase_slider.setValue(0)
-            self.distance_slider.setValue(5)
+            # Switch to Receiver mode
+            set_speed(SPEED_OF_LIGHT)
+            self.mode_dropdown.setCurrentText("Receiver")
+            self.distance_slider.setValue(10)
             self.emitters_spinbox.setValue(8)
+            self.phase_slider.setValue(45)  # Steering direction
+        elif scenario == "Ultrasound":
+            # Switch to Transmitter mode
+            set_speed(SPEED_OF_SOUND_TISSUE)
+
+            self.mode_dropdown.setCurrentText("Transmitter")
+            self.frequency_slider.setValue(2000000)
+            self.phase_slider.setValue(10)
+            self.distance_slider.setValue(5)
+            self.emitters_spinbox.setValue(16)
+            self.geometry_dropdown.setCurrentText("Linear")
         elif scenario == "Tumor Ablation":
-            self.frequency_slider.setValue(10000)
-            self.phase_slider.setValue(60)
-            self.distance_slider.setValue(8)
-            self.emitters_spinbox.setValue(10)
+            # Switch to Transmitter mode
+            set_speed(SPEED_OF_SOUND_TISSUE)
+
+            self.mode_dropdown.setCurrentText("Transmitter")
+            self.frequency_slider.setValue(500000)
+            self.phase_slider.setValue(15)
+            self.curvature_slider.setValue(8)
+            self.emitters_spinbox.setValue(32)
+            self.geometry_dropdown.setCurrentText("Curved")
+
+        # Trigger UI updates and redraw
+        self.update_mode(self.mode_dropdown.currentText())
+        self.update_plot()
 
     def createGroupBox(self, title, layout):
         groupbox = QGroupBox(title)

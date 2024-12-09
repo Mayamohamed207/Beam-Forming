@@ -1,13 +1,26 @@
 # phased_array.py
 import numpy as np
+# Default speeds
+SPEED_OF_LIGHT = 3e8  # Speed of light in m/s (5G)
+SPEED_OF_SOUND_AIR = 343  # Speed of sound in air (m/s, Ultrasound default)
+SPEED_OF_SOUND_TISSUE = 1500  # Speed of sound in soft tissue (m/s, Ultrasound and Tumor Ablation)
 
-ultrasound_v_air = 343  # Speed of sound in air (m/s)
+# Global simulation parameters
+current_speed = SPEED_OF_SOUND_AIR  # Default speed of sound
+
 max_size = 100  # Maximum grid size
 dx = None  # Grid spacing
 
+def set_speed(speed):
+    """
+    Set the global speed for wave propagation.
+    """
+    global current_speed
+    current_speed = speed
+    print(current_speed)
 def initialize_simulation_grid(N, f, d, max_size=100):
     global dx
-    w = ultrasound_v_air / f  # Wavelength
+    w =  current_speed / f  # Wavelength
     dx = w / 10  # Grid spacing
     size = min(np.ceil(2 * (((N - 1) * d) ** 2) / w * 4), max_size)
     x = np.arange(-size, size, dx)
@@ -15,7 +28,9 @@ def initialize_simulation_grid(N, f, d, max_size=100):
     return np.meshgrid(x, y), w
 
 def compute_wave_pattern(N, f, dir_angle, distance, grid, t=0, geometry="Linear", arc_radius=1.0):
-    w = ultrasound_v_air / f  # Wavelength
+    w =  current_speed / f  # Wavelength
+    print(current_speed)
+
     k = 2 * np.pi / w  # Wave number
     omega = 2 * np.pi * f  # Angular frequency
     dir_rad = np.radians(dir_angle)  # Steering angle in radians
@@ -46,7 +61,7 @@ def compute_wave_pattern(N, f, dir_angle, distance, grid, t=0, geometry="Linear"
 
 
 def compute_beam_profile(N, f, distance, dir_angle,receiver_positions ,geometry="Linear", arc_radius=1.0, mode="Emitter"):
-    w = ultrasound_v_air / f  # Wavelength
+    w =  current_speed / f  # Wavelength
     k = 2 * np.pi / w  # Wave number
     angles = np.linspace(-90, 90, 500)  # Array of angles in degrees
     dir_rad = np.radians(dir_angle)  # Convert steering angle to radians
@@ -91,31 +106,6 @@ def compute_beam_profile(N, f, distance, dir_angle,receiver_positions ,geometry=
     return angles, 20 * np.log10(array_factor)  # Convert to dB scale
 
 
-# def compute_received_beam_profile( f,dir_angle,distance, receiver_positions):
-#     # Compute the beam profile for the received signal based on the receiver's pattern
-#     w = ultrasound_v_air / f  # Wavelength
-#     k = 2 * np.pi / w  # Wave number
-#     angles = np.linspace(-90, 90, 500)  # Array of angles in degrees
-#     dir_rad = np.radians(dir_angle)  # Convert steering angle to radians
-#
-#     # Compute array factor for each angle (receiver's perspective)
-#     array_factor = np.zeros_like(angles, dtype=np.complex128)
-#
-#     for pos in receiver_positions:
-#         # Distance between receiver and observation point for each angle
-#         distance_to_point = np.hypot(pos[0] - distance * np.sin(dir_rad),
-#                                      pos[1] - distance * np.cos(dir_rad))
-#
-#         # Phase shift calculation for receiver's perspective
-#         phase_shift = k * distance_to_point + k * (
-#                 pos[0] * np.sin(np.radians(angles)) - pos[1] * np.cos(np.radians(angles)))
-#         array_factor += np.exp(1j * phase_shift)
-#
-#     array_factor = np.abs(array_factor)  # Get the magnitude
-#     array_factor /= np.max(array_factor)  # Normalize
-#     array_factor = np.clip(array_factor, 1e-10, 1)
-#
-#     return angles, 20 * np.log10(array_factor)  # Convert to dB scale
 
 
 def compute_receiver_pattern(grid, receiver_positions, steering_angle=0):

@@ -38,6 +38,7 @@ class BeamForming:
         # Compute wave or receiver pattern based on mode
         if self.state['mode'] == 'Receiver':
             self.Z, self.positions = self.update_receiver_pattern()
+            print(self.state['f'])
             # Compute the beam profile for the received signal
             angles, beam_profile =compute_beam_profile(self.state['N'], self.state['f'], self.state['distance'] ,self.state['dir'], self.positions,geometry=self.state['geometry'], arc_radius=self.state.get('curvature', 1.0), mode=self.state['mode'])
         else:
