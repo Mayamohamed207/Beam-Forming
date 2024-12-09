@@ -88,8 +88,9 @@ class Main(QMainWindow):
         self.load_scenario_button = QPushButton("Load Scenario")
         self.load_scenario_button.setStyleSheet("background-color: lightblue; font-weight: bold")
 
-        self.constructive_map_canvas = FigureCanvas(plt.figure(figsize=(7, 4))) 
-        self.beam_profile_canvas = FigureCanvas(plt.figure(figsize=(7, 4))) 
+        self.constructive_map_canvas = FigureCanvas(plt.figure(figsize=(7, 4)))
+        self.beam_profile_canvas = FigureCanvas(plt.figure(figsize=(7, 4)))
+        self.beam_profile_canvas.figure.add_subplot(111, polar=True)  # Polar plot
 
     def layoutSet(self):
         controlBar_layout = QVBoxLayout()

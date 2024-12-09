@@ -56,11 +56,16 @@ def compute_beam_profile(N, f, distance, dir_angle, geometry="Linear", arc_radiu
 
     if geometry == "Curved":
         # Curved geometry: emitter positions on a circular arc
-        emit_angles = np.linspace(-np.pi / 4, np.pi / 4, N)  # Spread emitters over a quarter-circle
-        positions = arc_radius * np.array([np.sin(emit_angles), np.cos(emit_angles)]).T  # Emitter positions
+        emit_angles = np.linspace(-np.pi / 4, np.pi / 4, N)  # Adjust based on arc_radius
+        positions = arc_radius * np.array([np.cos(emit_angles), np.sin(emit_angles)]).T  # Emitter positions
+
         for pos in positions:
-            r_angle = np.arctan2(pos[1], pos[0])  # Relative angle of the emitter
-            phase_shift = k * distance * np.sin(np.radians(angles) - dir_rad) + r_angle
+            # Distance between emitter and observation point for each angle
+            distance_to_point = np.hypot(pos[0] - distance * np.sin(dir_rad), pos[1] - distance * np.cos(dir_rad))
+
+            # Phase shift calculation
+            phase_shift = k * distance_to_point + k * (
+                        pos[0] * np.sin(np.radians(angles)) - pos[1] * np.cos(np.radians(angles)))
             array_factor += np.exp(1j * phase_shift)
     else:
         # Linear geometry: emitters spaced along X-axis
@@ -70,4 +75,6 @@ def compute_beam_profile(N, f, distance, dir_angle, geometry="Linear", arc_radiu
 
     array_factor = np.abs(array_factor)  # Get the magnitude
     array_factor /= np.max(array_factor)  # Normalize
+    array_factor = np.clip(array_factor, 1e-10, 1)
+    print(array_factor)
     return angles, 20 * np.log10(array_factor)  # Convert to dB scale

@@ -63,14 +63,26 @@ class BeamForming:
         self.profile_ax.clear()
         self.profile_ax.set_facecolor(darkColor)
         self.fig.patch.set_facecolor(darkColor)
-        self.profile_ax.plot(angles, beam_profile, color=greenColor)
-        self.profile_ax.set_xlabel("Angle (degrees)",color=greenColor)
-        self.profile_ax.set_ylabel("Intensity (dB)",color=greenColor)
-        # self.profile_ax.set_title("Beam Profile",color=greenColor)
-        self.profile_ax.tick_params(axis='both', colors=greenColor)  
-        self.profile_ax.grid(True,color=greenColor)
-        self.fig.patch.set_edgecolor(darkColor)
-        self.fig.patch.set_linewidth(0)
+
+        # Convert angles from degrees to radians
+        angles_rad = np.radians(angles)
+
+        # Polar plot setup
+        self.profile_ax.plot(angles_rad, beam_profile, color=greenColor)
+
+        # Set the angle limits from -90 to 90 degrees
+        self.profile_ax.set_thetalim(-np.pi / 2, np.pi / 2)
+
+        # Adjusting labels and styling
+        self.profile_ax.set_theta_zero_location("N")  # Zero degrees at the top
+        self.profile_ax.set_theta_direction(-1)  # Counterclockwise direction
+        self.profile_ax.set_xticks(np.radians(np.arange(-90, 91, 30)))  # Angle ticks
+        self.profile_ax.tick_params(axis='both', colors=greenColor)
+        self.profile_ax.grid(True, color=greenColor)
+
+        # Adjust subplot margins to maximize space utilization
+        self.fig.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)  # Reduce padding
+
         plt.draw()
 
     def update_state(self, **kwargs):
