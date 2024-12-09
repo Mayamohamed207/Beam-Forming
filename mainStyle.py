@@ -1,6 +1,10 @@
 greenColor = "#03efb0"
-# greenColor="#2BAF7E"
+
 darkColor = "#2D2D2D"
+# darkColor = "#242D5C" #blue
+# greenColor = "#2BE7AF" #green
+
+# greenColor="#2BAF7E"
 purpleColor="#472B79"
 greenColorHover = "#0A6950"
 

@@ -44,7 +44,12 @@ class Main(QMainWindow):
         self.update_plot()
 
     def createUIElements(self):
-        # Left controlBar Elements
+        # controlBar 
+        self.mode_label = QLabel("Mode:")
+        self.mode_dropdown = QComboBox()
+        self.mode_dropdown.addItems(["Transmitter", "Receiver"])
+
+
         self.frequency_label = QLabel("Frequency (Hz):")
         self.frequency_slider = QSlider(Qt.Horizontal)
         self.frequency_slider.setRange(500, 5000)
@@ -59,14 +64,14 @@ class Main(QMainWindow):
         self.phase_value = QLabel("0")
         self.phase_slider.setToolTip("Adjust phase shift between -180° and 180°")
 
-        self.distance_label = QLabel("Position of Emitters:")
+        self.distance_label = QLabel("Transmitter Position:")
         self.distance_slider = QSlider(Qt.Horizontal)
         self.distance_slider.setRange(1,100)
         self.distance_slider.setValue(10)
         self.distance_value = QLabel("0.10")
         self.distance_slider.setToolTip("Adjust distance between emitters")
 
-        self.emitters_label = QLabel("Emitters Number:")
+        self.emitters_label = QLabel("Transmitters Number:")
         self.emitters_spinbox = QSpinBox()
         self.emitters_spinbox.setRange(2, 16)
         self.emitters_spinbox.setValue(8)
@@ -88,26 +93,42 @@ class Main(QMainWindow):
         self.load_scenario_button = QPushButton("Load Scenario")
         self.load_scenario_button.setStyleSheet("background-color: lightblue; font-weight: bold")
 
+        #Graphs 
         self.constructive_map_canvas = FigureCanvas(plt.figure(figsize=(7, 4)))
         self.beam_profile_canvas = FigureCanvas(plt.figure(figsize=(7, 4)))
-        self.beam_profile_canvas.figure.add_subplot(111, polar=True)  # Polar plot
+        self.beam_profile_canvas.figure.add_subplot(111, polar=True) 
 
     def layoutSet(self):
         controlBar_layout = QVBoxLayout()
 
+        controlBar_layout.addWidget(self.createCompactGroupBox("Select a Mode", [
+        self.createComboBox(self.mode_label, self.mode_dropdown)
+         ]))
+        
         # beamforming parameters
-        controlBar_layout.addWidget(self.createGroupBox("Beamforming Parameters", [
-            self.createSliders(self.frequency_label, self.frequency_value, self.frequency_slider),
-            self.createSliders(self.phase_label, self.phase_value, self.phase_slider),
-            self.createSliders(self.distance_label, self.distance_value, self.distance_slider),
-            self.createSpinBox(self.emitters_label, self.emitters_spinbox)
-        ]))
+        self.parameters_box = QVBoxLayout()  # Use a layout for dynamic updates
+        parameters_group = self.createGroupBox("Beamforming Parameters", self.parameters_box)
+        controlBar_layout.addWidget(parameters_group)
+
+        # Add initial widgets to the parameters box
+        self.frequency_widget = self.createSliders(self.frequency_label, self.frequency_value, self.frequency_slider)
+        self.parameters_box.addWidget(self.frequency_widget)  # Frequency slider container
+
+        self.phase_widget = self.createSliders(self.phase_label, self.phase_value, self.phase_slider)
+        self.parameters_box.addWidget(self.phase_widget)  # Phase slider container
+
+        self.distance_widget = self.createSliders(self.distance_label, self.distance_value, self.distance_slider)
+        self.parameters_box.addWidget(self.distance_widget)  # Distance slider container
+
+        self.emitters_widget = self.createSpinBox(self.emitters_label, self.emitters_spinbox)
+        self.parameters_box.addWidget(self.emitters_widget) 
 
         # Geometry
-        controlBar_layout.addWidget(self.createCompactGroupBox("Geometry", [
+        self.geometry_box = self.createCompactGroupBox("Geometry", [
             self.createSliders(self.curvature_label, self.curvature_value, self.curvature_slider),
             self.createComboBox(self.geometry_label, self.geometry_dropdown)
-        ]))
+        ])
+        controlBar_layout.addWidget(self.geometry_box)
 
         # Scenario
         controlBar_layout.addWidget(self.createCompactGroupBox("Scenario", [
@@ -117,10 +138,11 @@ class Main(QMainWindow):
 
         controlBar = QWidget()
         controlBar.setLayout(controlBar_layout)
+       
 
         # Graphs Layout
         graphsBar_layout = QVBoxLayout()
-        graphsBar_layout.setSpacing(1)  
+        graphsBar_layout.setSpacing(5)  
         graphsBar_layout.setContentsMargins(0, 0, 0, 0)
         graphsBar_layout.addWidget(QLabel("Constructive/Destructive Map"))
         graphsBar_layout.addWidget(self.constructive_map_canvas)
@@ -130,7 +152,6 @@ class Main(QMainWindow):
         graphsBar = QWidget()
         graphsBar.setLayout(graphsBar_layout)
 
-        # Main Layout
         main_layout = QHBoxLayout()
         main_layout.addWidget(controlBar, 1)
         main_layout.addWidget(graphsBar, 4)
@@ -142,6 +163,7 @@ class Main(QMainWindow):
     def styleUi(self):
         self.centralWidget().setStyleSheet(mainStyle)
         self.setStyleSheet(groupBoxStyle)  
+        self.mode_dropdown.setStyleSheet(comboBoxStyle)
         self.frequency_slider.setStyleSheet(sliderStyle)
         self.phase_slider.setStyleSheet(sliderStyle)
         self.distance_slider.setStyleSheet(sliderStyle)
@@ -152,15 +174,131 @@ class Main(QMainWindow):
         self.load_scenario_button.setStyleSheet(buttonStyle)
         self.constructive_map_canvas.figure.set_facecolor(darkColor) 
         self.beam_profile_canvas.figure.set_facecolor(darkColor) 
-         
 
-    def createGroupBox(self, title, widgets):
+    def connectingUI(self):
+        print("Connecting UI")
+
+        self.frequency_slider.valueChanged.connect(
+            lambda: self.frequency_value.setText(str(self.frequency_slider.value()))
+        )
+        self.phase_slider.valueChanged.connect(
+            lambda: self.phase_value.setText(str(self.phase_slider.value()))
+        )
+        self.distance_slider.valueChanged.connect(
+            lambda: self.distance_value.setText(f"{self.distance_slider.value() / 100:.3f}")
+        )
+
+        self.mode_dropdown.currentTextChanged.connect(self.update_mode)
+        
+
+        self.frequency_slider.sliderReleased.connect(self.update_plot)
+        self.phase_slider.sliderReleased.connect(self.update_plot)
+        self.distance_slider.sliderReleased.connect(self.update_plot)
+        self.emitters_spinbox.valueChanged.connect(self.update_plot)
+        
+        self.geometry_dropdown.currentTextChanged.connect(self.update_geometry)
+        self.curvature_slider.sliderReleased.connect(self.update_plot)
+
+        self.load_scenario_button.clicked.connect(self.load_scenario)
+
+    def update_mode(self, mode):
+        if mode == "Receiver":
+            # Remove Frequency slider
+            self.parameters_box.removeWidget(self.frequency_widget)
+            self.frequency_widget.setParent(None)  
+            self.distance_label.setText("Receiver Position:")
+            self.emitters_label.setText("Receivers Number:")
+            self.emitters_spinbox.setRange(1, 16)
+            self.geometry_box.setVisible(False)
+            
+            self.distance_slider.setEnabled(True)
+            self.distance_slider.setStyleSheet(sliderStyle)
+
+        else:  # Transmitter mode
+            # Add Frequency slider
+            self.parameters_box.insertWidget(0, self.frequency_widget)  
+            self.distance_label.setText("Transmitter Position:")
+            self.emitters_label.setText("Transmitters Number:")
+            self.emitters_spinbox.setRange(2, 16)
+            self.geometry_box.setVisible(True)
+            if self.geometry_dropdown.currentText()== "Curved":
+                self.distance_slider.setEnabled(False)
+                self.distance_slider.setStyleSheet(sliderDisabledStyle)  
+            
+
+        self.update_plot()
+
+
+    def update_plot(self):
+        mode = self.mode_dropdown.currentText()
+        if mode == "Receiver":
+            self.controller.update_state(
+            mode=mode,
+            receiver_count=self.emitters_spinbox.value(),
+            receiver_spacing=self.distance_slider.value() / 100,
+            dir=self.phase_slider.value()  # Use the phase slider for steering angle
+    )
+
+        else:  # Transmitter mode
+            self.controller.update_state(
+                mode=mode,
+                N=self.emitters_spinbox.value(),
+                f=self.frequency_slider.value(),
+                dir=self.phase_slider.value(),
+                distance=self.distance_slider.value() / 100,
+                geometry=self.geometry_dropdown.currentText(),
+                curvature=self.curvature_slider.value() / 10
+            )
+        self.constructive_map_canvas.draw()
+        self.beam_profile_canvas.draw()
+
+   
+    def update_geometry(self):
+        selected_geometry = self.geometry_dropdown.currentText()
+
+        if selected_geometry == "Linear":
+            self.curvature_slider.setEnabled(False)
+            self.curvature_slider.setStyleSheet(sliderDisabledStyle)  
+            # Enable distance slider
+            self.distance_slider.setEnabled(True)
+            self.distance_slider.setStyleSheet(sliderStyle)  
+        elif selected_geometry == "Curved":
+            # Enable curvature slider
+            self.curvature_slider.setEnabled(True)
+            self.curvature_slider.setStyleSheet(sliderStyle)  
+            # Disable distance slider
+            self.distance_slider.setEnabled(False)
+            self.distance_slider.setStyleSheet(sliderDisabledStyle)  
+        
+        self.update_plot()  
+
+        
+    def load_scenario(self):
+        scenario = self.scenario_dropdown.currentText()
+        print(f"Loaded scenario: {scenario}")
+        if scenario == "5G":
+            self.frequency_slider.setValue(28000)
+            self.phase_slider.setValue(45)
+            self.distance_slider.setValue(15)
+            self.emitters_spinbox.setValue(12)
+        elif scenario == "Ultrasound":
+            self.frequency_slider.setValue(2000)
+            self.phase_slider.setValue(0)
+            self.distance_slider.setValue(5)
+            self.emitters_spinbox.setValue(8)
+        elif scenario == "Tumor Ablation":
+            self.frequency_slider.setValue(10000)
+            self.phase_slider.setValue(60)
+            self.distance_slider.setValue(8)
+            self.emitters_spinbox.setValue(10)
+
+    def createGroupBox(self, title, layout):
         groupbox = QGroupBox(title)
-        layout = QVBoxLayout()
-        for widget in widgets:
-            layout.addWidget(widget)
-        groupbox.setLayout(layout)
+        groupbox_layout = QVBoxLayout()
+        groupbox_layout.addLayout(layout)  
+        groupbox.setLayout(groupbox_layout)
         return groupbox
+
 
     def createCompactGroupBox(self, title, widgets):
         groupbox = QGroupBox(title)
@@ -209,84 +347,6 @@ class Main(QMainWindow):
         layout.addWidget(combobox)
         widget.setLayout(layout)
         return widget
-
-    def connectingUI(self):
-        print("Connecting UI")
-
-        # Update slider values dynamically
-        self.frequency_slider.valueChanged.connect(
-            lambda: self.frequency_value.setText(str(self.frequency_slider.value()))
-        )
-        self.phase_slider.valueChanged.connect(
-            lambda: self.phase_value.setText(str(self.phase_slider.value()))
-        )
-        self.distance_slider.valueChanged.connect(
-            lambda: self.distance_value.setText(f"{self.distance_slider.value() / 100:.3f}")
-        )
-
-        # Update beamforming simulation when sliders or spinbox change
-        self.frequency_slider.sliderReleased.connect(self.update_plot)
-        self.phase_slider.sliderReleased.connect(self.update_plot)
-        self.distance_slider.sliderReleased.connect(self.update_plot)
-        self.emitters_spinbox.valueChanged.connect(self.update_plot)
-        
-        self.geometry_dropdown.currentTextChanged.connect(self.update_geometry)
-        self.curvature_slider.sliderReleased.connect(self.update_plot)
-
-        
-        # Load Scenario button
-        self.load_scenario_button.clicked.connect(self.load_scenario)
-
-    def update_plot(self):
-        self.controller.update_state(
-            N=self.emitters_spinbox.value(),
-            f=self.frequency_slider.value(),
-            dir=self.phase_slider.value(),
-            distance=self.distance_slider.value() / 100,
-            geometry=self.geometry_dropdown.currentText(),
-            curvature=self.curvature_slider.value() / 10  
-        )
-        self.constructive_map_canvas.draw()
-        self.beam_profile_canvas.draw()
-
-    def update_geometry(self):
-        selected_geometry = self.geometry_dropdown.currentText()
-
-        if selected_geometry == "Linear":
-            self.curvature_slider.setEnabled(False)
-            self.curvature_slider.setStyleSheet(sliderDisabledStyle)  
-            # Enable distance slider
-            self.distance_slider.setEnabled(True)
-            self.distance_slider.setStyleSheet(sliderStyle)  
-        elif selected_geometry == "Curved":
-            # Enable curvature slider
-            self.curvature_slider.setEnabled(True)
-            self.curvature_slider.setStyleSheet(sliderStyle)  
-            # Disable distance slider
-            self.distance_slider.setEnabled(False)
-            self.distance_slider.setStyleSheet(sliderDisabledStyle)  
-        
-        self.update_plot()  
-
-        
-    def load_scenario(self):
-        scenario = self.scenario_dropdown.currentText()
-        print(f"Loaded scenario: {scenario}")
-        if scenario == "5G":
-            self.frequency_slider.setValue(28000)
-            self.phase_slider.setValue(45)
-            self.distance_slider.setValue(15)
-            self.emitters_spinbox.setValue(12)
-        elif scenario == "Ultrasound":
-            self.frequency_slider.setValue(2000)
-            self.phase_slider.setValue(0)
-            self.distance_slider.setValue(5)
-            self.emitters_spinbox.setValue(8)
-        elif scenario == "Tumor Ablation":
-            self.frequency_slider.setValue(10000)
-            self.phase_slider.setValue(60)
-            self.distance_slider.setValue(8)
-            self.emitters_spinbox.setValue(10)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

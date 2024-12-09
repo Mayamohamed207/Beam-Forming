@@ -1,45 +1,73 @@
-# # BeamFormingSystem.py
+# BeamFormingSystem.py
 import numpy as np
-
 import matplotlib.pyplot as plt
-from phased_array import initialize_simulation_grid, compute_wave_pattern, compute_beam_profile
-from mainStyle  import darkColor, greenColor,purpleColor
+from phased_array import initialize_simulation_grid, compute_wave_pattern, compute_beam_profile, compute_receiver_pattern
+from mainStyle import darkColor, greenColor, purpleColor
 
 class BeamForming:
     def __init__(self, fig, axs, initial_state):
         self.fig = fig
 
+        # Handle axs for both list and single axes cases
         if isinstance(axs, list) or isinstance(axs, np.ndarray):
             self.map_ax = axs[0]
             self.profile_ax = axs[1]
         else:
-            self.map_ax = axs 
-            self.profile_ax = axs  
+            self.map_ax = axs
+            self.profile_ax = axs
 
-        self.state = initial_state
+        self.state = {
+            'mode': 'Emitter',        # Default mode
+            'N': 8,                  # Default number of elements
+            'f': 1000,              # Default frequency in Hz
+            'distance': 0.1,         # Default element spacing in meters
+            'dir': 0,                # Default direction angle
+            'geometry': 'Linear',    # Default geometry
+        }
+        self.state.update(initial_state)  # Overwrite defaults with initial_state
 
+        # Initialize simulation grid
         self.grid, self.wavelength = initialize_simulation_grid(
             self.state['N'], self.state['f'], self.state['distance']
         )
-       
+
+        # Call the update method to initialize plots
         self.update_wave_pattern()
 
-
     def update_wave_pattern(self):
-        # Update Constructive/Destructive Map
-        self.Z, self.positions = compute_wave_pattern(
-            self.state['N'], self.state['f'], self.state['dir'], self.state['distance'],
-            self.grid, geometry=self.state['geometry'], arc_radius=self.state.get('curvature', 1.0)
-        )
-        self.plot_simulation()
+        # Compute wave or receiver pattern based on mode
+        if self.state['mode'] == 'Receiver':
+            self.Z, self.positions = self.update_receiver_pattern()
+        else:
+            self.Z, self.positions = compute_wave_pattern(
+                self.state['N'], self.state['f'], self.state['dir'], self.state['distance'],
+                self.grid, geometry=self.state['geometry'], arc_radius=self.state.get('curvature', 1.0)
+            )
 
-        # Update Beam Profile
+        # Plot the simulation and beam profile
+        self.plot_simulation()
         angles, beam_profile = compute_beam_profile(
             self.state['N'], self.state['f'], self.state['distance'], self.state['dir'],
             geometry=self.state['geometry'], arc_radius=self.state.get('curvature', 1.0)
         )
         self.plot_beam_profile(angles, beam_profile)
 
+    def update_receiver_pattern(self):
+        receiver_count = self.state.get('receiver_count', 1)
+        receiver_spacing = self.state.get('receiver_spacing', 0.5)
+        receiver_positions = np.linspace(
+        -receiver_spacing * (receiver_count - 1) / 2,
+        receiver_spacing * (receiver_count - 1) / 2,
+        receiver_count
+        )
+        receiver_positions = np.column_stack(
+        (receiver_positions, np.zeros_like(receiver_positions))  # Place at Y = 0
+        )
+
+        Z, _ = compute_receiver_pattern(
+            self.grid, receiver_positions, steering_angle=self.state['dir']
+        )
+        return Z, receiver_positions
 
     def plot_simulation(self):
         self.map_ax.clear()
@@ -49,14 +77,11 @@ class BeamForming:
         self.map_ax.set_xlim(np.min(self.grid[0]), np.max(self.grid[0]))
         self.map_ax.set_ylim(np.min(self.grid[1]), np.max(self.grid[1]))
 
-        self.map_ax.contourf(self.grid[0], self.grid[1], self.Z, levels=50, cmap='viridis',extend='both')
+        self.map_ax.contourf(self.grid[0], self.grid[1], self.Z, levels=50, cmap='viridis', extend='both')
         self.map_ax.plot(self.positions[:, 0], self.positions[:, 1], 'o', color=purpleColor, markersize=10)
-        self.map_ax.set_xlabel("X Position (m)",color=greenColor)
-        self.map_ax.set_ylabel("Y Position (m)",color=greenColor)
-        self.map_ax.tick_params(axis='both', colors=greenColor) 
-        # self.fig.subplots_adjust(left=-1.5, right=0.95, top=0.1, bottom=0.05)
-        # self.fig.tight_layout(pad=0.8) 
-        # self.map_ax.set_title(f"N={self.state['N']}, f={self.state['f']} Hz",color=greenColor)
+        self.map_ax.set_xlabel("X Position (m)", color=greenColor)
+        self.map_ax.set_ylabel("Y Position (m)", color=greenColor)
+        self.map_ax.tick_params(axis='both', colors=greenColor)
         plt.draw()
 
     def plot_beam_profile(self, angles, beam_profile):
@@ -80,9 +105,8 @@ class BeamForming:
         self.profile_ax.tick_params(axis='both', colors=greenColor)
         self.profile_ax.grid(True, color=greenColor)
 
-        # Adjust subplot margins to maximize space utilization
-        self.fig.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)  # Reduce padding
-
+        self.fig.subplots_adjust(left=0.12, right=0.9, top=1.0, bottom=0.04)
+        self.profile_ax.set_aspect('auto')
         plt.draw()
 
     def update_state(self, **kwargs):

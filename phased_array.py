@@ -76,5 +76,17 @@ def compute_beam_profile(N, f, distance, dir_angle, geometry="Linear", arc_radiu
     array_factor = np.abs(array_factor)  # Get the magnitude
     array_factor /= np.max(array_factor)  # Normalize
     array_factor = np.clip(array_factor, 1e-10, 1)
-    print(array_factor)
+    # print(array_factor)
     return angles, 20 * np.log10(array_factor)  # Convert to dB scale
+
+def compute_receiver_pattern(grid, receiver_positions, steering_angle=0):
+    X, Y = grid
+    Z = np.zeros(X.shape)
+    dir_rad = np.radians(steering_angle)  # Convert angle to radians
+
+    for rx in receiver_positions:
+        # Add phase adjustment for steering
+        Rs = np.sqrt((X - rx[0]) ** 2 + (Y - rx[1]) ** 2)
+        Z += np.cos(2 * np.pi * Rs / dx + 2 * np.pi * rx[0] * np.sin(dir_rad) / dx)
+
+    return Z, receiver_positions
