@@ -45,7 +45,7 @@ def compute_wave_pattern(N, f, dir_angle, distance, grid, t=0, geometry="Linear"
 
 
 
-def compute_beam_profile(N, f, distance, dir_angle, geometry="Linear", arc_radius=1.0):
+def compute_beam_profile(N, f, distance, dir_angle, receiver_positions,geometry="Linear", arc_radius=1.0, mode="Emitter"):
     w = ultrasound_v_air / f  # Wavelength
     k = 2 * np.pi / w  # Wave number
     angles = np.linspace(-90, 90, 500)  # Array of angles in degrees
@@ -53,31 +53,70 @@ def compute_beam_profile(N, f, distance, dir_angle, geometry="Linear", arc_radiu
 
     # Compute array factor for each angle
     array_factor = np.zeros_like(angles, dtype=np.complex128)
+    if mode == "Receiver":
+        for pos in receiver_positions:
+            # Distance between receiver and observation point for each angle
+            distance_to_point = np.hypot(pos[0] - distance * np.sin(dir_rad),
+                                         pos[1] - distance * np.cos(dir_rad))
 
-    if geometry == "Curved":
-        # Curved geometry: emitter positions on a circular arc
-        emit_angles = np.linspace(-np.pi / 4, np.pi / 4, N)  # Adjust based on arc_radius
-        positions = arc_radius * np.array([np.cos(emit_angles), np.sin(emit_angles)]).T  # Emitter positions
-
-        for pos in positions:
-            # Distance between emitter and observation point for each angle
-            distance_to_point = np.hypot(pos[0] - distance * np.sin(dir_rad), pos[1] - distance * np.cos(dir_rad))
-
-            # Phase shift calculation
+            # Phase shift calculation for receiver's perspective
             phase_shift = k * distance_to_point + k * (
-                        pos[0] * np.sin(np.radians(angles)) - pos[1] * np.cos(np.radians(angles)))
+                    pos[0] * np.sin(np.radians(angles)) - pos[1] * np.cos(np.radians(angles)))
             array_factor += np.exp(1j * phase_shift)
+
     else:
-        # Linear geometry: emitters spaced along X-axis
-        for n in range(N):
-            phase_shift = k * distance * np.sin(np.radians(angles - dir_angle)) * n
-            array_factor += np.exp(1j * phase_shift)
+        if geometry == "Curved":
+            # Curved geometry: emitter positions on a circular arc
+            emit_angles = np.linspace(-np.pi / 4, np.pi / 4, N)  # Adjust based on arc_radius
+            positions = arc_radius * np.array([np.cos(emit_angles), np.sin(emit_angles)]).T  # Emitter positions
+
+            for pos in positions:
+                # Distance between emitter and observation point for each angle
+                distance_to_point = np.hypot(pos[0] - distance * np.sin(dir_rad), pos[1] - distance * np.cos(dir_rad))
+
+                # Phase shift calculation
+                phase_shift = k * distance_to_point + k * (
+                            pos[0] * np.sin(np.radians(angles)) - pos[1] * np.cos(np.radians(angles)))
+                array_factor += np.exp(1j * phase_shift)
+        else:
+            # Linear geometry: emitters spaced along X-axis
+            for n in range(N):
+                phase_shift = k * distance * np.sin(np.radians(angles - dir_angle)) * n
+                array_factor += np.exp(1j * phase_shift)
 
     array_factor = np.abs(array_factor)  # Get the magnitude
     array_factor /= np.max(array_factor)  # Normalize
     array_factor = np.clip(array_factor, 1e-10, 1)
     # print(array_factor)
     return angles, 20 * np.log10(array_factor)  # Convert to dB scale
+
+
+# def compute_received_beam_profile( f,dir_angle,distance, receiver_positions):
+#     # Compute the beam profile for the received signal based on the receiver's pattern
+#     w = ultrasound_v_air / f  # Wavelength
+#     k = 2 * np.pi / w  # Wave number
+#     angles = np.linspace(-90, 90, 500)  # Array of angles in degrees
+#     dir_rad = np.radians(dir_angle)  # Convert steering angle to radians
+#
+#     # Compute array factor for each angle (receiver's perspective)
+#     array_factor = np.zeros_like(angles, dtype=np.complex128)
+#
+#     for pos in receiver_positions:
+#         # Distance between receiver and observation point for each angle
+#         distance_to_point = np.hypot(pos[0] - distance * np.sin(dir_rad),
+#                                      pos[1] - distance * np.cos(dir_rad))
+#
+#         # Phase shift calculation for receiver's perspective
+#         phase_shift = k * distance_to_point + k * (
+#                 pos[0] * np.sin(np.radians(angles)) - pos[1] * np.cos(np.radians(angles)))
+#         array_factor += np.exp(1j * phase_shift)
+#
+#     array_factor = np.abs(array_factor)  # Get the magnitude
+#     array_factor /= np.max(array_factor)  # Normalize
+#     array_factor = np.clip(array_factor, 1e-10, 1)
+#
+#     return angles, 20 * np.log10(array_factor)  # Convert to dB scale
+
 
 def compute_receiver_pattern(grid, receiver_positions, steering_angle=0):
     X, Y = grid
