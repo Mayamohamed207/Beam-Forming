@@ -72,32 +72,6 @@ class BeamForming:
         )
         return Z, receiver_positions
 
-    # def compute_received_beam_profile(self):
-    #     # Compute the beam profile for the received signal based on the receiver's pattern
-    #     w = self.wavelength
-    #     k = 2 * np.pi / w  # Wave number
-    #     angles = np.linspace(-90, 90, 500)  # Array of angles in degrees
-    #     dir_rad = np.radians(self.state['dir'])  # Convert steering angle to radians
-    #
-    #     # Compute array factor for each angle (receiver's perspective)
-    #     array_factor = np.zeros_like(angles, dtype=np.complex128)
-    #
-    #     receiver_positions = self.positions
-    #     for pos in receiver_positions:
-    #         # Distance between receiver and observation point for each angle
-    #         distance_to_point = np.hypot(pos[0] - self.state['distance'] * np.sin(dir_rad),
-    #                                      pos[1] - self.state['distance'] * np.cos(dir_rad))
-    #
-    #         # Phase shift calculation for receiver's perspective
-    #         phase_shift = k * distance_to_point + k * (
-    #                 pos[0] * np.sin(np.radians(angles)) - pos[1] * np.cos(np.radians(angles)))
-    #         array_factor += np.exp(1j * phase_shift)
-    #
-    #     array_factor = np.abs(array_factor)  # Get the magnitude
-    #     array_factor /= np.max(array_factor)  # Normalize
-    #     array_factor = np.clip(array_factor, 1e-10, 1)
-    #
-    #     return angles, 20 * np.log10(array_factor)  # Convert to dB scale
 
     def plot_simulation(self):
         self.map_ax.clear()

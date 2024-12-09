@@ -45,7 +45,7 @@ def compute_wave_pattern(N, f, dir_angle, distance, grid, t=0, geometry="Linear"
 
 
 
-def compute_beam_profile(N, f, distance, dir_angle, receiver_positions,geometry="Linear", arc_radius=1.0, mode="Emitter"):
+def compute_beam_profile(N, f, distance, dir_angle,receiver_positions ,geometry="Linear", arc_radius=1.0, mode="Emitter"):
     w = ultrasound_v_air / f  # Wavelength
     k = 2 * np.pi / w  # Wave number
     angles = np.linspace(-90, 90, 500)  # Array of angles in degrees
