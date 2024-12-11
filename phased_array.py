@@ -4,10 +4,10 @@ import numpy as np
 SPEED_OF_LIGHT = 3e8  # Speed of light in m/s (5G)
 SPEED_OF_SOUND_AIR = 343  # Speed of sound in air (m/s, Ultrasound default)
 SPEED_OF_SOUND_TISSUE = 1500  # Speed of sound in soft tissue (m/s, Ultrasound and Tumor Ablation)
-
+five_g_reciever_frequency=5000000000
 # Global simulation parameters
 current_speed = SPEED_OF_SOUND_AIR  # Default speed of sound
-
+reciever_frequency=five_g_reciever_frequency
 max_size = 100  # Maximum grid size
 dx = None  # Grid spacing
 
@@ -18,9 +18,12 @@ def set_speed(speed):
     global current_speed
     current_speed = speed
     print(current_speed)
+def set_frequency(frequency):
+    global reciever_frequency
+    reciever_frequency = frequency
 def initialize_simulation_grid(N, f, d, max_size=100):
     global dx
-    w =  current_speed / f  # Wavelength
+    w =  current_speed / 2000  # Wavelength
     dx = w / 10  # Grid spacing
     size = min(np.ceil(2 * (((N - 1) * d) ** 2) / w * 4), max_size)
     x = np.arange(-size, size, dx)
@@ -60,9 +63,9 @@ def compute_wave_pattern(N, f, dir_angle, distance, grid, t=0, geometry="Linear"
 
 
 
-def compute_beam_profile(N, f, distance, dir_angle,receiver_positions ,geometry="Linear", arc_radius=1.0, mode="Emitter"):
-    w =  current_speed / f  # Wavelength
-    k = 2 * np.pi / w  # Wave number
+def compute_beam_profile(Elements_Number, frequency, distance, dir_angle,receiver_positions ,geometry="Linear", arc_radius=1.0, mode="Emitter"):
+    Wavelength =  current_speed / frequency  # Wavelength
+    k = 2 * np.pi / Wavelength  # Wave number
     angles = np.linspace(-90, 90, 500)  # Array of angles in degrees
     dir_rad = np.radians(dir_angle)  # Convert steering angle to radians
 
@@ -82,7 +85,7 @@ def compute_beam_profile(N, f, distance, dir_angle,receiver_positions ,geometry=
     else:
         if geometry == "Curved":
             # Curved geometry: emitter positions on a circular arc
-            emit_angles = np.linspace(-np.pi / 4, np.pi / 4, N)  # Adjust based on arc_radius
+            emit_angles = np.linspace(-np.pi / 4, np.pi / 4, Elements_Number)  # Adjust based on arc_radius
             positions = arc_radius * np.array([np.cos(emit_angles), np.sin(emit_angles)]).T  # Emitter positions
 
             for pos in positions:
@@ -95,7 +98,7 @@ def compute_beam_profile(N, f, distance, dir_angle,receiver_positions ,geometry=
                 array_factor += np.exp(1j * phase_shift)
         else:
             # Linear geometry: emitters spaced along X-axis
-            for n in range(N):
+            for n in range(Elements_Number):
                 phase_shift = k * distance * np.sin(np.radians(angles - dir_angle)) * n
                 array_factor += np.exp(1j * phase_shift)
 

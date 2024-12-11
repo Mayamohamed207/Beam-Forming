@@ -1,7 +1,8 @@
 # BeamFormingSystem.py
 import numpy as np
 import matplotlib.pyplot as plt
-from phased_array import initialize_simulation_grid, compute_wave_pattern, compute_beam_profile, compute_receiver_pattern
+from phased_array import initialize_simulation_grid, compute_wave_pattern, compute_beam_profile, \
+    compute_receiver_pattern, current_speed
 from mainStyle import darkColor, greenColor, purpleColor
 
 class BeamForming:
@@ -22,7 +23,9 @@ class BeamForming:
             'f': 1000,              # Default frequency in Hz
             'distance': 0.1,         # Default element spacing in meters
             'dir': 0,                # Default direction angle
-            'geometry': 'Linear',    # Default geometry
+            'geometry': 'Linear',
+            'scenario': 'Default Mode',
+
         }
         self.state.update(initial_state)  # Overwrite defaults with initial_state
 
@@ -37,6 +40,12 @@ class BeamForming:
     def update_wave_pattern(self):
         # Compute wave or receiver pattern based on mode
         if self.state['mode'] == 'Receiver':
+            if self.state['scenario'] == "5G":
+                self.state['f'] =  5000000000
+            else:
+                self.state[
+                    'f'] = 5000  # Default frequency for Receiver mode
+            self.wavelength = current_speed / self.state['f']
             self.Z, self.positions = self.update_receiver_pattern()
             print(self.state['f'])
             # Compute the beam profile for the received signal
@@ -116,4 +125,5 @@ class BeamForming:
 
     def update_state(self, **kwargs):
         self.state.update(kwargs)
+        print(f"Updated State: {self.state}")
         self.update_wave_pattern()

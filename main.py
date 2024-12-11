@@ -11,7 +11,7 @@ from BeamFormingSystem import BeamForming
 import numpy as np
 from mainStyle import sliderStyle
 from mainStyle import mainStyle, sliderStyle, groupBoxStyle , buttonStyle, spinBoxStyle, comboBoxStyle,darkColor,sliderDisabledStyle
-from phased_array import set_speed, SPEED_OF_LIGHT, SPEED_OF_SOUND_TISSUE, SPEED_OF_SOUND_AIR
+from phased_array import set_speed, SPEED_OF_LIGHT, SPEED_OF_SOUND_TISSUE, SPEED_OF_SOUND_AIR, set_frequency,five_g_reciever_frequency
 
 
 
@@ -28,11 +28,12 @@ class Main(QMainWindow):
         self.setGeometry(100, 100, 1200, 800)
         self.initial_state = {
             'N': 8,
-            'f': 2000,
+            'f': 500,
             'dir': 30,
             'distance': 0.042875,
             'geometry': 'Linear',
-            'curvature': 0.0    
+            'curvature': 0.0,
+            'scenario': 'Default Mode'
         }
         self.createUIElements()
         self.layoutSet()
@@ -53,10 +54,10 @@ class Main(QMainWindow):
 
         self.frequency_label = QLabel("Frequency (Hz):")
         self.frequency_slider = QSlider(Qt.Horizontal)
-        self.frequency_slider.setRange(5000, 5000000)
-        self.frequency_slider.setValue(500000)
-        self.frequency_value = QLabel("500000")
-        self.frequency_slider.setToolTip("Adjust frequency between 500Hz and 5000Hz")
+        self.frequency_slider.setRange(500, 500000)
+        self.frequency_slider.setValue(500)
+        self.frequency_value = QLabel("500")
+        self.frequency_slider.setToolTip("Adjust frequency between 500Hz and 5MHz")
 
         self.phase_label = QLabel("Phase Shift (°):")
         self.phase_slider = QSlider(Qt.Horizontal)
@@ -90,7 +91,7 @@ class Main(QMainWindow):
 
         self.scenario_label = QLabel("Select Scenario:")
         self.scenario_dropdown = QComboBox()
-        self.scenario_dropdown.addItems(["5G", "Ultrasound", "Tumor Ablation"])
+        self.scenario_dropdown.addItems(["5G", "Ultrasound", "Tumor Ablation","Default Mode"])
         self.load_scenario_button = QPushButton("Load Scenario")
         self.load_scenario_button.setStyleSheet("background-color: lightblue; font-weight: bold")
 
@@ -232,6 +233,8 @@ class Main(QMainWindow):
 
     def update_plot(self):
         mode = self.mode_dropdown.currentText()
+        self.initial_state['scenario'] = self.scenario_dropdown.currentText()  # Update scenario in the state
+
         if mode == "Receiver":
             self.controller.update_state(
             mode=mode,
@@ -276,10 +279,12 @@ class Main(QMainWindow):
     def load_scenario(self):
         scenario = self.scenario_dropdown.currentText()
         print(f"Loaded scenario: {scenario}")
-
+        self.initial_state['scenario'] = scenario
+        self.controller.update_state(scenario=scenario)
         if scenario == "5G":
             # Switch to Receiver mode
             set_speed(SPEED_OF_LIGHT)
+            set_frequency(five_g_reciever_frequency)
             self.mode_dropdown.setCurrentText("Receiver")
             self.distance_slider.setValue(10)
             self.emitters_spinbox.setValue(8)
@@ -304,6 +309,14 @@ class Main(QMainWindow):
             self.curvature_slider.setValue(8)
             self.emitters_spinbox.setValue(32)
             self.geometry_dropdown.setCurrentText("Curved")
+        elif scenario == "Default Mode":
+            set_speed(SPEED_OF_SOUND_AIR)
+            self.mode_dropdown.setCurrentText("Transmitter")
+            self.frequency_slider.setValue(500)
+            self.phase_slider.setValue(0)
+            self.distance_slider.setValue(10)
+            self.emitters_spinbox.setValue(8)
+            self.geometry_dropdown.setCurrentText("Linear")
 
         # Trigger UI updates and redraw
         self.update_mode(self.mode_dropdown.currentText())
