@@ -1,66 +1,74 @@
-# phased_array.py
 import numpy as np
 # Default speeds
 SPEED_OF_LIGHT = 3e8  # Speed of light in m/s (5G)
 SPEED_OF_SOUND_AIR = 343  # Speed of sound in air (m/s, Ultrasound default)
 SPEED_OF_SOUND_TISSUE = 1500  # Speed of sound in soft tissue (m/s, Ultrasound and Tumor Ablation)
 five_g_reciever_frequency=5000000000
-# Global simulation parameters
+
 current_speed = SPEED_OF_SOUND_AIR  # Default speed of sound
 reciever_frequency=five_g_reciever_frequency
 max_size = 100  # Maximum grid size
 dx = None  # Grid spacing
 
 def set_speed(speed):
-    """
-    Set the global speed for wave propagation.
-    """
     global current_speed
     current_speed = speed
     print(current_speed)
 def set_frequency(frequency):
     global reciever_frequency
     reciever_frequency = frequency
-def initialize_simulation_grid(N, f, d, max_size=100):
-    global dx
-    w =  current_speed / 2000  # Wavelength
-    dx = w / 10  # Grid spacing
-    size = min(np.ceil(2 * (((N - 1) * d) ** 2) / w * 4), max_size)
-    x = np.arange(-size, size, dx)
-    y = np.arange(0, size, dx)
-    return np.meshgrid(x, y), w
 
-def compute_wave_pattern(N, f, dir_angle, distance, grid, t=0, geometry="Linear", arc_radius=1.0):
-    w =  current_speed / f  # Wavelength
+def initialize_simulation_grid(N, frequency, distance, max_size=100):
+    global dx
+    wavelength =  current_speed / 2000  # Wavelength
+    dx = wavelength / 10  # Grid spacing
+    size = min(np.ceil(2 * (((N - 1) * distance) ** 2) / wavelength * 4), max_size)
+    X_grid = np.arange(-size, size, dx)
+    Y_grid = np.arange(0, size, dx)
+    return np.meshgrid(X_grid, Y_grid), wavelength
+
+def compute_wave_pattern(N, frequency, steering_angle, distance, grid, t=0, geometry="Linear", arc_radius=1.0):
+    wavelength =  current_speed / frequency  # Wavelength
     print(current_speed)
 
-    k = 2 * np.pi / w  # Wave number
-    omega = 2 * np.pi * f  # Angular frequency
-    dir_rad = np.radians(dir_angle)  # Steering angle in radians
+    wave_number = 2 * np.pi / wavelength  # Wave number k = 2π / wavelength
+    omega = 2 * np.pi * frequency  # Angular frequency
+    steering_angle_rad = np.radians(steering_angle)  # Steering angle in radians
 
     if geometry == "Curved":
         # Positions along a circular arc
         angles = np.linspace(-np.pi / 4, np.pi / 4, N)
-        positions = arc_radius * np.stack((np.sin(angles), np.cos(angles)), axis=1)
-        dphi = k * arc_radius * np.sin(np.linspace(-np.pi / 4, np.pi / 4, N)) * np.sin(dir_rad)
+        positions = arc_radius * np.stack((np.sin(angles), np.cos(angles)), axis=1) #Convert polar to cartesian coordinates
+        phase_shifts = wave_number * arc_radius * np.sin(np.linspace(-np.pi / 4, np.pi / 4, N)) * np.sin(steering_angle_rad)
     else:
-        # Linear positions: N emitters spaced along X-axis
         positions = np.linspace(-(N - 1) * distance / 2, (N - 1) * distance / 2, N)
-        positions = np.column_stack((positions, np.zeros_like(positions)))  # Add Y=0 for Linear mode
+        positions = np.column_stack((positions, np.zeros_like(positions)))  
 
         # Phase shift per emitter due to steering
-        dphi_per_distance = 2 * np.pi * distance * np.sin(dir_rad) / w
-        dphi = np.arange(-(N - 1) / 2, (N - 1) / 2 + 1) * dphi_per_distance
+        dphi_per_distance = 2 * np.pi * distance * np.sin(steering_angle_rad) / wavelength
+        phase_shifts = np.arange(-(N - 1) / 2, (N - 1) / 2 + 1) * dphi_per_distance
 
     # Precompute distances from emitters
-    X, Y = grid
-    Rs = np.sqrt((X[:, :, None] - positions[:, 0]) ** 2 + (Y[:, :, None] - positions[:, 1]) ** 2)
+    X_grid, Y_grid = grid
+    emitter_distances = np.sqrt((X_grid[:, :, None] - positions[:, 0]) ** 2 + (Y_grid[:, :, None] - positions[:, 1]) ** 2)
 
     # Apply phase shifts
-    phase_shifts = k * Rs + omega * t + dphi[None, None, :]
-    Z = np.sum(np.cos(phase_shifts), axis=2)
-    return Z, positions
+    phase_shifts = wave_number * emitter_distances + omega * t + phase_shifts[None, None, :] # distances from each grid point to all emitter positions
+    wave_pattern = np.sum(np.cos(phase_shifts), axis=2)
+    return wave_pattern, positions
 
+
+def compute_receiver_pattern(grid, receiver_positions, steering_angle=0):
+    X_grid, Y_grid = grid
+    interference_pattern = np.zeros(X_grid.shape)
+    steering_angle_rad = np.radians(steering_angle)  # Convert angle to radians
+
+    for receiver in receiver_positions:
+
+        distance_from_receiver = np.sqrt((X_grid - receiver[0]) ** 2 + (Y_grid - receiver[1]) ** 2) # Distance from receiver to each grid point
+        interference_pattern += np.cos(2 * np.pi * distance_from_receiver / dx + 2 * np.pi * receiver[0] * np.sin(steering_angle_rad) / dx)  # Superposition of Waves : sum of cos( (2πR / λ) + (2πx₀ * sin(θ) / λ) )
+
+    return interference_pattern, receiver_positions
 
 
 def compute_beam_profile(Elements_Number, frequency, distance, dir_angle,receiver_positions ,geometry="Linear", arc_radius=1.0, mode="Emitter"):
@@ -105,20 +113,8 @@ def compute_beam_profile(Elements_Number, frequency, distance, dir_angle,receive
     array_factor = np.abs(array_factor)  # Get the magnitude
     array_factor /= np.max(array_factor)  # Normalize
     array_factor = np.clip(array_factor, 1e-10, 1)
-    # print(array_factor)
     return angles, 20 * np.log10(array_factor)  # Convert to dB scale
 
 
 
 
-def compute_receiver_pattern(grid, receiver_positions, steering_angle=0):
-    X, Y = grid
-    Z = np.zeros(X.shape)
-    dir_rad = np.radians(steering_angle)  # Convert angle to radians
-
-    for rx in receiver_positions:
-        # Add phase adjustment for steering
-        Rs = np.sqrt((X - rx[0]) ** 2 + (Y - rx[1]) ** 2)
-        Z += np.cos(2 * np.pi * Rs / dx + 2 * np.pi * rx[0] * np.sin(dir_rad) / dx)
-
-    return Z, receiver_positions

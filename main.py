@@ -54,7 +54,7 @@ class Main(QMainWindow):
 
         self.frequency_label = QLabel("Frequency (Hz):")
         self.frequency_slider = QSlider(Qt.Horizontal)
-        self.frequency_slider.setRange(500, 500000)
+        self.frequency_slider.setRange(500, 5000)
         self.frequency_slider.setValue(500)
         self.frequency_value = QLabel("500")
         self.frequency_slider.setToolTip("Adjust frequency between 500Hz and 5MHz")
@@ -91,9 +91,9 @@ class Main(QMainWindow):
 
         self.scenario_label = QLabel("Select Scenario:")
         self.scenario_dropdown = QComboBox()
-        self.scenario_dropdown.addItems(["5G", "Ultrasound", "Tumor Ablation","Default Mode"])
-        self.load_scenario_button = QPushButton("Load Scenario")
-        self.load_scenario_button.setStyleSheet("background-color: lightblue; font-weight: bold")
+        self.scenario_dropdown.addItems(["Default Mode","5G", "Ultrasound", "Tumor Ablation"])
+        # self.choose_scenario_button = QPushButton("Load Scenario")
+        # self.choose_scenario_button.setStyleSheet("background-color: lightblue; font-weight: bold")
 
         #Graphs 
         self.constructive_map_canvas = FigureCanvas(plt.figure(figsize=(7, 4)))
@@ -108,19 +108,18 @@ class Main(QMainWindow):
          ]))
         
         # beamforming parameters
-        self.parameters_box = QVBoxLayout()  # Use a layout for dynamic updates
+        self.parameters_box = QVBoxLayout()  
         parameters_group = self.createGroupBox("Beamforming Parameters", self.parameters_box)
         controlBar_layout.addWidget(parameters_group)
 
-        # Add initial widgets to the parameters box
         self.frequency_widget = self.createSliders(self.frequency_label, self.frequency_value, self.frequency_slider)
-        self.parameters_box.addWidget(self.frequency_widget)  # Frequency slider container
+        self.parameters_box.addWidget(self.frequency_widget) 
 
         self.phase_widget = self.createSliders(self.phase_label, self.phase_value, self.phase_slider)
-        self.parameters_box.addWidget(self.phase_widget)  # Phase slider container
+        self.parameters_box.addWidget(self.phase_widget)  
 
         self.distance_widget = self.createSliders(self.distance_label, self.distance_value, self.distance_slider)
-        self.parameters_box.addWidget(self.distance_widget)  # Distance slider container
+        self.parameters_box.addWidget(self.distance_widget)  
 
         self.emitters_widget = self.createSpinBox(self.emitters_label, self.emitters_spinbox)
         self.parameters_box.addWidget(self.emitters_widget) 
@@ -134,8 +133,8 @@ class Main(QMainWindow):
 
         # Scenario
         controlBar_layout.addWidget(self.createCompactGroupBox("Scenario", [
-            self.scenario_label, self.scenario_dropdown,
-            self.load_scenario_button
+            self.scenario_label, self.scenario_dropdown
+            # self.choose_scenario_button
         ]))
 
         controlBar = QWidget()
@@ -173,7 +172,7 @@ class Main(QMainWindow):
         self.emitters_spinbox.setStyleSheet(spinBoxStyle)
         self.geometry_dropdown.setStyleSheet(comboBoxStyle)
         self.scenario_dropdown.setStyleSheet(comboBoxStyle)
-        self.load_scenario_button.setStyleSheet(buttonStyle)
+        # self.choose_scenario_button.setStyleSheet(buttonStyle)
         self.constructive_map_canvas.figure.set_facecolor(darkColor) 
         self.beam_profile_canvas.figure.set_facecolor(darkColor) 
 
@@ -201,7 +200,8 @@ class Main(QMainWindow):
         self.geometry_dropdown.currentTextChanged.connect(self.update_geometry)
         self.curvature_slider.sliderReleased.connect(self.update_plot)
 
-        self.load_scenario_button.clicked.connect(self.load_scenario)
+        # self.choose_scenario_button.clicked.connect(self.choose_scenario)
+        self.scenario_dropdown.currentIndexChanged.connect(self.choose_scenario)
 
     def update_mode(self, mode):
         if mode == "Receiver":
@@ -233,7 +233,7 @@ class Main(QMainWindow):
 
     def update_plot(self):
         mode = self.mode_dropdown.currentText()
-        self.initial_state['scenario'] = self.scenario_dropdown.currentText()  # Update scenario in the state
+        self.initial_state['scenario'] = self.scenario_dropdown.currentText()  
 
         if mode == "Receiver":
             self.controller.update_state(
@@ -276,7 +276,7 @@ class Main(QMainWindow):
         
         self.update_plot()
 
-    def load_scenario(self):
+    def choose_scenario(self):
         scenario = self.scenario_dropdown.currentText()
         print(f"Loaded scenario: {scenario}")
         self.initial_state['scenario'] = scenario
@@ -294,24 +294,29 @@ class Main(QMainWindow):
             set_speed(SPEED_OF_SOUND_TISSUE)
 
             self.mode_dropdown.setCurrentText("Transmitter")
-            self.frequency_slider.setValue(2000000)
+            self.frequency_slider.setRange(2000000, 5000000)
+            self.frequency_slider.setValue(3000000)
             self.phase_slider.setValue(10)
             self.distance_slider.setValue(5)
             self.emitters_spinbox.setValue(16)
             self.geometry_dropdown.setCurrentText("Linear")
+
         elif scenario == "Tumor Ablation":
             # Switch to Transmitter mode
             set_speed(SPEED_OF_SOUND_TISSUE)
 
             self.mode_dropdown.setCurrentText("Transmitter")
-            self.frequency_slider.setValue(500000)
+            self.frequency_slider.setRange(500000, 2000000)
+            self.frequency_slider.setValue(600000)
             self.phase_slider.setValue(15)
             self.curvature_slider.setValue(8)
             self.emitters_spinbox.setValue(32)
             self.geometry_dropdown.setCurrentText("Curved")
+            
         elif scenario == "Default Mode":
             set_speed(SPEED_OF_SOUND_AIR)
             self.mode_dropdown.setCurrentText("Transmitter")
+            self.frequency_slider.setRange(500, 5000)
             self.frequency_slider.setValue(500)
             self.phase_slider.setValue(0)
             self.distance_slider.setValue(10)
