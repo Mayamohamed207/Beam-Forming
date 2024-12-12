@@ -21,12 +21,12 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 class Main(QMainWindow):
     def __init__(self):
         super().__init__()
-        print(f"{self} initialized")
+        logging.info(f"{self} initialized")
         self.initializeUI()
         self.connectingUI()
 
     def initializeUI(self):
-        print("UI initialized")
+        logging.info("UI initialized")
         self.setWindowTitle("2D Beamforming Simulator")
         self.setGeometry(100, 100, 1200, 800)
         self.initial_state = {
@@ -180,7 +180,7 @@ class Main(QMainWindow):
         self.beam_profile_canvas.figure.set_facecolor(darkColor) 
 
     def connectingUI(self):
-        print("Connecting UI")
+        logging.info("Connecting UI")
 
         self.frequency_slider.valueChanged.connect(
             lambda: self.frequency_value.setText(str(self.frequency_slider.value()))
@@ -230,7 +230,7 @@ class Main(QMainWindow):
                 self.distance_slider.setEnabled(False)
                 self.distance_slider.setStyleSheet(sliderDisabledStyle)  
             
-
+        logging.info("Mode changed to: %s", mode)
         self.update_plot()
 
 
@@ -281,7 +281,7 @@ class Main(QMainWindow):
 
     def choose_scenario(self):
         scenario = self.scenario_dropdown.currentText()
-        print(f"Loaded scenario: {scenario}")
+        logging.info(f"Loaded scenario: {scenario}")
         self.initial_state['scenario'] = scenario
         self.controller.update_state(scenario=scenario)
         if scenario == "5G":
@@ -303,6 +303,8 @@ class Main(QMainWindow):
             self.distance_slider.setValue(5)
             self.emitters_spinbox.setValue(16)
             self.geometry_dropdown.setCurrentText("Linear")
+            
+    
 
         elif scenario == "Tumor Ablation":
             # Switch to Transmitter mode
