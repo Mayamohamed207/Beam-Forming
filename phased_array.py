@@ -1,4 +1,8 @@
 import numpy as np
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# file_handler = logging.FileHandler('E:\DSP\Beam-Forming')
+# file_handler.setFormatter(formatter)
 # Default speeds
 SPEED_OF_LIGHT = 3e8  # Speed of light in m/s (5G)
 SPEED_OF_SOUND_AIR = 343  # Speed of sound in air (m/s, Ultrasound default)
@@ -13,10 +17,12 @@ dx = None  # Grid spacing
 def set_speed(speed):
     global current_speed
     current_speed = speed
-    print(current_speed)
+    logging.info(f"Speed updated to: {current_speed}")
+
 def set_frequency(frequency):
     global reciever_frequency
     reciever_frequency = frequency
+    logging.debug(f"Frequency updated to: {reciever_frequency}")
 
 def initialize_simulation_grid(N, frequency, distance, max_size=100):
     global dx
@@ -25,6 +31,8 @@ def initialize_simulation_grid(N, frequency, distance, max_size=100):
     size = min(np.ceil(2 * (((N - 1) * distance) ** 2) / wavelength * 4), max_size)
     X_grid = np.arange(-size, size, dx)
     Y_grid = np.arange(0, size, dx)
+    logging.debug(f"Grid initialized with size: {size}, wavelength: {wavelength}, dx: {dx}")
+
     return np.meshgrid(X_grid, Y_grid), wavelength
 
 def compute_wave_pattern(N, frequency, steering_angle, distance, grid, t=0, geometry="Linear", arc_radius=1.0):
@@ -34,27 +42,32 @@ def compute_wave_pattern(N, frequency, steering_angle, distance, grid, t=0, geom
     wave_number = 2 * np.pi / wavelength  # Wave number k = 2π / wavelength
     omega = 2 * np.pi * frequency  # Angular frequency
     steering_angle_rad = np.radians(steering_angle)  # Steering angle in radians
-
+    
+    logging.debug(f"wave pattern: N={N}, frequency={frequency}, steering_angle={steering_angle}")
+    
     if geometry == "Curved":
         # Positions along a circular arc
         angles = np.linspace(-np.pi / 4, np.pi / 4, N)
         positions = arc_radius * np.stack((np.sin(angles), np.cos(angles)), axis=1) #Convert polar to cartesian coordinates
-        phase_shifts = wave_number * arc_radius * np.sin(np.linspace(-np.pi / 4, np.pi / 4, N)) * np.sin(steering_angle_rad)
+        phase_shifts = wave_number * arc_radius * np.sin(np.linspace(-np.pi / 4, np.pi / 4, N)) * np.sin(steering_angle_rad) #ϕ = k⋅R⋅sin(θs)⋅sin(θn)
+    
     else:
         positions = np.linspace(-(N - 1) * distance / 2, (N - 1) * distance / 2, N)
         positions = np.column_stack((positions, np.zeros_like(positions)))  
 
         # Phase shift per emitter due to steering
-        dphi_per_distance = 2 * np.pi * distance * np.sin(steering_angle_rad) / wavelength
-        phase_shifts = np.arange(-(N - 1) / 2, (N - 1) / 2 + 1) * dphi_per_distance
+        phase_shifts_per_distance = 2 * np.pi * distance * np.sin(steering_angle_rad) / wavelength # Δϕ = 2πdsin(θ)/λ , (Δx=d sin(θ): distance between adjacent emitters)
+        phase_shifts = np.arange(-(N - 1) / 2, (N - 1) / 2 + 1) * phase_shifts_per_distance
 
-    # Precompute distances from emitters
     X_grid, Y_grid = grid
     emitter_distances = np.sqrt((X_grid[:, :, None] - positions[:, 0]) ** 2 + (Y_grid[:, :, None] - positions[:, 1]) ** 2)
 
-    # Apply phase shifts
+    # wave equation = Acos(kx−ωt+ϕ)
     phase_shifts = wave_number * emitter_distances + omega * t + phase_shifts[None, None, :] # distances from each grid point to all emitter positions
     wave_pattern = np.sum(np.cos(phase_shifts), axis=2)
+    
+    logging.debug(f"Transmitter Wave pattern computed")
+    
     return wave_pattern, positions
 
 
@@ -68,6 +81,7 @@ def compute_receiver_pattern(grid, receiver_positions, steering_angle=0):
         distance_from_receiver = np.sqrt((X_grid - receiver[0]) ** 2 + (Y_grid - receiver[1]) ** 2) # Distance from receiver to each grid point
         interference_pattern += np.cos(2 * np.pi * distance_from_receiver / dx + 2 * np.pi * receiver[0] * np.sin(steering_angle_rad) / dx)  # Superposition of Waves : sum of cos( (2πR / λ) + (2πx₀ * sin(θ) / λ) )
 
+    logging.debug(f"Receiver Wave pattern computed")
     return interference_pattern, receiver_positions
 
 
@@ -113,6 +127,10 @@ def compute_beam_profile(Elements_Number, frequency, distance, dir_angle,receive
     array_factor = np.abs(array_factor)  # Get the magnitude
     array_factor /= np.max(array_factor)  # Normalize
     array_factor = np.clip(array_factor, 1e-10, 1)
+
+    # logging.info(f"Array factor updated to : {array_factor}")
+
+    logging.info(f"Beam profile is combuted")
     return angles, 20 * np.log10(array_factor)  # Convert to dB scale
 
 

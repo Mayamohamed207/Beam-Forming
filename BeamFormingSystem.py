@@ -1,8 +1,11 @@
 import numpy as np
+import logging
 import matplotlib.pyplot as plt
 from phased_array import initialize_simulation_grid, compute_wave_pattern, compute_beam_profile, \
     compute_receiver_pattern, current_speed
 from mainStyle import darkColor, greenColor, purpleColor
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class BeamForming:
     def __init__(self, fig, axs, initial_state):
@@ -16,9 +19,11 @@ class BeamForming:
             self.profile_ax = axs
 
         self.state = {
-            'mode': 'Emitter','N': 8,'f': 1000,'distance': 0.1,'dir': 0, 'geometry': 'Linear', 'scenario': 'Default Mode',}
+            'mode': 'Emitter','N': 8,'f': 500,'distance': 0.1,'dir': 0, 'geometry': 'Linear', 'scenario': 'Default Mode',}
         
         self.state.update(initial_state)  
+
+        logging.info(f"Initial state: {self.state}")
 
         self.grid, self.wavelength = initialize_simulation_grid(
             self.state['N'], self.state['f'], self.state['distance']
@@ -52,6 +57,7 @@ class BeamForming:
 
         self.plot_simulation()
         self.plot_beam_profile(angles, beam_profile)
+        logging.info("Wave pattern updated")
 
     def update_receiver_pattern(self):
         receiver_count = self.state.get('receiver_count', 1)
@@ -92,8 +98,6 @@ class BeamForming:
         self.fig.patch.set_facecolor(darkColor)
 
         angles_rad = np.radians(angles)
-
-        # Polar plot setup
         self.profile_ax.plot(angles_rad, beam_profile, color=greenColor)
 
         # Set the angle limits from -90 to 90 degrees

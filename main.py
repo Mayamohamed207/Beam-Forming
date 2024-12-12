@@ -13,6 +13,9 @@ from mainStyle import sliderStyle
 from mainStyle import mainStyle, sliderStyle, groupBoxStyle , buttonStyle, spinBoxStyle, comboBoxStyle,darkColor,sliderDisabledStyle
 from phased_array import set_speed, SPEED_OF_LIGHT, SPEED_OF_SOUND_TISSUE, SPEED_OF_SOUND_AIR, set_frequency,five_g_reciever_frequency
 
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 
 
 class Main(QMainWindow):
