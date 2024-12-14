@@ -13,6 +13,7 @@ current_speed = SPEED_OF_SOUND_AIR  # Default speed of sound
 reciever_frequency=five_g_reciever_frequency
 max_size = 100  # Maximum grid size
 dx = None  # Grid spacing
+size=2
 
 def set_speed(speed):
     global current_speed
@@ -44,6 +45,10 @@ def compute_wave_pattern(N, frequency, steering_angle, distance, grid, t=0, geom
     steering_angle_rad = np.radians(steering_angle)  # Steering angle in radians
     
     logging.debug(f"wave pattern: N={N}, frequency={frequency}, steering_angle={steering_angle}")
+    
+    size = min(np.ceil(2 * (((N - 1) * distance) ** 2) / wavelength * 4), max_size)
+    X_grid = np.arange(-size, size, dx)
+    Y_grid = np.arange(0, size, dx)
     
     if geometry == "Curved":
         # Positions along a circular arc

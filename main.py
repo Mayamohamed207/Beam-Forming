@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import (
     QMainWindow, QApplication, QVBoxLayout, QHBoxLayout, QGroupBox,
     QWidget, QLabel, QSlider, QPushButton, QComboBox, QSpinBox
 )
+import os 
 from PyQt5.QtCore import Qt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
@@ -14,14 +15,19 @@ from mainStyle import mainStyle, sliderStyle, groupBoxStyle , buttonStyle, spinB
 from phased_array import set_speed, SPEED_OF_LIGHT, SPEED_OF_SOUND_TISSUE, SPEED_OF_SOUND_AIR, set_frequency,five_g_reciever_frequency
 
 import logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# for handler in logging.getLogger().handlers[:]:
+#     logging.getLogger().removeHandler(handler)
 
-
+# logging.basicConfig(
+#     filename="Logging.log",
+#     level=logging.INFO,
+#     format="%(asctime)s - %(levelname)s - %(message)s"
+# )
 
 class Main(QMainWindow):
     def __init__(self):
         super().__init__()
-        logging.info(f"{self} initialized")
+        logging.info("initialized")
         self.initializeUI()
         self.connectingUI()
 

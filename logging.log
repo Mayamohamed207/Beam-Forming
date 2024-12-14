@@ -1,0 +1,187 @@
+2024-12-04 13:46:34,106 - INFO - initialized
+2024-12-04 13:46:34,106 - INFO - UI initialized
+2024-12-04 13:46:34,106 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'curvature': 0.0}
+2024-12-04 13:46:34,106 - INFO - Wave pattern updated
+
+2024-12-04 15:46:34,967 - INFO - initialized
+2024-12-04 15:46:34,967 - INFO - UI initialized
+2024-12-04 15:46:34,967 - INFO - Connecting UI
+2024-12-04 15:46:34,967 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'curvature': 0.0}
+2024-12-04 15:46:34,967 - INFO - Wave pattern updated
+
+2024-12-05 13:47:56,853 - INFO - initialized
+2024-12-05 13:47:56,853 - INFO - UI initialized
+2024-12-04 15:46:34,853 - INFO - Connecting UI
+2024-12-05 13:47:56,853 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'curvature': 0.0}
+2024-12-05 13:47:56,853 - INFO - Wave pattern updated
+2024-12-05 13:47:56,900 - INFO - Loaded scenario: 5G
+2024-12-05 13:47:56,900 - INFO - Mode changed to: Receiver
+2024-12-05 13:47:56,900 - INFO - Beam profile is combuted
+2024-12-05 13:47:56,900 - INFO - Wave pattern updated
+2024-12-05 13:47:56,900 - INFO - Speed updated to: 300000000.0
+2024-12-05 13:47:56,910 - INFO - Beam profile is combuted
+2024-12-05 13:47:59,910 - INFO - Wave pattern updated
+2024-12-05 13:48:00,916 - INFO - Beam profile is combuted
+2024-12-05 13:48:01,916 - INFO - Wave pattern updated
+2024-12-05 13:48:01,925 - INFO - Mode changed to: Receiver
+2024-12-05 13:48:01,925 - INFO - Beam profile is combuted
+2024-12-05 13:48:02,925 - INFO - Wave pattern updated
+2024-12-05 13:48:03,925 - INFO - Beam profile is combuted
+2024-12-05 13:48:04,930 - INFO - Wave pattern updated
+2024-12-05 13:48:08,930 - INFO - Beam profile is combuted
+2024-12-05 13:48:10,930 - INFO - Wave pattern updated
+2024-12-05 13:48:11,960 - INFO - Beam profile is combuted
+2024-12-05 13:48:12,960 - INFO - Wave pattern updated
+
+2024-12-08 13:48:17,802 - INFO - Loaded scenario: Ultrasound
+2024-12-08 13:48:17,863 - INFO - Beam profile is combuted
+2024-12-08 13:48:19,564 - INFO - Wave pattern updated
+2024-12-08 13:48:19,564 - INFO - Speed updated to: 1500
+2024-12-08 13:48:19,565 - INFO - Mode changed to: Transmitter
+2024-12-08 13:48:19,618 - INFO - Beam profile is combuted
+2024-12-08 13:48:19,778 - INFO - Wave pattern updated
+2024-12-08 13:48:19,998 - INFO - Beam profile is combuted
+2024-12-08 13:48:21,390 - INFO - Wave pattern updated
+2024-12-08 13:48:22,178 - INFO - Beam profile is combuted
+2024-12-08 13:48:23,338 - INFO - Wave pattern updated
+2024-12-08 13:48:23,891 - INFO - Mode changed to: Transmitter
+2024-12-08 13:48:24,007 - INFO - Beam profile is combuted
+2024-12-08 13:48:25,170 - INFO - Wave pattern updated
+2024-12-08 13:48:25,841 - INFO - Beam profile is combuted
+2024-12-08 13:48:26,961 - INFO - Wave pattern updated
+2024-12-08 13:48:30,438 - INFO - Loaded scenario: Tumor Ablation
+2024-12-08 13:48:30,598 - INFO - Beam profile is combuted
+2024-12-08 13:48:32,057 - INFO - Wave pattern updated
+2024-12-08 13:48:32,058 - INFO - Speed updated to: 1500
+2024-12-08 13:48:32,274 - INFO - Beam profile is combuted
+2024-12-08 13:48:33,243 - INFO - Wave pattern updated
+2024-12-08 13:48:34,428 - INFO - Beam profile is combuted
+2024-12-08 13:48:34,528 - INFO - Wave pattern updated
+2024-12-08 13:48:36,269 - INFO - Beam profile is combuted
+2024-12-08 13:48:36,651 - INFO - Wave pattern updated
+2024-12-08 13:48:37,596 - INFO - Beam profile is combuted
+2024-12-08 13:48:37,892 - INFO - Wave pattern updated
+
+
+
+2024-12-14 13:46:34,106 - INFO - initialized
+2024-12-14 13:46:34,106 - INFO - UI initialized
+2024-12-14 13:46:34,713 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'curvature': 0.0}
+2024-12-14 13:46:34,766 - INFO - Beam profile is combuted
+2024-12-14 13:46:34,967 - INFO - Wave pattern updated
+2024-12-14 13:46:35,022 - INFO - Beam profile is combuted
+2024-12-14 13:37:45,169 - WARNING - Colorbar could not be removed. It might already be detached.
+2024-12-14 13:46:35,190 - INFO - Wave pattern updated
+2024-12-14 13:46:35,334 - INFO - Connecting UI
+2024-12-14 13:46:40,209 - INFO - Beam profile is combuted
+2024-12-14 13:46:40,409 - INFO - Wave pattern updated
+2024-12-14 13:46:41,745 - INFO - Beam profile is combuted
+2024-12-14 13:46:41,960 - INFO - Wave pattern updated
+2024-12-14 13:46:43,932 - INFO - Beam profile is combuted
+2024-12-14 13:46:44,219 - INFO - Wave pattern updated
+2024-12-14 13:46:45,452 - INFO - Beam profile is combuted
+2024-12-14 13:46:45,708 - INFO - Wave pattern updated
+2024-12-14 13:46:47,064 - INFO - Beam profile is combuted
+2024-12-14 13:46:47,360 - INFO - Wave pattern updated
+2024-12-14 13:46:49,944 - INFO - Beam profile is combuted
+2024-12-14 13:46:50,144 - INFO - Wave pattern updated
+2024-12-14 13:46:53,021 - INFO - Beam profile is combuted
+2024-12-14 13:46:53,234 - INFO - Wave pattern updated
+2024-12-14 13:46:56,198 - INFO - Beam profile is combuted
+2024-12-14 13:46:56,434 - INFO - Wave pattern updated
+2024-12-14 13:47:00,367 - INFO - Beam profile is combuted
+2024-12-14 13:47:00,610 - INFO - Wave pattern updated
+2024-12-14 13:47:02,732 - INFO - Beam profile is combuted
+2024-12-14 13:47:03,016 - INFO - Wave pattern updated
+2024-12-14 13:47:04,873 - INFO - Beam profile is combuted
+2024-12-14 13:47:05,123 - INFO - Wave pattern updated
+2024-12-14 13:47:07,393 - INFO - Beam profile is combuted
+2024-12-14 13:47:07,620 - INFO - Wave pattern updated
+2024-12-14 13:47:08,770 - INFO - Beam profile is combuted
+2024-12-14 13:47:08,973 - INFO - Wave pattern updated
+2024-12-14 13:47:11,700 - INFO - Beam profile is combuted
+2024-12-14 13:47:11,914 - INFO - Wave pattern updated
+2024-12-14 13:47:13,177 - INFO - Beam profile is combuted
+2024-12-14 13:47:13,391 - INFO - Wave pattern updated
+2024-12-14 13:47:14,518 - INFO - Beam profile is combuted
+2024-12-14 13:47:14,758 - INFO - Wave pattern updated
+2024-12-14 13:47:15,655 - INFO - Beam profile is combuted
+2024-12-14 13:47:15,873 - INFO - Wave pattern updated
+2024-12-14 13:47:17,190 - INFO - Beam profile is combuted
+2024-12-14 13:47:17,409 - INFO - Wave pattern updated
+2024-12-14 13:47:19,318 - INFO - Beam profile is combuted
+2024-12-14 13:47:19,555 - INFO - Wave pattern updated
+2024-12-14 13:47:21,026 - INFO - Beam profile is combuted
+2024-12-14 13:47:21,243 - INFO - Wave pattern updated
+2024-12-14 13:47:24,339 - INFO - Beam profile is combuted
+2024-12-14 13:47:24,556 - INFO - Wave pattern updated
+2024-12-14 13:47:36,403 - INFO - Beam profile is combuted
+2024-12-14 13:47:36,651 - INFO - Wave pattern updated
+2024-12-14 13:47:40,441 - INFO - Beam profile is combuted
+2024-12-14 13:47:40,675 - INFO - Wave pattern updated
+2024-12-14 13:47:49,636 - INFO - Beam profile is combuted
+2024-12-14 13:47:49,963 - INFO - Wave pattern updated
+2024-12-14 13:47:52,171 - INFO - Beam profile is combuted
+2024-12-14 13:47:52,524 - INFO - Wave pattern updated
+2024-12-14 13:47:56,632 - INFO - Loaded scenario: 5G
+2024-12-14 13:47:56,657 - INFO - Beam profile is combuted
+2024-12-14 13:47:56,979 - INFO - Wave pattern updated
+2024-12-14 13:47:56,980 - INFO - Speed updated to: 300000000.0
+2024-12-14 13:47:56,981 - INFO - Mode changed to: Receiver
+2024-12-14 13:47:56,996 - INFO - Beam profile is combuted
+2024-12-14 13:47:59,263 - INFO - Wave pattern updated
+2024-12-14 13:48:00,496 - INFO - Beam profile is combuted
+2024-12-14 13:48:01,307 - INFO - Wave pattern updated
+2024-12-14 13:48:01,784 - INFO - Mode changed to: Receiver
+2024-12-14 13:48:01,828 - INFO - Beam profile is combuted
+2024-12-14 13:48:02,908 - INFO - Wave pattern updated
+2024-12-14 13:48:03,538 - INFO - Beam profile is combuted
+2024-12-14 13:48:04,643 - INFO - Wave pattern updated
+2024-12-14 13:48:08,876 - INFO - Beam profile is combuted
+2024-12-14 13:48:10,303 - INFO - Wave pattern updated
+2024-12-14 13:48:11,318 - INFO - Beam profile is combuted
+2024-12-14 13:48:12,643 - INFO - Wave pattern updated
+2024-12-14 13:48:17,802 - INFO - Loaded scenario: Ultrasound
+2024-12-14 13:48:17,863 - INFO - Beam profile is combuted
+2024-12-14 13:48:19,564 - INFO - Wave pattern updated
+2024-12-14 13:48:19,564 - INFO - Speed updated to: 1500
+2024-12-14 13:48:19,565 - INFO - Mode changed to: Transmitter
+2024-12-14 13:48:19,618 - INFO - Beam profile is combuted
+2024-12-14 13:48:19,778 - INFO - Wave pattern updated
+2024-12-14 13:48:19,998 - INFO - Beam profile is combuted
+2024-12-14 13:48:21,390 - INFO - Wave pattern updated
+2024-12-14 13:48:22,178 - INFO - Beam profile is combuted
+2024-12-14 13:48:23,338 - INFO - Wave pattern updated
+2024-12-14 13:48:23,891 - INFO - Mode changed to: Transmitter
+2024-12-14 13:48:24,007 - INFO - Beam profile is combuted
+2024-12-14 13:48:25,170 - INFO - Wave pattern updated
+2024-12-14 13:48:25,841 - INFO - Beam profile is combuted
+2024-12-14 13:48:26,961 - INFO - Wave pattern updated
+2024-12-14 13:48:30,438 - INFO - Loaded scenario: Tumor Ablation
+2024-12-14 13:48:30,598 - INFO - Beam profile is combuted
+2024-12-14 13:48:32,057 - INFO - Wave pattern updated
+2024-12-14 13:48:32,058 - INFO - Speed updated to: 1500
+2024-12-14 13:48:32,274 - INFO - Beam profile is combuted
+2024-12-14 13:48:33,243 - INFO - Wave pattern updated
+2024-12-14 13:48:33,961 - INFO - Beam profile is combuted
+2024-12-14 13:48:35,257 - INFO - Wave pattern updated
+2024-12-14 13:48:35,879 - INFO - Mode changed to: Transmitter
+2024-12-14 13:48:36,102 - INFO - Beam profile is combuted
+2024-12-14 13:48:37,359 - INFO - Wave pattern updated
+2024-12-14 13:48:38,198 - INFO - Beam profile is combuted
+2024-12-14 13:48:39,284 - INFO - Wave pattern updated
+2024-12-14 13:48:42,591 - INFO - Beam profile is combuted
+2024-12-14 13:48:44,126 - INFO - Wave pattern updated
+2024-12-14 13:48:46,909 - INFO - Beam profile is combuted
+2024-12-14 13:48:48,312 - INFO - Wave pattern updated
+2024-12-14 13:48:50,567 - INFO - Beam profile is combuted
+2024-12-14 13:48:52,095 - INFO - Wave pattern updated
+
+2024-12-14 14:03:57,821 - INFO - initialized
+2024-12-14 14:03:57,821 - INFO - UI initialized
+2024-12-14 14:03:58,660 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'curvature': 0.0}
+2024-12-14 14:03:58,737 - INFO - Beam profile is combuted
+2024-12-14 14:03:59,019 - INFO - Wave pattern updated
+2024-12-14 14:03:59,088 - INFO - Beam profile is combuted
+2024-12-14 14:03:59,323 - INFO - Wave pattern updated
+2024-12-14 14:03:59,530 - INFO - Connecting UI

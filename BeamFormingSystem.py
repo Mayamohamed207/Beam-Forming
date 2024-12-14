@@ -28,7 +28,7 @@ class BeamForming:
         self.grid, self.wavelength = initialize_simulation_grid(
             self.state['N'], self.state['f'], self.state['distance']
         )
-
+        self.colorbar = None
         self.update_wave_pattern()
 
     def update_wave_pattern(self):
@@ -84,13 +84,25 @@ class BeamForming:
         self.map_ax.set_xticks(np.arange(np.min(self.grid[0]), np.max(self.grid[0]), 1))
         self.map_ax.set_xlim(np.min(self.grid[0]), np.max(self.grid[0]))
         self.map_ax.set_ylim(np.min(self.grid[1]), np.max(self.grid[1]))
+        
+        self.color_map = plt.cm.get_cmap("viridis")
 
-        self.map_ax.contourf(self.grid[0], self.grid[1], self.wave_pattern, levels=50, cmap='viridis', extend='both')
+        contour = self.map_ax.contourf(self.grid[0], self.grid[1], self.wave_pattern, levels=50, cmap='viridis', extend='both')
+
+        if self.colorbar is None:       
+            self.colorbar = self.fig.colorbar(contour, ax=self.map_ax, orientation='vertical', pad=0.05)
+            self.colorbar.set_label("Wave Intensity", color=greenColor)
+            self.colorbar.ax.tick_params(colors=greenColor)
+        else:
+            self.colorbar.update_normal(contour)
+
+        # Plot positions
         self.map_ax.plot(self.positions[:, 0], self.positions[:, 1], 'o', color=purpleColor, markersize=10)
         self.map_ax.set_xlabel("X Position (m)", color=greenColor)
         self.map_ax.set_ylabel("Y Position (m)", color=greenColor)
         self.map_ax.tick_params(axis='both', colors=greenColor)
         plt.draw()
+
 
     def plot_beam_profile(self, angles, beam_profile):
         self.profile_ax.clear()
@@ -109,7 +121,7 @@ class BeamForming:
         self.profile_ax.tick_params(axis='both', colors=greenColor)
         self.profile_ax.grid(True, color=greenColor)
 
-        self.fig.subplots_adjust(left=0.12, right=0.9, top=1.0, bottom=0.04)
+        self.fig.subplots_adjust(left=0.12, right=0.79, top=1.0, bottom=0.04)        
         self.profile_ax.set_aspect('auto')
         plt.draw()
 
