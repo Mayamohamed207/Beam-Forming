@@ -227,7 +227,7 @@ class Main(QMainWindow):
             self.distance_label.setText("Receiver Position:")
             self.emitters_label.setText("Receivers Number:")
             self.emitters_spinbox.setRange(1, 64)
-            self.geometry_box.setVisible(False)
+            # self.geometry_box.setVisible(False)
             
             self.distance_slider.setEnabled(True)
             self.distance_slider.setStyleSheet(sliderStyle)
@@ -238,11 +238,14 @@ class Main(QMainWindow):
             self.distance_label.setText("Transmitter Position:")
             self.emitters_label.setText("Transmitters Number:")
             self.emitters_spinbox.setRange(2, 64)
-            self.geometry_box.setVisible(True)
-            if self.geometry_dropdown.currentText()== "Curved":
-                self.distance_slider.setEnabled(False)
-                self.distance_slider.setStyleSheet(sliderDisabledStyle)  
-            
+            # self.geometry_box.setVisible(True)
+            # if self.geometry_dropdown.currentText()== "Curved":
+            #     self.distance_slider.setEnabled(False)
+            #     self.distance_slider.setStyleSheet(sliderDisabledStyle)
+            self.distance_slider.setEnabled(True)
+            self.distance_slider.setStyleSheet(sliderStyle)
+            self.curvature_slider.setEnabled(True)
+            self.curvature_slider.setStyleSheet(sliderStyle)
         logging.info("Mode changed to: %s", mode)
         self.update_plot()
 
@@ -341,9 +344,12 @@ class Main(QMainWindow):
             self.phase_slider.setValue(10)
             self.distance_slider.setValue(5)
             self.emitters_spinbox.setValue(16)
-            self.geometry_dropdown.setCurrentText("Linear")
-            
-    
+            self.curvature_slider.setValue(0)
+            # self.geometry_dropdown.setCurrentText("Linear")
+            self.initial_state['geometry'] = "Linear"
+
+
+
 
         elif scenario == "Tumor Ablation":
             # Switch to Transmitter mode
@@ -353,10 +359,14 @@ class Main(QMainWindow):
             self.frequency_slider.setRange(500000, 2000000)
             self.frequency_slider.setValue(600000)
             self.phase_slider.setValue(15)
+            self.distance_slider.setValue(0)
+
             self.curvature_slider.setValue(8)
             self.emitters_spinbox.setValue(32)
-            self.geometry_dropdown.setCurrentText("Curved")
-            
+            # self.geometry_dropdown.setCurrentText("Curved")
+            self.initial_state['geometry'] = "Curved"
+
+
         elif scenario == "Default Mode":
             set_speed(SPEED_OF_SOUND_AIR)
             self.mode_dropdown.setCurrentText("Transmitter")
@@ -364,8 +374,10 @@ class Main(QMainWindow):
             self.frequency_slider.setValue(500)
             self.phase_slider.setValue(0)
             self.distance_slider.setValue(10)
+            self.curvature_slider.setValue(0)
             self.emitters_spinbox.setValue(8)
-            self.geometry_dropdown.setCurrentText("Linear")
+            # self.geometry_dropdown.setCurrentText("Linear")
+            self.initial_state['geometry'] = "Linear"
 
         # Trigger UI updates and redraw
         self.update_mode(self.mode_dropdown.currentText())
