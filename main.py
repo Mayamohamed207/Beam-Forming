@@ -96,7 +96,7 @@ class Main(QMainWindow):
         self.curvature_slider.setRange(0, 50)
         self.curvature_slider.setValue(1)
         self.curvature_value = QLabel("0.0")
-        self.curvature_slider.setEnabled(False)
+        # self.curvature_slider.setEnabled(False)
 
         self.scenario_label = QLabel("Select Scenario:")
         self.scenario_dropdown = QComboBox()
@@ -133,13 +133,15 @@ class Main(QMainWindow):
         self.emitters_widget = self.createSpinBox(self.emitters_label, self.emitters_spinbox)
         self.parameters_box.addWidget(self.emitters_widget) 
 
-        # Geometry
-        self.geometry_box = self.createCompactGroupBox("Geometry", [
-            self.createSliders(self.curvature_label, self.curvature_value, self.curvature_slider),
-            self.createComboBox(self.geometry_label, self.geometry_dropdown)
-        ])
-        controlBar_layout.addWidget(self.geometry_box)
+        # # Geometry
+        # self.geometry_box = self.createCompactGroupBox("Geometry", [
+        #     self.createSliders(self.curvature_label, self.curvature_value, self.curvature_slider),
+        #     self.createComboBox(self.geometry_label, self.geometry_dropdown)
+        # ])
+        # controlBar_layout.addWidget(self.geometry_box)
 
+        self.curvature_widget = self.createSliders(self.curvature_label, self.curvature_value, self.curvature_slider)
+        self.parameters_box.addWidget(self.curvature_widget)
         # Scenario
         controlBar_layout.addWidget(self.createCompactGroupBox("Scenario", [
             self.scenario_label, self.scenario_dropdown
@@ -179,7 +181,7 @@ class Main(QMainWindow):
         self.distance_slider.setStyleSheet(sliderStyle)
         self.curvature_slider.setStyleSheet(sliderDisabledStyle)
         self.emitters_spinbox.setStyleSheet(spinBoxStyle)
-        self.geometry_dropdown.setStyleSheet(comboBoxStyle)
+        # self.geometry_dropdown.setStyleSheet(comboBoxStyle)
         self.scenario_dropdown.setStyleSheet(comboBoxStyle)
         # self.choose_scenario_button.setStyleSheet(buttonStyle)
         self.constructive_map_canvas.figure.set_facecolor(darkColor) 
@@ -194,10 +196,15 @@ class Main(QMainWindow):
         self.phase_slider.valueChanged.connect(
             lambda: self.phase_value.setText(str(self.phase_slider.value()))
         )
+        # self.distance_slider.valueChanged.connect(
+        #     lambda: self.distance_value.setText(f"{self.distance_slider.value() / 100:.3f}")
+        # )
         self.distance_slider.valueChanged.connect(
-            lambda: self.distance_value.setText(f"{self.distance_slider.value() / 100:.3f}")
+            lambda: self.update_distance_and_geometry()
         )
-
+        self.curvature_slider.valueChanged.connect(
+            lambda: self.update_curvature_and_geometry()
+        )
         self.mode_dropdown.currentTextChanged.connect(self.update_mode)
         
 
@@ -206,7 +213,7 @@ class Main(QMainWindow):
         self.distance_slider.sliderReleased.connect(self.update_plot)
         self.emitters_spinbox.valueChanged.connect(self.update_plot)
         
-        self.geometry_dropdown.currentTextChanged.connect(self.update_geometry)
+        # self.geometry_dropdown.currentTextChanged.connect(self.update_geometry)
         self.curvature_slider.sliderReleased.connect(self.update_plot)
 
         # self.choose_scenario_button.clicked.connect(self.choose_scenario)
@@ -239,6 +246,14 @@ class Main(QMainWindow):
         logging.info("Mode changed to: %s", mode)
         self.update_plot()
 
+    def set_geometry(self, geometry):
+        self.initial_state['geometry'] = geometry
+        if geometry == "Linear":
+            self.curvature_slider.setValue(0)  # Reset curvature when switching to linear
+        elif geometry == "Curved":
+            self.distance_slider.setValue(10)  # Reset distance when switching to curved
+
+        self.update_plot()
 
     def update_plot(self):
         mode = self.mode_dropdown.currentText()
@@ -259,31 +274,49 @@ class Main(QMainWindow):
                 f=self.frequency_slider.value(),
                 dir=self.phase_slider.value(),
                 distance=self.distance_slider.value() / 100,
-                geometry=self.geometry_dropdown.currentText(),
+                geometry=self.initial_state['geometry'],  # Updated geometry
                 curvature=self.curvature_slider.value() / 10
             )
         self.constructive_map_canvas.draw()
         self.beam_profile_canvas.draw()
 
-   
-    def update_geometry(self):
-        selected_geometry = self.geometry_dropdown.currentText()
-
-        if selected_geometry == "Linear":
-            self.curvature_slider.setEnabled(False)
-            self.curvature_slider.setStyleSheet(sliderDisabledStyle)  
-            # Enable distance slider
-            self.distance_slider.setEnabled(True)
-            self.distance_slider.setStyleSheet(sliderStyle)  
-        elif selected_geometry == "Curved":
-            # Enable curvature slider
-            self.curvature_slider.setEnabled(True)
-            self.curvature_slider.setStyleSheet(sliderStyle)  
-            # Disable distance slider
-            self.distance_slider.setEnabled(False)
-            self.distance_slider.setStyleSheet(sliderDisabledStyle)  
-        
+    def update_distance_and_geometry(self):
+        # Update the distance label
+        self.distance_value.setText(f"{self.distance_slider.value() / 100:.3f}")
+        # Set the geometry type to Linear
+        # self.set_geometry("Linear")
+        self.initial_state['geometry'] ="Linear"
         self.update_plot()
+
+
+
+    def update_curvature_and_geometry(self):
+        # Update the curvature label
+        self.curvature_value.setText(f"{self.curvature_slider.value() / 10:.1f}")
+        # Set the geometry type to Curved
+        # self.set_geometry("Curved")
+        self.initial_state['geometry'] ="Curved"
+        self.update_plot()
+
+
+    # def update_geometry(self):
+    #     selected_geometry = self.geometry_dropdown.currentText()
+    #
+    #     if selected_geometry == "Linear":
+    #         self.curvature_slider.setEnabled(False)
+    #         self.curvature_slider.setStyleSheet(sliderDisabledStyle)
+    #         # Enable distance slider
+    #         self.distance_slider.setEnabled(True)
+    #         self.distance_slider.setStyleSheet(sliderStyle)
+    #     elif selected_geometry == "Curved":
+    #         # Enable curvature slider
+    #         self.curvature_slider.setEnabled(True)
+    #         self.curvature_slider.setStyleSheet(sliderStyle)
+    #         # Disable distance slider
+    #         self.distance_slider.setEnabled(False)
+    #         self.distance_slider.setStyleSheet(sliderDisabledStyle)
+    #
+    #     self.update_plot()
 
     def choose_scenario(self):
         scenario = self.scenario_dropdown.currentText()
