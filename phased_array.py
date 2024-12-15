@@ -25,17 +25,50 @@ def set_frequency(frequency):
     reciever_frequency = frequency
     logging.debug(f"Frequency updated to: {reciever_frequency}")
 
+
+# def initialize_simulation_grid(N, frequency, distance, resolution=500, max_size=100):
+#     """
+#     Initializes the simulation grid based on resolution, frequency, and grid size.
+#
+#     Parameters:
+#         N (int): Number of elements (e.g., antennas or sources).
+#         frequency (float): Frequency of the wave (Hz).
+#         distance (float): Distance between elements.
+#         resolution (int): Number of points per grid axis for higher clarity.
+#         max_size (float): Maximum grid size limit.
+#
+#     Returns:
+#         tuple: (X, Y) mesh grid, wavelength of the wave.
+#     """
+#     # Calculate wavelength based on speed of wave
+#     wavelength = current_speed / frequency
+#
+#     # Define grid size dynamically
+#     grid_size = min(np.ceil(2 * (((N - 1) * distance) ** 2) / wavelength), max_size)
+#
+#     # Use resolution to control grid density
+#     x = np.linspace(-grid_size, grid_size, resolution)
+#     y = np.linspace(0, grid_size, resolution)
+#
+#     X, Y = np.meshgrid(x, y)
+#
+#     # Debug information
+#     logging.debug(
+#         f"Grid initialized with grid_size: {grid_size:.2f}, wavelength: {wavelength:.2e}, resolution: {resolution}")
+#
+#     return (X, Y), wavelength
+
 def initialize_simulation_grid(N, frequency, distance, max_size=100):
     global dx
-    wavelength =  current_speed / 2000  # Wavelength
+    wavelength = current_speed / frequency  # Wavelength
     dx = wavelength / 10  # Grid spacing
+
     size = min(np.ceil(2 * (((N - 1) * distance) ** 2) / wavelength * 4), max_size)
     X_grid = np.arange(-size, size, dx)
     Y_grid = np.arange(0, size, dx)
     logging.debug(f"Grid initialized with size: {size}, wavelength: {wavelength}, dx: {dx}")
 
     return np.meshgrid(X_grid, Y_grid), wavelength
-
 def compute_wave_pattern(N, frequency, steering_angle, distance, grid, t=0, geometry="Linear", arc_radius=1.0):
     wavelength =  current_speed / frequency  # Wavelength
     print(current_speed)
