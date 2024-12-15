@@ -57,7 +57,6 @@ def set_frequency(frequency):
 #         f"Grid initialized with grid_size: {grid_size:.2f}, wavelength: {wavelength:.2e}, resolution: {resolution}")
 #
 #     return (X, Y), wavelength
-
 def initialize_simulation_grid(N, frequency, distance, max_size=100):
     global dx
     wavelength = current_speed / frequency  # Wavelength
@@ -69,6 +68,7 @@ def initialize_simulation_grid(N, frequency, distance, max_size=100):
     logging.debug(f"Grid initialized with size: {size}, wavelength: {wavelength}, dx: {dx}")
 
     return np.meshgrid(X_grid, Y_grid), wavelength
+
 def compute_wave_pattern(N, frequency, steering_angle, distance, grid, t=0, geometry="Linear", arc_radius=1.0):
     wavelength =  current_speed / frequency  # Wavelength
     print(current_speed)
