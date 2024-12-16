@@ -8,21 +8,22 @@ import os
 from PyQt5.QtCore import Qt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from BeamFormingSystem import BeamForming
 import numpy as np
 from mainStyle import sliderStyle
 from mainStyle import mainStyle, sliderStyle, groupBoxStyle , buttonStyle, spinBoxStyle, comboBoxStyle,darkColor,sliderDisabledStyle
-from phased_array import set_speed, SPEED_OF_LIGHT, SPEED_OF_SOUND_TISSUE, SPEED_OF_SOUND_AIR, set_frequency,five_g_reciever_frequency
-
+from phased_array import set_speed, SPEED_OF_LIGHT, SPEED_OF_SOUND_TISSUE, SPEED_OF_SOUND_AIR, set_frequency,five_g_reciever_frequency,initialize_simulation_grid
+from PyQt5.QtGui import QIcon
 import logging
-# for handler in logging.getLogger().handlers[:]:
-#     logging.getLogger().removeHandler(handler)
+for handler in logging.getLogger().handlers[:]:
+    logging.getLogger().removeHandler(handler)
 
-# logging.basicConfig(
-#     filename="Logging.log",
-#     level=logging.INFO,
-#     format="%(asctime)s - %(levelname)s - %(message)s"
-# )
+logging.basicConfig(
+    filename="Logging.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 class Main(QMainWindow):
     def __init__(self):
@@ -101,11 +102,23 @@ class Main(QMainWindow):
         self.scenario_label = QLabel("Select Scenario:")
         self.scenario_dropdown = QComboBox()
         self.scenario_dropdown.addItems(["Default Mode","5G", "Ultrasound", "Tumor Ablation"])
-        # self.choose_scenario_button = QPushButton("Load Scenario")
-        # self.choose_scenario_button.setStyleSheet("background-color: lightblue; font-weight: bold")
 
         #Graphs 
         self.constructive_map_canvas = FigureCanvas(plt.figure(figsize=(7, 4)))
+        self.constructive_map_toolbar = NavigationToolbar(self.constructive_map_canvas, self)
+       
+        for action in self.constructive_map_toolbar.actions():
+            action.setVisible(False)  
+
+        for index in [1, 2, 3, 4,5]:
+            if index < len(self.constructive_map_toolbar.actions()):
+                action = self.constructive_map_toolbar.actions()[index]
+                action.setVisible(True) 
+
+                icon = QIcon(f"photos/toolbar_{index}.png")  
+                action.setIcon(icon)
+
+        # self.constructive_map_toolbar.setContentsMargins(900, 0, 0, 0) 
         self.beam_profile_canvas = FigureCanvas(plt.figure(figsize=(7, 4)))
         self.beam_profile_canvas.figure.add_subplot(111, polar=True) 
 
@@ -130,33 +143,34 @@ class Main(QMainWindow):
         self.distance_widget = self.createSliders(self.distance_label, self.distance_value, self.distance_slider)
         self.parameters_box.addWidget(self.distance_widget)  
 
+        self.curvature_widget = self.createSliders(self.curvature_label, self.curvature_value, self.curvature_slider)
+        self.parameters_box.addWidget(self.curvature_widget)
+
         self.emitters_widget = self.createSpinBox(self.emitters_label, self.emitters_spinbox)
         self.parameters_box.addWidget(self.emitters_widget) 
 
-        # # Geometry
-        # self.geometry_box = self.createCompactGroupBox("Geometry", [
-        #     self.createSliders(self.curvature_label, self.curvature_value, self.curvature_slider),
-        #     self.createComboBox(self.geometry_label, self.geometry_dropdown)
-        # ])
-        # controlBar_layout.addWidget(self.geometry_box)
-
-        self.curvature_widget = self.createSliders(self.curvature_label, self.curvature_value, self.curvature_slider)
-        self.parameters_box.addWidget(self.curvature_widget)
         # Scenario
         controlBar_layout.addWidget(self.createCompactGroupBox("Scenario", [
             self.scenario_label, self.scenario_dropdown
-            # self.choose_scenario_button
         ]))
 
         controlBar = QWidget()
         controlBar.setLayout(controlBar_layout)
        
-
+        
         # Graphs Layout
         graphsBar_layout = QVBoxLayout()
-        graphsBar_layout.setSpacing(5)  
+        graphsBar_layout.setSpacing(0)  
         graphsBar_layout.setContentsMargins(0, 0, 0, 0)
-        graphsBar_layout.addWidget(QLabel("Constructive/Destructive Map"))
+
+        map_toolbar_layout = QHBoxLayout()
+        map_toolbar_layout.addWidget(QLabel("Constructive/Destructive Map"))
+        map_toolbar_layout.addSpacing(105)
+        map_toolbar_layout.addWidget(self.constructive_map_toolbar)
+        graphsBar_layout.addLayout(map_toolbar_layout)
+
+        # graphsBar_layout.addSpacing(20)
+        # graphsBar_layout.addWidget(self.constructive_map_toolbar)
         graphsBar_layout.addWidget(self.constructive_map_canvas)
         graphsBar_layout.addWidget(QLabel("Beam Profile Viewer"))
         graphsBar_layout.addWidget(self.beam_profile_canvas)
@@ -179,7 +193,7 @@ class Main(QMainWindow):
         self.frequency_slider.setStyleSheet(sliderStyle)
         self.phase_slider.setStyleSheet(sliderStyle)
         self.distance_slider.setStyleSheet(sliderStyle)
-        self.curvature_slider.setStyleSheet(sliderDisabledStyle)
+        self.curvature_slider.setStyleSheet(sliderStyle)
         self.emitters_spinbox.setStyleSheet(spinBoxStyle)
         # self.geometry_dropdown.setStyleSheet(comboBoxStyle)
         self.scenario_dropdown.setStyleSheet(comboBoxStyle)
@@ -196,9 +210,6 @@ class Main(QMainWindow):
         self.phase_slider.valueChanged.connect(
             lambda: self.phase_value.setText(str(self.phase_slider.value()))
         )
-        # self.distance_slider.valueChanged.connect(
-        #     lambda: self.distance_value.setText(f"{self.distance_slider.value() / 100:.3f}")
-        # )
         self.distance_slider.valueChanged.connect(
             lambda: self.update_distance_and_geometry()
         )
@@ -213,35 +224,27 @@ class Main(QMainWindow):
         self.distance_slider.sliderReleased.connect(self.update_plot)
         self.emitters_spinbox.valueChanged.connect(self.update_plot)
         
-        # self.geometry_dropdown.currentTextChanged.connect(self.update_geometry)
         self.curvature_slider.sliderReleased.connect(self.update_plot)
 
-        # self.choose_scenario_button.clicked.connect(self.choose_scenario)
         self.scenario_dropdown.currentIndexChanged.connect(self.choose_scenario)
 
     def update_mode(self, mode):
         if mode == "Receiver":
-            # Remove Frequency slider
             self.parameters_box.removeWidget(self.frequency_widget)
             self.frequency_widget.setParent(None)  
             self.distance_label.setText("Receiver Position:")
             self.emitters_label.setText("Receivers Number:")
             self.emitters_spinbox.setRange(1, 64)
-            # self.geometry_box.setVisible(False)
-            
+            self.curvature_widget.setParent(None)              
             self.distance_slider.setEnabled(True)
             self.distance_slider.setStyleSheet(sliderStyle)
 
         else:  # Transmitter mode
-            # Add Frequency slider
-            self.parameters_box.insertWidget(0, self.frequency_widget)  
+            self.parameters_box.insertWidget(0, self.frequency_widget)
+            self.parameters_box.insertWidget(3, self.curvature_widget)  
             self.distance_label.setText("Transmitter Position:")
             self.emitters_label.setText("Transmitters Number:")
             self.emitters_spinbox.setRange(2, 64)
-            # self.geometry_box.setVisible(True)
-            # if self.geometry_dropdown.currentText()== "Curved":
-            #     self.distance_slider.setEnabled(False)
-            #     self.distance_slider.setStyleSheet(sliderDisabledStyle)
             self.distance_slider.setEnabled(True)
             self.distance_slider.setStyleSheet(sliderStyle)
             self.curvature_slider.setEnabled(True)
@@ -252,9 +255,9 @@ class Main(QMainWindow):
     def set_geometry(self, geometry):
         self.initial_state['geometry'] = geometry
         if geometry == "Linear":
-            self.curvature_slider.setValue(0)  # Reset curvature when switching to linear
+            self.curvature_slider.setValue(0)  
         elif geometry == "Curved":
-            self.distance_slider.setValue(10)  # Reset distance when switching to curved
+            self.distance_slider.setValue(10) 
 
         self.update_plot()
 
@@ -267,65 +270,40 @@ class Main(QMainWindow):
             mode=mode,
             receiver_count=self.emitters_spinbox.value(),
             receiver_spacing=self.distance_slider.value() / 100,
-            dir=self.phase_slider.value()  # Use the phase slider for steering angle
+            dir=self.phase_slider.value() 
     )
 
-        else:  # Transmitter mode
+        else: 
             self.controller.update_state(
                 mode=mode,
                 N=self.emitters_spinbox.value(),
                 f=self.frequency_slider.value(),
                 dir=self.phase_slider.value(),
                 distance=self.distance_slider.value() / 100,
-                geometry=self.initial_state['geometry'],  # Updated geometry
+                geometry=self.initial_state['geometry'], 
                 curvature=self.curvature_slider.value() / 10
             )
         self.constructive_map_canvas.draw()
         self.beam_profile_canvas.draw()
 
     def update_distance_and_geometry(self):
-        # Update the distance label
         self.distance_value.setText(f"{self.distance_slider.value() / 100:.3f}")
-        # Set the geometry type to Linear
-        # self.set_geometry("Linear")
         self.initial_state['geometry'] ="Linear"
         self.update_plot()
 
 
 
     def update_curvature_and_geometry(self):
-        # Update the curvature label
         self.curvature_value.setText(f"{self.curvature_slider.value() / 10:.1f}")
-        # Set the geometry type to Curved
-        # self.set_geometry("Curved")
         self.initial_state['geometry'] ="Curved"
         self.update_plot()
-
-
-    # def update_geometry(self):
-    #     selected_geometry = self.geometry_dropdown.currentText()
-    #
-    #     if selected_geometry == "Linear":
-    #         self.curvature_slider.setEnabled(False)
-    #         self.curvature_slider.setStyleSheet(sliderDisabledStyle)
-    #         # Enable distance slider
-    #         self.distance_slider.setEnabled(True)
-    #         self.distance_slider.setStyleSheet(sliderStyle)
-    #     elif selected_geometry == "Curved":
-    #         # Enable curvature slider
-    #         self.curvature_slider.setEnabled(True)
-    #         self.curvature_slider.setStyleSheet(sliderStyle)
-    #         # Disable distance slider
-    #         self.distance_slider.setEnabled(False)
-    #         self.distance_slider.setStyleSheet(sliderDisabledStyle)
-    #
-    #     self.update_plot()
 
     def choose_scenario(self):
         scenario = self.scenario_dropdown.currentText()
         logging.info(f"Loaded scenario: {scenario}")
         self.initial_state['scenario'] = scenario
         self.controller.update_state(scenario=scenario)
+        sizeY=10
         if scenario == "5G":
             # Switch to Receiver mode
             set_speed(SPEED_OF_LIGHT)
@@ -333,9 +311,9 @@ class Main(QMainWindow):
             self.mode_dropdown.setCurrentText("Receiver")
             self.distance_slider.setValue(10)
             self.emitters_spinbox.setValue(8)
-            self.phase_slider.setValue(45)  # Steering direction
+            self.phase_slider.setValue(45) 
+            sizeY = 1 
         elif scenario == "Ultrasound":
-            # Switch to Transmitter mode
             set_speed(SPEED_OF_SOUND_TISSUE)
 
             self.mode_dropdown.setCurrentText("Transmitter")
@@ -345,14 +323,10 @@ class Main(QMainWindow):
             self.distance_slider.setValue(5)
             self.emitters_spinbox.setValue(16)
             self.curvature_slider.setValue(0)
-            # self.geometry_dropdown.setCurrentText("Linear")
             self.initial_state['geometry'] = "Linear"
-
-
-
+            sizeY = 1
 
         elif scenario == "Tumor Ablation":
-            # Switch to Transmitter mode
             set_speed(SPEED_OF_SOUND_TISSUE)
 
             self.mode_dropdown.setCurrentText("Transmitter")
@@ -363,8 +337,8 @@ class Main(QMainWindow):
 
             self.curvature_slider.setValue(8)
             self.emitters_spinbox.setValue(32)
-            # self.geometry_dropdown.setCurrentText("Curved")
             self.initial_state['geometry'] = "Curved"
+            sizeY = 1
 
 
         elif scenario == "Default Mode":
@@ -376,10 +350,16 @@ class Main(QMainWindow):
             self.distance_slider.setValue(10)
             self.curvature_slider.setValue(0)
             self.emitters_spinbox.setValue(8)
-            # self.geometry_dropdown.setCurrentText("Linear")
             self.initial_state['geometry'] = "Linear"
-
-        # Trigger UI updates and redraw
+            sizeY = 10
+        
+    #     self.controller.grid, self.controller.wavelength = initialize_simulation_grid(
+    #     self.controller.state['N'],
+    #     self.controller.state['f'],
+    #     self.controller.state['distance'],
+    #     sizeX=5,
+    #     sizeY=sizeY
+    # )
         self.update_mode(self.mode_dropdown.currentText())
         self.update_plot()
 

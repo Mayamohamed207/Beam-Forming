@@ -1,9 +1,11 @@
 import numpy as np
 import logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-# file_handler = logging.FileHandler('E:\DSP\Beam-Forming')
-# file_handler.setFormatter(formatter)
-# Default speeds
+logging.basicConfig(
+    filename="Logging.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
 SPEED_OF_LIGHT = 3e8  # Speed of light in m/s (5G)
 SPEED_OF_SOUND_AIR = 343  # Speed of sound in air (m/s, Ultrasound default)
 SPEED_OF_SOUND_TISSUE = 1500  # Speed of sound in soft tissue (m/s, Ultrasound and Tumor Ablation)
@@ -25,42 +27,14 @@ def set_frequency(frequency):
     reciever_frequency = frequency
     logging.debug(f"Frequency updated to: {reciever_frequency}")
 
-
-# def initialize_simulation_grid(N, frequency, distance, resolution=500, max_size=100):
-#     """
-#     Initializes the simulation grid based on resolution, frequency, and grid size.
-#
-#     Parameters:
-#         N (int): Number of elements (e.g., antennas or sources).
-#         frequency (float): Frequency of the wave (Hz).
-#         distance (float): Distance between elements.
-#         resolution (int): Number of points per grid axis for higher clarity.
-#         max_size (float): Maximum grid size limit.
-#
-#     Returns:
-#         tuple: (X, Y) mesh grid, wavelength of the wave.
-#     """
-#     # Calculate wavelength based on speed of wave
-#     wavelength = current_speed / frequency
-#
-#     # Define grid size dynamically
-#     grid_size = min(np.ceil(2 * (((N - 1) * distance) ** 2) / wavelength), max_size)
-#
-#     # Use resolution to control grid density
-#     x = np.linspace(-grid_size, grid_size, resolution)
-#     y = np.linspace(0, grid_size, resolution)
-#
-#     X, Y = np.meshgrid(x, y)
-#
-#     # Debug information
-#     logging.debug(
-#         f"Grid initialized with grid_size: {grid_size:.2f}, wavelength: {wavelength:.2e}, resolution: {resolution}")
-#
-#     return (X, Y), wavelength
-def initialize_simulation_grid(N, frequency, distance, max_size=100):
+def initialize_simulation_grid(N, frequency, distance,sizeX=5,sizeY=10, max_size=100):
     global dx
-    wavelength = current_speed / frequency  # Wavelength
+    wavelength =  current_speed / 2000  # Wavelength
     dx = wavelength / 10  # Grid spacing
+    # if sizeX < dx: sizeX = 2 * dx  # Ensure minimum size
+    # if sizeY < dx: sizeY = 2 * dx  # Ensure minimum size
+    # X_grid = np.arange(-sizeX, sizeX, dx)
+    # Y_grid = np.arange(0, sizeY, dx)
 
     size = min(np.ceil(2 * (((N - 1) * distance) ** 2) / wavelength * 4), max_size)
     X_grid = np.arange(-size, size, dx)

@@ -5,7 +5,11 @@ from phased_array import initialize_simulation_grid, compute_wave_pattern, compu
     compute_receiver_pattern, current_speed
 from mainStyle import darkColor, greenColor, purpleColor
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    filename="Logging.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 class BeamForming:
     def __init__(self, fig, axs, initial_state):
@@ -19,32 +23,19 @@ class BeamForming:
             self.profile_ax = axs
 
         self.state = {
-            'mode': 'Emitter','N': 8,'f': 500,'distance': 0.1,'dir': 0, 'geometry': 'Linear', 'scenario': 'Default Mode',}
+            'mode': 'Emitter','N': 8,'f': 500,'distance': 0.1,'dir': 0, 'geometry': 'Linear', 'scenario': 'Default Mode','sizeX': 5,'sizeY': 10}
         
         self.state.update(initial_state)  
 
         logging.info(f"Initial state: {self.state}")
 
         self.grid, self.wavelength = initialize_simulation_grid(
-            self.state['N'], self.state['f'], self.state['distance']
+            self.state['N'], self.state['f'], self.state['distance'],sizeX=self.state['sizeX'],sizeY=self.state['sizeY']
         )
         self.colorbar = None
         self.update_wave_pattern()
 
     def update_wave_pattern(self):
-        # scenario_resolutions = {
-        #     "5G": 1000,  # High resolution for precise visualization
-        #     "Ultrasound": 800,  # Medium-high resolution
-        #     "Tumor Ablation": 600,  # Medium resolution
-        #     "Default Mode": 500  # Lower resolution for general use
-        # }
-        #
-        # resolution = scenario_resolutions.get(self.state['scenario'], 500)
-        #
-        # # Reinitialize grid with updated resolution
-        # self.grid, self.wavelength = initialize_simulation_grid(
-        #     self.state['N'], self.state['f'], self.state['distance'], resolution=resolution
-        # )
         if self.state['mode'] == 'Receiver':
             if self.state['scenario'] == "5G":
                 self.state['f'] =  5000000000
@@ -71,38 +62,6 @@ class BeamForming:
         self.plot_beam_profile(angles, beam_profile)
         logging.info("Wave pattern updated")
 
-    # def adjust_plot_limits(self):
-    #     # Example: Adjust limits based on scenario and resolution
-    #     if self.state['scenario'] == "5G":
-    #         self.grid, self.wavelength = initialize_simulation_grid(
-    #             self.state['N'], self.state['f'], self.state['distance']
-    #         )
-    #         self.map_ax.set_xlim(np.min(self.grid[0]), np.max(self.grid[0]))
-    #         self.map_ax.set_ylim(np.min(self.grid[1]), np.max(self.grid[1]))
-    #         self.map_ax.set_xticks(np.arange(np.min(self.grid[0]), np.max(self.grid[0]), 1))
-    #
-    #     elif self.state['scenario'] == "Ultrasound":
-    #         self.grid, self.wavelength = initialize_simulation_grid(
-    #             self.state['N'], self.state['f'], self.state['distance']
-    #         )
-    #         self.map_ax.set_xlim(np.min(self.grid[0]), np.max(self.grid[0]))
-    #         self.map_ax.set_ylim(np.min(self.grid[1]), np.max(self.grid[1]))
-    #         self.map_ax.set_xticks(np.arange(np.min(self.grid[0]), np.max(self.grid[0]), 1))
-    #
-    #     elif self.state['scenario'] == "Tumor Ablation":
-    #         self.grid, self.wavelength = initialize_simulation_grid(
-    #             self.state['N'], self.state['f'], self.state['distance']
-    #         )
-    #         self.map_ax.set_xlim(np.min(self.grid[0]), np.max(self.grid[0]))
-    #         self.map_ax.set_ylim(np.min(self.grid[1]), np.max(self.grid[1]))
-    #         self.map_ax.set_xticks(np.arange(np.min(self.grid[0]), np.max(self.grid[0]), 1))
-    #
-    #     else:
-    #         # Default scenario
-    #         self.map_ax.set_xlim(np.min(self.grid[0]), np.max(self.grid[0]))
-    #         self.map_ax.set_ylim(np.min(self.grid[1]), np.max(self.grid[1]))
-    #         self.map_ax.set_xticks(np.arange(np.min(self.grid[0]), np.max(self.grid[0]), 1))
-
     def update_receiver_pattern(self):
         receiver_count = self.state.get('receiver_count', 1)
         receiver_spacing = self.state.get('receiver_spacing', 0.5)
@@ -112,7 +71,7 @@ class BeamForming:
         receiver_count
         )
         receiver_positions = np.column_stack(
-        (receiver_positions, np.zeros_like(receiver_positions))  # Place at Y = 0
+        (receiver_positions, np.zeros_like(receiver_positions))
         )
 
         wave_pattern, _ = compute_receiver_pattern(
@@ -128,8 +87,6 @@ class BeamForming:
         self.map_ax.set_xticks(np.arange(np.min(self.grid[0]), np.max(self.grid[0]), 1))
         self.map_ax.set_xlim(np.min(self.grid[0]), np.max(self.grid[0]))
         self.map_ax.set_ylim(np.min(self.grid[1]), np.max(self.grid[1]))
-        # self.adjust_plot_limits()
-
         self.color_map = plt.cm.get_cmap("viridis")
 
         contour = self.map_ax.contourf(self.grid[0], self.grid[1], self.wave_pattern, levels=50, cmap='viridis', extend='both')
@@ -141,7 +98,6 @@ class BeamForming:
         else:
             self.colorbar.update_normal(contour)
 
-        # Plot positions
         self.map_ax.plot(self.positions[:, 0], self.positions[:, 1], 'o', color=purpleColor, markersize=10)
         self.map_ax.set_xlabel("X Position (m)", color=greenColor)
         self.map_ax.set_ylabel("Y Position (m)", color=greenColor)
