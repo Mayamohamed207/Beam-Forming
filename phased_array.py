@@ -141,6 +141,7 @@ def compute_beam_profile(Elements_Number, frequency, distance, dir_angle,receive
     array_factor = np.clip(array_factor, 1e-10, 1)
 
     # logging.info(f"Array factor updated to : {array_factor}")
+    logging.info(f"Array factor updated")
 
     logging.info(f"Beam profile is combuted")
     return angles, 20 * np.log10(array_factor)  # Convert to dB scale
