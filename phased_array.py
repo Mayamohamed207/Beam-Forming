@@ -39,7 +39,7 @@ def initialize_simulation_grid(N, frequency, distance,sizeX=5,sizeY=10, max_size
     size = min(np.ceil(2 * (((N - 1) * distance) ** 2) / wavelength * 4), max_size)
     X_grid = np.arange(-size, size, dx)
     Y_grid = np.arange(0, size, dx)
-    logging.debug(f"Grid initialized with size: {size}, wavelength: {wavelength}, dx: {dx}")
+    logging.info(f"Grid initialized with size: {size}, wavelength: {wavelength}, dx: {dx}")
 
     return np.meshgrid(X_grid, Y_grid), wavelength
 
@@ -51,7 +51,7 @@ def compute_wave_pattern(N, frequency, steering_angle, distance, grid, t=0, geom
     omega = 2 * np.pi * frequency  # Angular frequency
     steering_angle_rad = np.radians(steering_angle)  # Steering angle in radians
     
-    logging.debug(f"wave pattern: N={N}, frequency={frequency}, steering_angle={steering_angle}")
+    logging.info(f"wave pattern: N={N}, frequency={frequency}, steering_angle={steering_angle}")
     
     size = min(np.ceil(2 * (((N - 1) * distance) ** 2) / wavelength * 4), max_size)
     X_grid = np.arange(-size, size, dx)
@@ -141,7 +141,6 @@ def compute_beam_profile(Elements_Number, frequency, distance, dir_angle,receive
     array_factor = np.clip(array_factor, 1e-10, 1)
 
     # logging.info(f"Array factor updated to : {array_factor}")
-    logging.info(f"Array factor updated")
 
     logging.info(f"Beam profile is combuted")
     return angles, 20 * np.log10(array_factor)  # Convert to dB scale
