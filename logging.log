@@ -828,3 +828,86 @@
 2024-12-17 00:19:43,479 - INFO - wave pattern: N=16, frequency=3000000, steering_angle=10
 2024-12-17 00:19:43,564 - INFO - Beam profile is combuted
 2024-12-17 00:19:44,361 - INFO - Wave pattern updated
+2024-12-17 12:27:35,732 - INFO - initialized
+2024-12-17 12:27:35,732 - INFO - UI initialized
+2024-12-17 12:27:36,805 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 10, 'curvature': 0.0}
+2024-12-17 12:27:36,805 - INFO - Grid initialized with size: 5.0, wavelength: 0.1715, dx: 0.017150000000000002
+2024-12-17 12:27:36,807 - INFO - wave pattern: N=8, frequency=500, steering_angle=30
+2024-12-17 12:27:36,993 - INFO - Beam profile is computed
+2024-12-17 12:27:37,332 - INFO - Wave pattern updated
+2024-12-17 12:27:37,335 - INFO - wave pattern: N=8, frequency=500, steering_angle=0
+2024-12-17 12:27:37,467 - INFO - Beam profile is computed
+2024-12-17 12:27:37,664 - INFO - Wave pattern updated
+2024-12-17 12:27:37,861 - INFO - Connecting UI
+2024-12-17 12:27:42,300 - INFO - wave pattern: N=8, frequency=1589, steering_angle=0
+2024-12-17 12:27:42,438 - INFO - Beam profile is computed
+2024-12-17 12:27:42,621 - INFO - Wave pattern updated
+2024-12-17 12:27:45,136 - INFO - wave pattern: N=8, frequency=1589, steering_angle=-39
+2024-12-17 12:27:45,285 - INFO - Beam profile is computed
+2024-12-17 12:27:45,521 - INFO - Wave pattern updated
+2024-12-17 12:27:47,942 - INFO - wave pattern: N=8, frequency=1589, steering_angle=-39
+2024-12-17 12:27:48,102 - INFO - Beam profile is computed
+2024-12-17 12:27:48,357 - INFO - Wave pattern updated
+2024-12-17 12:27:48,578 - INFO - wave pattern: N=8, frequency=1589, steering_angle=-39
+2024-12-17 12:27:48,696 - INFO - Beam profile is computed
+2024-12-17 12:27:48,941 - INFO - Wave pattern updated
+2024-12-17 12:27:49,173 - INFO - wave pattern: N=8, frequency=1589, steering_angle=-39
+2024-12-17 12:27:49,340 - INFO - Beam profile is computed
+2024-12-17 12:27:49,613 - INFO - Wave pattern updated
+2024-12-17 12:27:50,127 - INFO - wave pattern: N=8, frequency=1589, steering_angle=-39
+2024-12-17 12:27:50,295 - INFO - Beam profile is computed
+2024-12-17 12:27:50,554 - INFO - Wave pattern updated
+2024-12-17 12:27:50,802 - INFO - wave pattern: N=8, frequency=1589, steering_angle=-39
+2024-12-17 12:27:50,970 - INFO - Beam profile is computed
+2024-12-17 12:27:51,255 - INFO - Wave pattern updated
+2024-12-17 12:28:00,180 - INFO - wave pattern: N=8, frequency=1589, steering_angle=-39
+2024-12-17 12:28:00,334 - INFO - Beam profile is computed
+2024-12-17 12:28:00,728 - INFO - Wave pattern updated
+2024-12-17 12:28:01,035 - INFO - wave pattern: N=8, frequency=1589, steering_angle=-39
+2024-12-17 12:28:01,158 - INFO - Beam profile is computed
+2024-12-17 12:28:01,422 - INFO - Wave pattern updated
+2024-12-17 12:28:01,602 - INFO - wave pattern: N=8, frequency=1589, steering_angle=-39
+2024-12-17 12:28:01,773 - INFO - Beam profile is computed
+2024-12-17 12:28:02,036 - INFO - Wave pattern updated
+2024-12-17 12:28:09,709 - INFO - wave pattern: N=8, frequency=1589, steering_angle=-39
+2024-12-17 12:28:09,869 - INFO - Beam profile is computed
+2024-12-17 12:28:10,121 - INFO - Wave pattern updated
+2024-12-17 12:28:10,341 - INFO - wave pattern: N=8, frequency=1589, steering_angle=-39
+2024-12-17 12:28:10,482 - INFO - Beam profile is computed
+2024-12-17 12:28:10,718 - INFO - Wave pattern updated
+2024-12-17 12:28:10,909 - INFO - wave pattern: N=8, frequency=1589, steering_angle=-39
+2024-12-17 12:28:11,021 - INFO - Beam profile is computed
+2024-12-17 12:28:11,285 - INFO - Wave pattern updated
+2024-12-17 12:28:16,553 - INFO - Loaded scenario: Ultrasound
+2024-12-17 12:28:16,553 - INFO - wave pattern: N=8, frequency=1589, steering_angle=-39
+2024-12-17 12:28:16,686 - INFO - Beam profile is computed
+2024-12-17 12:28:16,951 - INFO - Wave pattern updated
+2024-12-17 12:28:16,952 - INFO - Speed updated to: 1500
+2024-12-17 12:28:17,014 - INFO - wave pattern: N=8, frequency=3000000, steering_angle=10
+2024-12-17 12:28:17,151 - INFO - Beam profile is computed
+2024-12-17 12:28:18,547 - INFO - Wave pattern updated
+2024-12-17 12:28:19,057 - INFO - wave pattern: N=16, frequency=3000000, steering_angle=10
+2024-12-17 12:28:19,268 - INFO - Beam profile is computed
+2024-12-17 12:28:20,574 - INFO - Wave pattern updated
+2024-12-17 12:28:21,073 - INFO - wave pattern: N=16, frequency=3000000, steering_angle=10
+2024-12-17 12:28:21,279 - INFO - Beam profile is computed
+2024-12-17 12:28:24,601 - INFO - Wave pattern updated
+2024-12-17 12:28:25,904 - INFO - Mode changed to: Transmitter
+2024-12-17 12:28:25,905 - INFO - wave pattern: N=16, frequency=3000000, steering_angle=10
+2024-12-17 12:28:26,122 - INFO - Beam profile is computed
+2024-12-17 12:28:27,570 - INFO - Wave pattern updated
+2024-12-17 12:28:28,087 - INFO - wave pattern: N=16, frequency=3000000, steering_angle=10
+2024-12-17 12:28:28,287 - INFO - Beam profile is computed
+2024-12-17 12:28:29,668 - INFO - Wave pattern updated
+2024-12-17 12:28:45,732 - INFO - wave pattern: N=16, frequency=3000000, steering_angle=10
+2024-12-17 12:28:46,007 - INFO - Beam profile is computed
+2024-12-17 12:28:47,439 - INFO - Wave pattern updated
+2024-12-17 12:28:48,022 - INFO - wave pattern: N=16, frequency=3000000, steering_angle=10
+2024-12-17 12:28:48,235 - INFO - Beam profile is computed
+2024-12-17 12:28:49,787 - INFO - Wave pattern updated
+2024-12-17 12:28:50,365 - INFO - wave pattern: N=16, frequency=3000000, steering_angle=10
+2024-12-17 12:28:50,559 - INFO - Beam profile is computed
+2024-12-17 12:28:52,360 - INFO - Wave pattern updated
+2024-12-17 12:28:53,005 - INFO - wave pattern: N=16, frequency=3000000, steering_angle=10
+2024-12-17 12:28:53,201 - INFO - Beam profile is computed
+2024-12-17 12:28:54,679 - INFO - Wave pattern updated
