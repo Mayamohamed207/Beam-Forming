@@ -27,18 +27,52 @@ def set_frequency(frequency):
     reciever_frequency = frequency
     logging.debug(f"Frequency updated to: {reciever_frequency}")
 
-def initialize_simulation_grid(N, frequency, distance,sizeX=5,sizeY=10, max_size=100):
+def initialize_simulation_grid(N, frequency, distance,sizeX=5,sizeY=100, max_size=100,max_points=1000):
     global dx
-    wavelength =  current_speed / 2000  # Wavelength
+    wavelength =  current_speed / frequency  # Wavelength
     dx = wavelength / 10  # Grid spacing
     # if sizeX < dx: sizeX = 2 * dx  # Ensure minimum size
     # if sizeY < dx: sizeY = 2 * dx  # Ensure minimum size
     # X_grid = np.arange(-sizeX, sizeX, dx)
     # Y_grid = np.arange(0, sizeY, dx)
 
-    size = min(np.ceil(2 * (((N - 1) * distance) ** 2) / wavelength * 4), max_size)
-    X_grid = np.arange(-size, size, dx)
-    Y_grid = np.arange(0, size, dx)
+    # size = min(np.ceil(2 * (((N - 1) * distance) ** 2) / wavelength * 4), sizeY)
+    # X_grid = np.arange(-size, size, dx)
+    # Y_grid = np.arange(0, size, dx)
+    # dx = max(min(wavelength / 10, 1.0), 0.001)  # Limit dx between 0.001 and 1.0 units
+
+    # logging.info(f"Calculated wavelength: {wavelength:.6f}, dx: {dx:.6f}")
+
+    # # Dynamically adjust grid size to fit simulation constraints
+    # # Ensure that sizeX and sizeY are large enough to visualize emitters/spatial details
+    # adjusted_sizeX = max(2 * dx, sizeX)  # Minimum width for grid
+    # adjusted_sizeY = max(2 * dx, sizeY)  # Minimum height for grid
+    #
+    # # Constrain grid sizes to avoid excessively large grids
+    # adjusted_sizeX = min(adjusted_sizeX, max_size)
+    # adjusted_sizeY = min(adjusted_sizeY, max_size)
+    #
+    # # Generate grid points
+    # X_grid = np.arange(-adjusted_sizeX, adjusted_sizeX, dx)
+    # Y_grid = np.arange(0, adjusted_sizeY, dx)
+
+    # dx = min(wavelength / 10, 0.01), 0.0001)  # Bound dx between 0.0001 and 0.01 units
+    max_dx = max(sizeX, sizeY) / max_points  # Upper bound for dx
+    dx = max(dx, max_dx)  # Ensure dx is not too small
+    logging.info(f"Calculated wavelength: {wavelength:.6f}, dx: {dx:.6f}")
+
+    # Adjust grid size to prevent excessive memory usage
+    adjusted_sizeX = max(min(sizeX, max_size), 2 * dx)  # Ensure minimum grid size
+    adjusted_sizeY = max(min(sizeY, max_size), 2 * dx)
+
+    # Generate grid points safely
+    X_grid = np.arange(-adjusted_sizeX, adjusted_sizeX, dx)
+    Y_grid = np.arange(0, adjusted_sizeY, dx)
+
+    # Validate grid size
+    if X_grid.size == 0 or Y_grid.size == 0:
+        logging.error("Grid size is invalid. Check dx and input parameters.")
+        raise ValueError("Invalid grid size: dx is too large or frequency too small.")
     logging.info(f"Grid initialized with size: {size}, wavelength: {wavelength}, dx: {dx}")
 
     return np.meshgrid(X_grid, Y_grid), wavelength

@@ -303,28 +303,40 @@ class Main(QMainWindow):
         logging.info(f"Loaded scenario: {scenario}")
         self.initial_state['scenario'] = scenario
         self.controller.update_state(scenario=scenario)
-        sizeY=10
+        # sizeY=10
         if scenario == "5G":
             # Switch to Receiver mode
             set_speed(SPEED_OF_LIGHT)
-            set_frequency(five_g_reciever_frequency)
-            self.mode_dropdown.setCurrentText("Receiver")
+            # set_frequency(five_g_reciever_frequency)
+            # self.mode_dropdown.setCurrentText("Receiver")
+            # self.distance_slider.setValue(10)
+            # self.emitters_spinbox.setValue(8)
+            # self.phase_slider.setValue(45)
+            self.mode_dropdown.setCurrentText("Transmitter")
+            self.frequency_slider.setRange(200000000, 600000000)
+            self.frequency_slider.setValue(40000000)
+            self.phase_slider.setValue(0)
             self.distance_slider.setValue(10)
-            self.emitters_spinbox.setValue(8)
-            self.phase_slider.setValue(45) 
-            sizeY = 1 
+            self.emitters_spinbox.setValue(16)
+            self.curvature_slider.setValue(0)
+            self.initial_state['geometry'] = "Linear"
+            sizeX=5
+            sizeY = 3
+            max_points=1000000
         elif scenario == "Ultrasound":
             set_speed(SPEED_OF_SOUND_TISSUE)
 
             self.mode_dropdown.setCurrentText("Transmitter")
             self.frequency_slider.setRange(2000000, 5000000)
             self.frequency_slider.setValue(3000000)
-            self.phase_slider.setValue(10)
+            self.phase_slider.setValue(0)
             self.distance_slider.setValue(5)
-            self.emitters_spinbox.setValue(16)
+            self.emitters_spinbox.setValue(8)
             self.curvature_slider.setValue(0)
             self.initial_state['geometry'] = "Linear"
-            sizeY = 1
+            sizeY = 0.8
+            sizeX=2
+            max_points=800
 
         elif scenario == "Tumor Ablation":
             set_speed(SPEED_OF_SOUND_TISSUE)
@@ -336,9 +348,11 @@ class Main(QMainWindow):
             self.distance_slider.setValue(0)
 
             self.curvature_slider.setValue(8)
-            self.emitters_spinbox.setValue(32)
+            self.emitters_spinbox.setValue(8)
             self.initial_state['geometry'] = "Curved"
-            sizeY = 1
+            sizeY = 5
+            sizeX=5
+            max_points=2000
 
 
         elif scenario == "Default Mode":
@@ -352,14 +366,16 @@ class Main(QMainWindow):
             self.emitters_spinbox.setValue(8)
             self.initial_state['geometry'] = "Linear"
             sizeY = 10
+            sizeX=5
+            max_points=1000
         
-    #     self.controller.grid, self.controller.wavelength = initialize_simulation_grid(
-    #     self.controller.state['N'],
-    #     self.controller.state['f'],
-    #     self.controller.state['distance'],
-    #     sizeX=5,
-    #     sizeY=sizeY
-    # )
+        self.controller.grid, self.controller.wavelength = initialize_simulation_grid(
+        self.controller.state['N'],
+        self.controller.state['f'],
+        self.controller.state['distance'],
+        sizeX=sizeX,
+        sizeY=sizeY,max_points=max_points
+    )
         self.update_mode(self.mode_dropdown.currentText())
         self.update_plot()
 

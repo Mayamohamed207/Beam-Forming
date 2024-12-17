@@ -37,10 +37,10 @@ class BeamForming:
 
     def update_wave_pattern(self):
         if self.state['mode'] == 'Receiver':
-            if self.state['scenario'] == "5G":
-                self.state['f'] =  5000000000
-            else:
-                self.state[
+            # if self.state['scenario'] == "5G":
+            #     self.state['f'] =  5000000000
+            # else:
+            self.state[
                     'f'] = 5000  
             self.wavelength = current_speed / self.state['f']
             self.wave_pattern, self.positions = self.update_receiver_pattern()
@@ -52,6 +52,7 @@ class BeamForming:
                 self.state['N'], self.state['f'], self.state['dir'], self.state['distance'],
                 self.grid, geometry=self.state['geometry'], arc_radius=self.state.get('curvature', 1.0)
             )
+            print("trans wave")
 
             angles, beam_profile = compute_beam_profile(
                 self.state['N'], self.state['f'], self.state['distance'], self.state['dir'],self.positions,
