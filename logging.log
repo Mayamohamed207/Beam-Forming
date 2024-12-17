@@ -1,12 +1,27 @@
 2024-12-04 13:46:34,106 - INFO - initialized
 2024-12-04 13:46:34,106 - INFO - UI initialized
-2024-12-04 13:46:34,106 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'curvature': 0.0}
+2024-12-04 13:46:34,106 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30}
 2024-12-04 13:46:34,106 - INFO - Wave pattern updated
+
+2024-12-04 13:50:11,106 - INFO - initialized
+2024-12-04 13:50:11,106 - INFO - UI initialized
+2024-12-04 13:50:11,106 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30}
+2024-12-04 13:50:11,106 - INFO - Wave pattern updated
+
+2024-12-04 14:10:22,106 - INFO - initialized
+2024-12-04 14:10:22,106 - INFO - UI initialized
+2024-12-04 14:10:22,106 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30}
+2024-12-04 14:10:22,106 - INFO - Wave pattern updated
+
+2024-12-04 15:40:23,106 - INFO - initialized
+2024-12-04 15:40:23,106 - INFO - UI initialized
+2024-12-04 15:40:23,106 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30}
+2024-12-04 15:40:23,106 - INFO - Wave pattern updated
 
 2024-12-04 15:46:34,967 - INFO - initialized
 2024-12-04 15:46:34,967 - INFO - UI initialized
 2024-12-04 15:46:34,967 - INFO - Connecting UI
-2024-12-04 15:46:34,967 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'curvature': 0.0}
+2024-12-04 15:46:34,967 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30}
 2024-12-04 15:46:34,967 - INFO - Wave pattern updated
 
 2024-12-05 13:47:56,853 - INFO - initialized
@@ -248,7 +263,9 @@
  1.40248126e-01 1.40446358e-01 1.40613936e-01 1.40750939e-01
  1.40857429e-01 1.40933458e-01 1.40979061e-01 1.40994260e-01]
 
-
+2024-12-08 13:48:17,960 - INFO - initialized
+2024-12-08 13:48:17,972 - INFO - UI initialized
+2024-12-08 13:48:17,347 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 10, 'curvature': 0.0}
 2024-12-08 13:48:17,802 - INFO - Loaded scenario: Ultrasound
 2024-12-08 13:48:17,863 - INFO - Beam profile is combuted
 2024-12-08 13:48:19,564 - INFO - Wave pattern updated
@@ -318,6 +335,11 @@
 2024-12-14 13:37:45,169 - WARNING - Colorbar could not be removed. It might already be detached.
 2024-12-14 13:46:35,190 - INFO - Wave pattern updated
 2024-12-14 13:46:35,334 - INFO - Connecting UI
+2024-12-14 13:46:35,613 - INFO - wave pattern: N=8, frequency=500, steering_angle=0
+2024-12-14 13:46:35,626 - INFO - Array factor updated
+2024-12-14 13:46:35,626 - INFO - Beam profile is combuted
+2024-12-14 13:46:35,900 - INFO - Wave pattern updated
+2024-12-14 13:46:35,127 - INFO - wave pattern: N=8, frequency=1522, steering_angle=0
 2024-12-14 13:46:40,209 - INFO - Beam profile is combuted
 2024-12-14 13:46:40,409 - INFO - Wave pattern updated
 2024-12-14 13:46:41,745 - INFO - Beam profile is combuted
@@ -828,3 +850,76 @@
 2024-12-17 00:19:43,479 - INFO - wave pattern: N=16, frequency=3000000, steering_angle=10
 2024-12-17 00:19:43,564 - INFO - Beam profile is combuted
 2024-12-17 00:19:44,361 - INFO - Wave pattern updated
+2024-12-17 00:27:33,230 - INFO - initialized
+2024-12-17 00:27:33,230 - INFO - UI initialized
+2024-12-17 00:27:33,600 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 10, 'curvature': 0.0}
+2024-12-17 00:27:33,600 - INFO - Grid initialized with size: 5.0, wavelength: 0.1715, dx: 0.017150000000000002
+2024-12-17 00:27:33,600 - INFO - wave pattern: N=8, frequency=500, steering_angle=30
+2024-12-17 00:27:33,636 - INFO - Beam profile is combuted
+2024-12-17 00:27:33,757 - INFO - Wave pattern updated
+2024-12-17 00:27:33,757 - INFO - wave pattern: N=8, frequency=500, steering_angle=0
+2024-12-17 00:27:33,795 - INFO - Beam profile is combuted
+2024-12-17 00:27:33,896 - INFO - Wave pattern updated
+2024-12-17 00:27:33,980 - INFO - Connecting UI
+2024-12-17 00:29:11,162 - INFO - initialized
+2024-12-17 00:29:11,162 - INFO - UI initialized
+2024-12-17 00:29:11,575 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 10, 'curvature': 0.0}
+2024-12-17 00:29:11,575 - INFO - Grid initialized with size: 5.0, wavelength: 0.1715, dx: 0.017150000000000002
+2024-12-17 00:29:11,576 - INFO - wave pattern: N=8, frequency=500, steering_angle=30
+2024-12-17 00:29:11,613 - INFO - Beam profile is combuted
+2024-12-17 00:29:11,740 - INFO - Wave pattern updated
+2024-12-17 00:29:11,740 - INFO - wave pattern: N=8, frequency=500, steering_angle=0
+2024-12-17 00:29:11,783 - INFO - Beam profile is combuted
+2024-12-17 00:29:11,889 - INFO - Wave pattern updated
+2024-12-17 00:29:11,973 - INFO - Connecting UI
+2024-12-17 00:29:43,361 - INFO - initialized
+2024-12-17 00:29:43,361 - INFO - UI initialized
+2024-12-17 00:29:43,762 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 10, 'curvature': 0.0}
+2024-12-17 00:29:43,762 - INFO - Grid initialized with size: 5.0, wavelength: 0.1715, dx: 0.017150000000000002
+2024-12-17 00:29:43,763 - INFO - wave pattern: N=8, frequency=500, steering_angle=30
+2024-12-17 00:29:43,819 - INFO - Beam profile is combuted
+2024-12-17 00:29:43,947 - INFO - Wave pattern updated
+2024-12-17 00:29:43,947 - INFO - wave pattern: N=8, frequency=500, steering_angle=0
+2024-12-17 00:29:44,006 - INFO - Beam profile is combuted
+2024-12-17 00:29:44,106 - INFO - Wave pattern updated
+2024-12-17 00:29:44,196 - INFO - Connecting UI
+2024-12-17 00:30:09,450 - INFO - initialized
+2024-12-17 00:30:09,450 - INFO - UI initialized
+2024-12-17 00:30:09,863 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 10, 'curvature': 0.0}
+2024-12-17 00:30:09,863 - INFO - Grid initialized with size: 5.0, wavelength: 0.1715, dx: 0.017150000000000002
+2024-12-17 00:30:09,864 - INFO - wave pattern: N=8, frequency=500, steering_angle=30
+2024-12-17 00:30:09,901 - INFO - Beam profile is combuted
+2024-12-17 00:30:39,778 - INFO - initialized
+2024-12-17 00:30:39,778 - INFO - UI initialized
+2024-12-17 00:30:40,187 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 10, 'curvature': 0.0}
+2024-12-17 00:30:40,187 - INFO - Grid initialized with size: 5.0, wavelength: 0.1715, dx: 0.017150000000000002
+2024-12-17 00:30:40,188 - INFO - wave pattern: N=8, frequency=500, steering_angle=30
+2024-12-17 00:30:40,225 - INFO - Beam profile is combuted
+2024-12-17 00:30:40,346 - INFO - Wave pattern updated
+2024-12-17 00:30:40,347 - INFO - wave pattern: N=8, frequency=500, steering_angle=0
+2024-12-17 00:30:40,385 - INFO - Beam profile is combuted
+2024-12-17 00:30:40,485 - INFO - Wave pattern updated
+2024-12-17 00:30:40,575 - INFO - Connecting UI
+2024-12-17 00:32:38,537 - INFO - initialized
+2024-12-17 00:32:38,537 - INFO - UI initialized
+2024-12-17 00:32:38,938 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 10, 'curvature': 0.0}
+2024-12-17 00:32:38,938 - INFO - Grid initialized with size: 5.0, wavelength: 0.1715, dx: 0.017150000000000002
+2024-12-17 00:32:38,939 - INFO - wave pattern: N=8, frequency=500, steering_angle=30
+2024-12-17 00:32:38,977 - INFO - Beam profile is combuted
+2024-12-17 00:32:39,099 - INFO - Wave pattern updated
+2024-12-17 00:32:39,100 - INFO - wave pattern: N=8, frequency=500, steering_angle=0
+2024-12-17 00:32:39,138 - INFO - Beam profile is combuted
+2024-12-17 00:32:39,240 - INFO - Wave pattern updated
+2024-12-17 00:32:39,320 - INFO - Connecting UI
+
+2024-12-17 14:53:27,951 - INFO - initialized
+2024-12-17 14:53:27,951 - INFO - UI initialized
+2024-12-17 14:53:28,856 - INFO - Initial state: {'mode': 'Emitter', 'N': 8, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 10, 'curvature': 0.0}
+2024-12-17 14:53:28,856 - INFO - Grid initialized with size: 5.0, wavelength: 0.1715, dx: 0.017150000000000002
+2024-12-17 14:53:28,856 - INFO - wave pattern: N=8, frequency=500, steering_angle=30
+2024-12-17 14:53:28,909 - INFO - Beam profile is combuted
+2024-12-17 14:53:29,069 - INFO - Wave pattern updated
+2024-12-17 14:53:29,069 - INFO - wave pattern: N=8, frequency=500, steering_angle=0
+2024-12-17 14:53:29,119 - INFO - Beam profile is combuted
+2024-12-17 14:53:29,277 - INFO - Wave pattern updated
+2024-12-17 14:53:29,393 - INFO - Connecting UI

@@ -5,11 +5,11 @@ from phased_array import initialize_simulation_grid, compute_wave_pattern, compu
     compute_receiver_pattern, current_speed
 from mainStyle import darkColor, greenColor, purpleColor
 
-logging.basicConfig(
-    filename="Logging.log",
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
+# logging.basicConfig(
+#     filename="Logging.log",
+#     level=logging.INFO,
+#     format="%(asctime)s - %(levelname)s - %(message)s"
+# )
 
 class BeamForming:
     def __init__(self, fig, axs, initial_state):

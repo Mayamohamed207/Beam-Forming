@@ -19,11 +19,11 @@ import logging
 for handler in logging.getLogger().handlers[:]:
     logging.getLogger().removeHandler(handler)
 
-logging.basicConfig(
-    filename="Logging.log",
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
+# logging.basicConfig(
+#     filename="Logging.log",
+#     level=logging.INFO,
+#     format="%(asctime)s - %(levelname)s - %(message)s"
+# )
 
 class Main(QMainWindow):
     def __init__(self):
@@ -110,7 +110,7 @@ class Main(QMainWindow):
         for action in self.constructive_map_toolbar.actions():
             action.setVisible(False)  
 
-        for index in [1, 2, 3, 4,5]:
+        for index in [1, 2, 3,5]:
             if index < len(self.constructive_map_toolbar.actions()):
                 action = self.constructive_map_toolbar.actions()[index]
                 action.setVisible(True) 
@@ -165,7 +165,7 @@ class Main(QMainWindow):
 
         map_toolbar_layout = QHBoxLayout()
         map_toolbar_layout.addWidget(QLabel("Constructive/Destructive Map"))
-        map_toolbar_layout.addSpacing(105)
+        map_toolbar_layout.addSpacing(170)
         map_toolbar_layout.addWidget(self.constructive_map_toolbar)
         graphsBar_layout.addLayout(map_toolbar_layout)
 
