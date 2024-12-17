@@ -97,52 +97,79 @@ def compute_receiver_pattern(grid, receiver_positions, steering_angle=0):
     return interference_pattern, receiver_positions
 
 
-def compute_beam_profile(Elements_Number, frequency, distance, dir_angle,receiver_positions ,geometry="Linear", arc_radius=1.0, mode="Emitter"):
-    Wavelength =  current_speed / frequency  # Wavelength
+def compute_beam_profile(Elements_Number, frequency, distance, dir_angle, receiver_positions, geometry="Linear",
+                         arc_radius=1.0, mode="Emitter"):
+    # Calculate wavelength: λ = c / f
+    Wavelength = current_speed / frequency  # Wavelength
+
+    # Calculate wave number: k = 2π / λ
     k = 2 * np.pi / Wavelength  # Wave number
+
+    # Generate an array of observation angles from -90° to 90°
     angles = np.linspace(-90, 90, 500)  # Array of angles in degrees
+
+    # Convert the steering angle from degrees to radians
     dir_rad = np.radians(dir_angle)  # Convert steering angle to radians
 
-    # Compute array factor for each angle
+    # Initialize array factor as a complex number array
     array_factor = np.zeros_like(angles, dtype=np.complex128)
+
     if mode == "Receiver":
+        # Calculate array factor for receiver mode
         for pos in receiver_positions:
-            # Distance between receiver and observation point for each angle
+            # Distance between receiver and observation point: r = √((x - d·sin(θ))² + (y - d·cos(θ))²)
             distance_to_point = np.hypot(pos[0] - distance * np.sin(dir_rad),
                                          pos[1] - distance * np.cos(dir_rad))
 
-            # Phase shift calculation for receiver's perspective
+            # Phase shift calculation: φ = kr + k(x·sin(θ) - y·cos(θ))
             phase_shift = k * distance_to_point + k * (
                     pos[0] * np.sin(np.radians(angles)) - pos[1] * np.cos(np.radians(angles)))
+
+            # Accumulate contributions to the array factor
             array_factor += np.exp(1j * phase_shift)
 
     else:
         if geometry == "Curved":
             # Curved geometry: emitter positions on a circular arc
+            # Generate emitter angles evenly spaced along the arc
             emit_angles = np.linspace(-np.pi / 4, np.pi / 4, Elements_Number)  # Adjust based on arc_radius
-            positions = arc_radius * np.array([np.cos(emit_angles), np.sin(emit_angles)]).T  # Emitter positions
+
+            # Emitter positions: [x, y] = R[cos(θ), sin(θ)]
+            positions = arc_radius * np.array([np.cos(emit_angles), np.sin(emit_angles)]).T
 
             for pos in positions:
-                # Distance between emitter and observation point for each angle
-                distance_to_point = np.hypot(pos[0] - distance * np.sin(dir_rad), pos[1] - distance * np.cos(dir_rad))
+                # Distance between emitter and observation point: r = √((x - d·sin(θ))² + (y - d·cos(θ))²)
+                distance_to_point = np.hypot(pos[0] - distance * np.sin(dir_rad),
+                                             pos[1] - distance * np.cos(dir_rad))
 
-                # Phase shift calculation
+                # Phase shift calculation: φ = kr + k(x·sin(θ) - y·cos(θ))
                 phase_shift = k * distance_to_point + k * (
-                            pos[0] * np.sin(np.radians(angles)) - pos[1] * np.cos(np.radians(angles)))
+                        pos[0] * np.sin(np.radians(angles)) - pos[1] * np.cos(np.radians(angles)))
+
+                # Accumulate contributions to the array factor
                 array_factor += np.exp(1j * phase_shift)
         else:
             # Linear geometry: emitters spaced along X-axis
             for n in range(Elements_Number):
+                # Phase shift for linear array: φ = kd·sin(θ)·n
                 phase_shift = k * distance * np.sin(np.radians(angles - dir_angle)) * n
+
+                # Accumulate contributions to the array factor
                 array_factor += np.exp(1j * phase_shift)
 
-    array_factor = np.abs(array_factor)  # Get the magnitude
-    array_factor /= np.max(array_factor)  # Normalize
+    # Magnitude of the array factor |AF(θ)|
+    array_factor = np.abs(array_factor)
+
+    # Normalize array factor by its maximum value
+    array_factor /= np.max(array_factor)
+
+    # Clip values to avoid logarithm issues
     array_factor = np.clip(array_factor, 1e-10, 1)
 
     # logging.info(f"Array factor updated to : {array_factor}")
+    logging.info(f"Beam profile is computed")
 
-    logging.info(f"Beam profile is combuted")
+    # Return the beam profile in dB scale: AF(θ) = 20·log10(|AF(θ)|)
     return angles, 20 * np.log10(array_factor)  # Convert to dB scale
 
 
