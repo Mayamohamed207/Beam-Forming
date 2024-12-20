@@ -10,6 +10,7 @@ SPEED_OF_LIGHT = 3e8  # Speed of light in m/s (5G)
 SPEED_OF_SOUND_AIR = 343  # Speed of sound in air (m/s, Ultrasound default)
 SPEED_OF_SOUND_TISSUE = 1500  # Speed of sound in soft tissue (m/s, Ultrasound and Tumor Ablation)
 five_g_reciever_frequency=5000000000
+RESOLUTION_FACTOR=100
 
 current_speed = SPEED_OF_SOUND_AIR  # Default speed of sound
 reciever_frequency=five_g_reciever_frequency
@@ -27,49 +28,24 @@ def set_frequency(frequency):
     reciever_frequency = frequency
     logging.debug(f"Frequency updated to: {reciever_frequency}")
 
-def initialize_simulation_grid(N, frequency, distance,sizeX=5,sizeY=100, max_size=100,max_points=1000):
+def initialize_simulation_grid(N, frequency, distance,sizeX=5,sizeY=100, max_size=100,max_points=1000,geometry="linear"):
     global dx
     wavelength =  current_speed / frequency  # Wavelength
     dx = wavelength / 10  # Grid spacing
-    # if sizeX < dx: sizeX = 2 * dx  # Ensure minimum size
-    # if sizeY < dx: sizeY = 2 * dx  # Ensure minimum size
-    # X_grid = np.arange(-sizeX, sizeX, dx)
-    # Y_grid = np.arange(0, sizeY, dx)
-
-    # size = min(np.ceil(2 * (((N - 1) * distance) ** 2) / wavelength * 4), sizeY)
-    # X_grid = np.arange(-size, size, dx)
-    # Y_grid = np.arange(0, size, dx)
-    # dx = max(min(wavelength / 10, 1.0), 0.001)  # Limit dx between 0.001 and 1.0 units
-
-    # logging.info(f"Calculated wavelength: {wavelength:.6f}, dx: {dx:.6f}")
-
-    # # Dynamically adjust grid size to fit simulation constraints
-    # # Ensure that sizeX and sizeY are large enough to visualize emitters/spatial details
-    # adjusted_sizeX = max(2 * dx, sizeX)  # Minimum width for grid
-    # adjusted_sizeY = max(2 * dx, sizeY)  # Minimum height for grid
-    #
-    # # Constrain grid sizes to avoid excessively large grids
-    # adjusted_sizeX = min(adjusted_sizeX, max_size)
-    # adjusted_sizeY = min(adjusted_sizeY, max_size)
-    #
-    # # Generate grid points
-    # X_grid = np.arange(-adjusted_sizeX, adjusted_sizeX, dx)
-    # Y_grid = np.arange(0, adjusted_sizeY, dx)
-
-    # dx = min(wavelength / 10, 0.01), 0.0001)  # Bound dx between 0.0001 and 0.01 units
     max_dx = max(sizeX, sizeY) / max_points  # Upper bound for dx
     dx = max(dx, max_dx)  # Ensure dx is not too small
     logging.info(f"Calculated wavelength: {wavelength:.6f}, dx: {dx:.6f}")
 
-    # Adjust grid size to prevent excessive memory usage
     adjusted_sizeX = max(min(sizeX, max_size), 2 * dx)  # Ensure minimum grid size
     adjusted_sizeY = max(min(sizeY, max_size), 2 * dx)
-
-    # Generate grid points safely
+    if geometry == "Curved":
+         Y_grid = np.arange(-adjusted_sizeY, adjusted_sizeY, dx)
+    else:
+        Y_grid = np.arange(0, adjusted_sizeY, dx)
+        
     X_grid = np.arange(-adjusted_sizeX, adjusted_sizeX, dx)
-    Y_grid = np.arange(0, adjusted_sizeY, dx)
+    
 
-    # Validate grid size
     if X_grid.size == 0 or Y_grid.size == 0:
         logging.error("Grid size is invalid. Check dx and input parameters.")
         raise ValueError("Invalid grid size: dx is too large or frequency too small.")
@@ -87,9 +63,6 @@ def compute_wave_pattern(N, frequency, steering_angle, distance, grid, t=0, geom
     
     logging.info(f"wave pattern: N={N}, frequency={frequency}, steering_angle={steering_angle}")
     
-    size = min(np.ceil(2 * (((N - 1) * distance) ** 2) / wavelength * 4), max_size)
-    X_grid = np.arange(-size, size, dx)
-    Y_grid = np.arange(0, size, dx)
     
     if geometry == "Curved":
         # Positions along a circular arc
@@ -116,19 +89,25 @@ def compute_wave_pattern(N, frequency, steering_angle, distance, grid, t=0, geom
     
     return wave_pattern, positions
 
-
-def compute_receiver_pattern(grid, receiver_positions, steering_angle=0):
+def compute_receiver_pattern(grid, receiver_positions, frequency,steering_angle=0, current_speed=343, t=0):
     X_grid, Y_grid = grid
     interference_pattern = np.zeros(X_grid.shape)
-    steering_angle_rad = np.radians(steering_angle)  # Convert angle to radians
+    
+    transmitter_position = np.array([20, 20])
+    
+    wavelength = current_speed / frequency 
+    wave_number = 2 * np.pi / wavelength  # k = 2π / wavelength
+    omega = 2 * np.pi * frequency  # Angular frequency (ω = 2π * frequency)    
+    emitter_distances = np.sqrt((X_grid - transmitter_position[0]) ** 2 + (Y_grid - transmitter_position[1]) ** 2)
+    
+    # wave equation: A * cos(kx - ωt + φ))
+    phase_shifts = wave_number * emitter_distances - omega * t
+    wave_pattern = np.cos(phase_shifts)  # Using cosine to represent the wave propagation
+    interference_pattern += wave_pattern
 
-    for receiver in receiver_positions:
+    return interference_pattern, wave_pattern
 
-        distance_from_receiver = np.sqrt((X_grid - receiver[0]) ** 2 + (Y_grid - receiver[1]) ** 2) # Distance from receiver to each grid point
-        interference_pattern += np.cos(2 * np.pi * distance_from_receiver / dx + 2 * np.pi * receiver[0] * np.sin(steering_angle_rad) / dx)  # Superposition of Waves : sum of cos( (2πR / λ) + (2πx₀ * sin(θ) / λ) )
 
-    logging.debug(f"Receiver Wave pattern computed")
-    return interference_pattern, receiver_positions
 
 
 def compute_beam_profile(Elements_Number, frequency, distance, dir_angle, receiver_positions, geometry="Linear",

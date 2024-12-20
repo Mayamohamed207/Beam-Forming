@@ -23,7 +23,7 @@ class BeamForming:
             self.profile_ax = axs
 
         self.state = {
-            'mode': 'Emitter','N': 8,'f': 500,'distance': 0.1,'dir': 0, 'geometry': 'Linear', 'scenario': 'Default Mode','sizeX': 5,'sizeY': 10}
+            'mode': 'Emitter','N': 2,'f': 500,'distance': 0.1,'dir': 0, 'geometry': 'Linear', 'scenario': 'Default Mode','sizeX': 5,'sizeY': 10}
         
         self.state.update(initial_state)  
 
@@ -37,11 +37,7 @@ class BeamForming:
 
     def update_wave_pattern(self):
         if self.state['mode'] == 'Receiver':
-            # if self.state['scenario'] == "5G":
-            #     self.state['f'] =  5000000000
-            # else:
-            self.state[
-                    'f'] = 5000  
+            self.state['f']  
             self.wavelength = current_speed / self.state['f']
             self.wave_pattern, self.positions = self.update_receiver_pattern()
             print(self.state['f'])
@@ -76,7 +72,7 @@ class BeamForming:
         )
 
         wave_pattern, _ = compute_receiver_pattern(
-            self.grid, receiver_positions, steering_angle=self.state['dir']
+            self.grid, receiver_positions, frequency=self.state['f'],steering_angle=self.state['dir']
         )
         return wave_pattern, receiver_positions
 
@@ -99,7 +95,7 @@ class BeamForming:
         else:
             self.colorbar.update_normal(contour)
 
-        self.map_ax.plot(self.positions[:, 0], self.positions[:, 1], 'o', color=purpleColor, markersize=10)
+        self.map_ax.plot(self.positions[:, 0], self.positions[:, 1], 'o', color=darkColor, markersize=10)
         self.map_ax.set_xlabel("X Position (m)", color=greenColor)
         self.map_ax.set_ylabel("Y Position (m)", color=greenColor)
         self.map_ax.tick_params(axis='both', colors=greenColor)
