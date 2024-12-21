@@ -23,7 +23,7 @@ class BeamForming:
             self.profile_ax = axs
 
         self.state = {
-            'mode': 'Emitter','N': 2,'f': 500,'distance': 0.1,'dir': 0, 'geometry': 'Linear', 'scenario': 'Default Mode','sizeX': 5,'sizeY': 10}
+            'mode': 'Emitter','N': 2,'f': 500,'distance': 0.1,'direction': 0, 'geometry': 'Linear', 'scenario': 'Default Mode','sizeX': 5,'sizeY': 10}
         
         self.state.update(initial_state)  
 
@@ -42,16 +42,16 @@ class BeamForming:
             self.wave_pattern, self.positions = self.update_receiver_pattern()
             print(self.state['f'])
 
-            angles, beam_profile =compute_beam_profile(self.state['N'], self.state['f'], self.state['distance'] ,self.state['dir'], self.positions,geometry=self.state['geometry'], arc_radius=self.state.get('curvature', 1.0), mode=self.state['mode'])
+            angles, beam_profile =compute_beam_profile(self.state['N'], self.state['f'], self.state['distance'] ,self.state['direction'], self.positions,geometry=self.state['geometry'], arc_radius=self.state.get('curvature', 1.0), mode=self.state['mode'])
         else:
             self.wave_pattern, self.positions = compute_wave_pattern(
-                self.state['N'], self.state['f'], self.state['dir'], self.state['distance'],
+                self.state['N'], self.state['f'], self.state['direction'], self.state['distance'],
                 self.grid, geometry=self.state['geometry'], arc_radius=self.state.get('curvature', 1.0)
             )
             print("trans wave")
 
             angles, beam_profile = compute_beam_profile(
-                self.state['N'], self.state['f'], self.state['distance'], self.state['dir'],self.positions,
+                self.state['N'], self.state['f'], self.state['distance'], self.state['direction'],self.positions,
                 geometry=self.state['geometry'], arc_radius=self.state.get('curvature', 1.0), mode=self.state['mode']
             )
 
@@ -72,7 +72,7 @@ class BeamForming:
         )
 
         wave_pattern, _ = compute_receiver_pattern(
-            self.grid, receiver_positions, frequency=self.state['f'],steering_angle=self.state['dir']
+            self.grid, receiver_positions, frequency=self.state['f'],steering_angle=self.state['direction']
         )
         return wave_pattern, receiver_positions
 

@@ -13,7 +13,7 @@ from BeamFormingSystem import BeamForming
 import numpy as np
 from mainStyle import sliderStyle
 from mainStyle import mainStyle, sliderStyle, groupBoxStyle , buttonStyle, spinBoxStyle, comboBoxStyle,darkColor,sliderDisabledStyle
-from phased_array import set_speed, SPEED_OF_LIGHT, SPEED_OF_SOUND_TISSUE, SPEED_OF_SOUND_AIR, RESOLUTION_FACTOR,SPEED_OF_RECEIVER,initialize_simulation_grid
+from phased_array import set_speed, SPEED_OF_LIGHT, SPEED_OF_SOUND_TISSUE, SPEED_OF_SOUND_AIR, GRID_FACTOR,initialize_simulation_grid
 from PyQt5.QtGui import QIcon
 import logging
 for handler in logging.getLogger().handlers[:]:
@@ -30,6 +30,7 @@ class Main(QMainWindow):
         super().__init__()
         logging.info("initialized")
         self.initializeUI()
+        self.initializeParameters()
         self.connectingUI()
 
     def initializeUI(self):
@@ -37,14 +38,7 @@ class Main(QMainWindow):
         self.setWindowTitle("2D Beamforming Simulator")
         self.setGeometry(100, 100, 1200, 800)
         self.initial_state = {
-            'N': 2,'f': 500,'dir': 30,'distance': 0.042875,'geometry': 'Linear','curvature': 0.0,'scenario': 'Default Mode','sizeX': 5,'sizeY': 7}
-        
-        self.ULTRASOUND_FREQ_RANGE = (20000, 50000)
-        self.ULTRASOUND_FREQ_DEFAULT =30000
-        self.TUMOR_FREQ_RANGE = (1000, 20000)
-        self.TUMOR_FREQ_DEFAULT =3000
-        self.RECEIVER_FREQ_RANGE=(10,1500)
-        self.RECEIVER_FREQ_DEFAULT=500
+            'N': 2,'f': 500,'direction': 30,'distance': 0.042875,'geometry': 'Linear','curvature': 0.0,'scenario': 'Default Mode','sizeX': 5,'sizeY': 7}
 
         self.createUIElements()
         self.layoutSet()
@@ -196,6 +190,15 @@ class Main(QMainWindow):
         self.constructive_map_canvas.figure.set_facecolor(darkColor) 
         self.beam_profile_canvas.figure.set_facecolor(darkColor) 
 
+    def initializeParameters(self):
+        self.ultrasound_freq_range = (20000, 50000)
+        self.ultrasound_freq_default =30000
+        self.tumor_freq_range = (1000, 20000)
+        self.tumor_freq_default =3000
+        self.receiver_freq_range=(10,1500)
+        self.receiver_freq_default=500
+        self.speed_of_receiver=343
+    
     def connectingUI(self):
         logging.info("Connecting UI")
 
@@ -226,7 +229,7 @@ class Main(QMainWindow):
     def update_mode(self, mode):
         if mode == "Receiver":
             self.reset_to_receiver_mode()
-            self.frequency_value.setText(str(self.frequency_slider.value()/RESOLUTION_FACTOR))
+            self.frequency_value.setText(str(self.frequency_slider.value()/GRID_FACTOR))
             self.distance_label.setText("Receiver Position:")
             self.emitters_label.setText("Receivers Number:")
             self.emitters_spinbox.setRange(1, 64)
@@ -264,7 +267,7 @@ class Main(QMainWindow):
             receiver_count=self.emitters_spinbox.value(),
             receiver_spacing=self.distance_slider.value() / 100,
             f=self.frequency_slider.value(),
-            dir=self.phase_slider.value() 
+            direction=self.phase_slider.value() 
     )
 
         else: 
@@ -272,7 +275,7 @@ class Main(QMainWindow):
                 mode=mode,
                 N=self.emitters_spinbox.value(),
                 f=self.frequency_slider.value(),
-                dir=self.phase_slider.value(),
+                direction=self.phase_slider.value(),
                 distance=self.distance_slider.value() / 100,
                 geometry=self.initial_state['geometry'], 
                 curvature=self.curvature_slider.value() / 10
@@ -299,7 +302,6 @@ class Main(QMainWindow):
         self.controller.update_state(scenario=scenario)
         sizeY=7
         if scenario == "5G_Transmitter Mode":
-            # Switch to Receiver mode
             set_speed(SPEED_OF_LIGHT)
             self.mode_dropdown.setCurrentText("Transmitter")
             self.frequency_slider.setRange(200000000, 600000000)
@@ -316,9 +318,9 @@ class Main(QMainWindow):
             set_speed(SPEED_OF_SOUND_TISSUE)
 
             self.mode_dropdown.setCurrentText("Transmitter")
-            self.frequency_slider.setRange(self.ULTRASOUND_FREQ_RANGE[0], self.ULTRASOUND_FREQ_RANGE[1])
-            self.frequency_slider.setValue(self.ULTRASOUND_FREQ_DEFAULT)
-            self.frequency_value.setText(str(self.ULTRASOUND_FREQ_DEFAULT*RESOLUTION_FACTOR))
+            self.frequency_slider.setRange(self.ultrasound_freq_range[0], self.ultrasound_freq_range[1])
+            self.frequency_slider.setValue(self.ultrasound_freq_default)
+            self.frequency_value.setText(str(self.ultrasound_freq_default*GRID_FACTOR))
             self.phase_slider.setValue(0)
             self.distance_slider.setValue(2)
             self.emitters_spinbox.setValue(4)
@@ -328,15 +330,15 @@ class Main(QMainWindow):
             sizeX=2
             max_points=1000
             self.frequency_slider.valueChanged.connect(
-            lambda: self.frequency_value.setText(str(self.frequency_slider.value() * RESOLUTION_FACTOR)))
+            lambda: self.frequency_value.setText(str(self.frequency_slider.value() * GRID_FACTOR)))
             
         elif scenario == "Tumor Ablation":
             set_speed(SPEED_OF_SOUND_TISSUE)
 
             self.mode_dropdown.setCurrentText("Transmitter")
-            self.frequency_slider.setRange(self.TUMOR_FREQ_RANGE[0], self.TUMOR_FREQ_RANGE[1])
-            self.frequency_slider.setValue(self.TUMOR_FREQ_DEFAULT)
-            self.frequency_value.setText(str(self.TUMOR_FREQ_DEFAULT*RESOLUTION_FACTOR))
+            self.frequency_slider.setRange(self.tumor_freq_range[0], self.tumor_freq_range[1])
+            self.frequency_slider.setValue(self.tumor_freq_default)
+            self.frequency_value.setText(str(self.tumor_freq_default*GRID_FACTOR))
             self.phase_slider.setValue(0)
             self.distance_slider.setValue(0)
 
@@ -344,7 +346,7 @@ class Main(QMainWindow):
             self.emitters_spinbox.setValue(20)
             self.initial_state['geometry'] = "Curved"
             self.frequency_slider.valueChanged.connect(
-            lambda: self.frequency_value.setText(str(self.frequency_slider.value() * RESOLUTION_FACTOR)))
+            lambda: self.frequency_value.setText(str(self.frequency_slider.value() * GRID_FACTOR)))
             sizeY = 5
             sizeX=5
             max_points=2000
@@ -387,17 +389,17 @@ class Main(QMainWindow):
 
     def reset_to_receiver_mode(self):
         self.scenario_dropdown.setCurrentText("5G_Receiver Mode")
-        set_speed(SPEED_OF_RECEIVER)
-        self.frequency_slider.setRange(self.RECEIVER_FREQ_RANGE[0], self.RECEIVER_FREQ_RANGE[1])
+        set_speed(self.speed_of_receiver)
+        self.frequency_slider.setRange(self.receiver_freq_range[0], self.receiver_freq_range[1])
         
-        self.frequency_slider.setValue(self.RECEIVER_FREQ_DEFAULT)
+        self.frequency_slider.setValue(self.receiver_freq_default)
         
         self.frequency_slider.valueChanged.connect(
-            lambda: self.frequency_value.setText(str(self.frequency_slider.value()/RESOLUTION_FACTOR)))
+            lambda: self.frequency_value.setText(str(self.frequency_slider.value()/GRID_FACTOR)))
         self.frequency_label.setText("Frequency (GHz):")
         self.mode_dropdown.setCurrentText("Receiver")
         self.phase_slider.setValue(0)
-        self.distance_slider.setValue(28)
+        self.distance_slider.setValue(27)
         self.curvature_slider.setValue(0)
         self.emitters_spinbox.setValue(4)
         self.initial_state['geometry'] = "Linear"

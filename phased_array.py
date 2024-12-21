@@ -10,8 +10,8 @@ SPEED_OF_LIGHT = 3e8  # Speed of light in m/s (5G)
 SPEED_OF_SOUND_AIR = 343  # Speed of sound in air (m/s, Ultrasound default)
 SPEED_OF_SOUND_TISSUE = 1500  # Speed of sound in soft tissue (m/s, Ultrasound and Tumor Ablation)
 five_g_reciever_frequency=5000000000
-RESOLUTION_FACTOR=100
-SPEED_OF_RECEIVER=343
+GRID_FACTOR=100
+speed_of_receiver=3e8
 
 current_speed = SPEED_OF_SOUND_AIR  # Default speed of sound
 reciever_frequency=five_g_reciever_frequency
@@ -109,7 +109,7 @@ def compute_receiver_pattern(grid, receiver_positions, frequency,steering_angle=
     return interference_pattern, wave_pattern
 
 
-def compute_beam_profile(Elements_Number, frequency, distance, dir_angle, receiver_positions, geometry="Linear",
+def compute_beam_profile(Elements_Number, frequency, distance, direction_angle, receiver_positions, geometry="Linear",
                          arc_radius=1.0, mode="Emitter"):
     # Calculate wavelength: λ = c / f
     Wavelength = current_speed / frequency  # Wavelength
@@ -121,7 +121,7 @@ def compute_beam_profile(Elements_Number, frequency, distance, dir_angle, receiv
     angles = np.linspace(-90, 90, 500)  # Array of angles in degrees
 
     # Convert the steering angle from degrees to radians
-    dir_rad = np.radians(dir_angle)  # Convert steering angle to radians
+    direction_rad = np.radians(direction_angle)  # Convert steering angle to radians
 
     # Initialize array factor as a complex number array
     array_factor = np.zeros_like(angles, dtype=np.complex128)
@@ -130,8 +130,8 @@ def compute_beam_profile(Elements_Number, frequency, distance, dir_angle, receiv
         # Calculate array factor for receiver mode
         for pos in receiver_positions:
             # Distance between receiver and observation point: r = √((x - d·sin(θ))² + (y - d·cos(θ))²)
-            distance_to_point = np.hypot(pos[0] - distance * np.sin(dir_rad),
-                                         pos[1] - distance * np.cos(dir_rad))
+            distance_to_point = np.hypot(pos[0] - distance * np.sin(direction_rad),
+                                         pos[1] - distance * np.cos(direction_rad))
 
             # Phase shift calculation: φ = kr + k(x·sin(θ) - y·cos(θ))
             phase_shift = k * distance_to_point + k * (
@@ -151,8 +151,8 @@ def compute_beam_profile(Elements_Number, frequency, distance, dir_angle, receiv
 
             for pos in positions:
                 # Distance between emitter and observation point: r = √((x - d·sin(θ))² + (y - d·cos(θ))²)
-                distance_to_point = np.hypot(pos[0] - distance * np.sin(dir_rad),
-                                             pos[1] - distance * np.cos(dir_rad))
+                distance_to_point = np.hypot(pos[0] - distance * np.sin(direction_rad),
+                                             pos[1] - distance * np.cos(direction_rad))
 
                 # Phase shift calculation: φ = kr + k(x·sin(θ) - y·cos(θ))
                 phase_shift = k * distance_to_point + k * (
@@ -164,7 +164,7 @@ def compute_beam_profile(Elements_Number, frequency, distance, dir_angle, receiv
             # Linear geometry: emitters spaced along X-axis
             for n in range(Elements_Number):
                 # Phase shift for linear array: φ = kd·sin(θ)·n
-                phase_shift = k * distance * np.sin(np.radians(angles - dir_angle)) * n
+                phase_shift = k * distance * np.sin(np.radians(angles - direction_angle)) * n
 
                 # Accumulate contributions to the array factor
                 array_factor += np.exp(1j * phase_shift)
