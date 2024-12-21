@@ -1,11 +1,7 @@
 greenColor = "#03efb0"
-
 darkColor = "#2D2D2D"
-# darkColor = "#242D5C" #blue
-# greenColor = "#2BE7AF" #green
-
-# greenColor="#2BAF7E"
 purpleColor="#472B79"
+redColor="#B80C09"
 greenColorHover = "#0A6950"
 
 mainStyle = f"""

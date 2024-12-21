@@ -13,17 +13,17 @@ from BeamFormingSystem import BeamForming
 import numpy as np
 from mainStyle import sliderStyle
 from mainStyle import mainStyle, sliderStyle, groupBoxStyle , buttonStyle, spinBoxStyle, comboBoxStyle,darkColor,sliderDisabledStyle
-from phased_array import set_speed, SPEED_OF_LIGHT, SPEED_OF_SOUND_TISSUE, SPEED_OF_SOUND_AIR, RESOLUTION_FACTOR,set_frequency,five_g_reciever_frequency,initialize_simulation_grid
+from phased_array import set_speed, SPEED_OF_LIGHT, SPEED_OF_SOUND_TISSUE, SPEED_OF_SOUND_AIR, RESOLUTION_FACTOR,SPEED_OF_RECEIVER,initialize_simulation_grid
 from PyQt5.QtGui import QIcon
 import logging
 for handler in logging.getLogger().handlers[:]:
     logging.getLogger().removeHandler(handler)
 
-# logging.basicConfig(
-#     filename="Logging.log",
-#     level=logging.INFO,
-#     format="%(asctime)s - %(levelname)s - %(message)s"
-# )
+logging.basicConfig(
+    filename="Logging.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 class Main(QMainWindow):
     def __init__(self):
@@ -43,6 +43,8 @@ class Main(QMainWindow):
         self.ULTRASOUND_FREQ_DEFAULT =30000
         self.TUMOR_FREQ_RANGE = (1000, 20000)
         self.TUMOR_FREQ_DEFAULT =3000
+        self.RECEIVER_FREQ_RANGE=(10,1500)
+        self.RECEIVER_FREQ_DEFAULT=500
 
         self.createUIElements()
         self.layoutSet()
@@ -224,12 +226,11 @@ class Main(QMainWindow):
     def update_mode(self, mode):
         if mode == "Receiver":
             self.reset_to_receiver_mode()
-            self.frequency_value.setText(str(self.frequency_slider.value()))
+            self.frequency_value.setText(str(self.frequency_slider.value()/RESOLUTION_FACTOR))
             self.distance_label.setText("Receiver Position:")
             self.emitters_label.setText("Receivers Number:")
             self.emitters_spinbox.setRange(1, 64)
             self.emitters_spinbox.setValue(4)
-            self.distance_slider.setValue(80)
             self.curvature_widget.setParent(None)              
             self.distance_slider.setStyleSheet(sliderStyle)
 
@@ -386,14 +387,17 @@ class Main(QMainWindow):
 
     def reset_to_receiver_mode(self):
         self.scenario_dropdown.setCurrentText("5G_Receiver Mode")
-        set_speed(SPEED_OF_SOUND_AIR)
-        self.frequency_slider.setRange(10,1500)
-        self.frequency_slider.setValue(1000)
+        set_speed(SPEED_OF_RECEIVER)
+        self.frequency_slider.setRange(self.RECEIVER_FREQ_RANGE[0], self.RECEIVER_FREQ_RANGE[1])
+        
+        self.frequency_slider.setValue(self.RECEIVER_FREQ_DEFAULT)
+        
         self.frequency_slider.valueChanged.connect(
-            lambda: self.frequency_value.setText(str(self.frequency_slider.value())))
+            lambda: self.frequency_value.setText(str(self.frequency_slider.value()/RESOLUTION_FACTOR)))
+        self.frequency_label.setText("Frequency (GHz):")
         self.mode_dropdown.setCurrentText("Receiver")
         self.phase_slider.setValue(0)
-        self.distance_slider.setValue(50)
+        self.distance_slider.setValue(28)
         self.curvature_slider.setValue(0)
         self.emitters_spinbox.setValue(4)
         self.initial_state['geometry'] = "Linear"

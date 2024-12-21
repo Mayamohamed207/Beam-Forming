@@ -1,16 +1,17 @@
 import numpy as np
 import logging
-# logging.basicConfig(
-#     filename="Logging.log",
-#     level=logging.INFO,
-#     format="%(asctime)s - %(levelname)s - %(message)s"
-# )
+logging.basicConfig(
+    filename="Logging.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 SPEED_OF_LIGHT = 3e8  # Speed of light in m/s (5G)
 SPEED_OF_SOUND_AIR = 343  # Speed of sound in air (m/s, Ultrasound default)
 SPEED_OF_SOUND_TISSUE = 1500  # Speed of sound in soft tissue (m/s, Ultrasound and Tumor Ablation)
 five_g_reciever_frequency=5000000000
 RESOLUTION_FACTOR=100
+SPEED_OF_RECEIVER=343
 
 current_speed = SPEED_OF_SOUND_AIR  # Default speed of sound
 reciever_frequency=five_g_reciever_frequency
@@ -61,7 +62,7 @@ def compute_wave_pattern(N, frequency, steering_angle, distance, grid, t=0, geom
     omega = 2 * np.pi * frequency  # Angular frequency
     steering_angle_rad = np.radians(steering_angle)  # Steering angle in radians
     
-    logging.info(f"wave pattern: N={N}, frequency={frequency}, steering_angle={steering_angle}")
+    # logging.info(f"wave pattern: N={N}, frequency={frequency}, steering_angle={steering_angle}")
     
     
     if geometry == "Curved":
@@ -106,8 +107,6 @@ def compute_receiver_pattern(grid, receiver_positions, frequency,steering_angle=
     interference_pattern += wave_pattern
 
     return interference_pattern, wave_pattern
-
-
 
 
 def compute_beam_profile(Elements_Number, frequency, distance, dir_angle, receiver_positions, geometry="Linear",

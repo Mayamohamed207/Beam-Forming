@@ -3,13 +3,13 @@ import logging
 import matplotlib.pyplot as plt
 from phased_array import initialize_simulation_grid, compute_wave_pattern, compute_beam_profile, \
     compute_receiver_pattern, current_speed
-from mainStyle import darkColor, greenColor, purpleColor
+from mainStyle import darkColor, greenColor, purpleColor,redColor
 
-# logging.basicConfig(
-#     filename="Logging.log",
-#     level=logging.INFO,
-#     format="%(asctime)s - %(levelname)s - %(message)s"
-# )
+logging.basicConfig(
+    filename="Logging.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 class BeamForming:
     def __init__(self, fig, axs, initial_state):
@@ -95,7 +95,7 @@ class BeamForming:
         else:
             self.colorbar.update_normal(contour)
 
-        self.map_ax.plot(self.positions[:, 0], self.positions[:, 1], 'o', color=darkColor, markersize=10)
+        self.map_ax.plot(self.positions[:, 0], self.positions[:, 1], 'o', color=redColor, markersize=10)
         self.map_ax.set_xlabel("X Position (m)", color=greenColor)
         self.map_ax.set_ylabel("Y Position (m)", color=greenColor)
         self.map_ax.tick_params(axis='both', colors=greenColor)

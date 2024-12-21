@@ -911,3 +911,23 @@
 2024-12-17 12:28:53,005 - INFO - wave pattern: N=16, frequency=3000000, steering_angle=10
 2024-12-17 12:28:53,201 - INFO - Beam profile is computed
 2024-12-17 12:28:54,679 - INFO - Wave pattern updated
+2024-12-21 14:42:35,554 - INFO - initialized
+2024-12-21 14:42:35,554 - INFO - UI initialized
+2024-12-21 14:42:35,916 - INFO - Initial state: {'mode': 'Emitter', 'N': 2, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 7, 'curvature': 0.0}
+2024-12-21 14:42:35,916 - INFO - Calculated wavelength: 0.686000, dx: 0.068600
+2024-12-21 14:42:35,916 - INFO - Grid initialized with size: 2, wavelength: 0.686, dx: 0.06860000000000001
+2024-12-21 14:42:35,916 - INFO - Beam profile is computed
+2024-12-21 14:42:35,982 - INFO - Wave pattern updated
+2024-12-21 14:42:35,984 - INFO - Beam profile is computed
+2024-12-21 14:42:36,031 - INFO - Wave pattern updated
+2024-12-21 14:42:36,118 - INFO - Connecting UI
+2024-12-21 14:43:27,724 - INFO - initialized
+2024-12-21 14:43:27,724 - INFO - UI initialized
+2024-12-21 14:43:28,122 - INFO - Initial state: {'mode': 'Emitter', 'N': 2, 'f': 500, 'distance': 0.042875, 'dir': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 7, 'curvature': 0.0}
+2024-12-21 14:43:28,122 - INFO - Calculated wavelength: 0.686000, dx: 0.068600
+2024-12-21 14:43:28,122 - INFO - Grid initialized with size: 2, wavelength: 0.686, dx: 0.06860000000000001
+2024-12-21 14:43:28,122 - INFO - Beam profile is computed
+2024-12-21 14:43:28,198 - INFO - Wave pattern updated
+2024-12-21 14:43:28,200 - INFO - Beam profile is computed
+2024-12-21 14:43:28,248 - INFO - Wave pattern updated
+2024-12-21 14:43:28,337 - INFO - Connecting UI
