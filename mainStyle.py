@@ -2,6 +2,7 @@ greenColor = "#03efb0"
 darkColor = "#2D2D2D"
 purpleColor="#472B79"
 redColor="#B80C09"
+blueGreenColor="#21918c"
 greenColorHover = "#0A6950"
 
 mainStyle = f"""

@@ -158,6 +158,9 @@ def compute_beam_profile(Elements_Number, frequency, distance, direction_angle, 
         window = np.blackman(Elements_Number)  # Blackman-Harris window
         window /= np.sum(window)  # Normalize the window to ensure correct scaling
 
+        # window = np.kaiser(Elements_Number, beta=8.0)
+        # window /= np.sum(window)
+
         # Ensure receiver positions are valid
         if len(receiver_positions) != Elements_Number:
             print("Error: Number of receiver positions does not match Elements_Number.")

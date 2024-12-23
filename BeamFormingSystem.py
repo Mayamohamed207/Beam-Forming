@@ -3,7 +3,7 @@ import logging
 import matplotlib.pyplot as plt
 from phased_array import initialize_simulation_grid, compute_wave_pattern, compute_beam_profile, \
     compute_receiver_pattern, current_speed
-from mainStyle import darkColor, greenColor, purpleColor,redColor
+from mainStyle import darkColor, greenColor, purpleColor,redColor,blueGreenColor
 
 logging.basicConfig(
     filename="Logging.log",
@@ -121,26 +121,26 @@ class BeamForming:
             right_cross = angles_rad[crossing_indices[-1]]
 
             # Plot lines at the -3 dB points
-            self.profile_ax.axvline(left_cross, color=purpleColor, linestyle='--', label="-3 dB Left")
-            self.profile_ax.axvline(right_cross, color=purpleColor, linestyle='--', label="-3 dB Right")
+            self.profile_ax.axvline(left_cross, color=greenColor, linestyle='--', label="-3 dB Left")
+            self.profile_ax.axvline(right_cross, color=greenColor, linestyle='--', label="-3 dB Right")
 
             # Annotate the points
             self.profile_ax.text(
                 left_cross, max_dB - 5, f"{np.degrees(left_cross):.1f}°",
-                color=purpleColor, ha='center'
+                color=greenColor, ha='center'
             )
             self.profile_ax.text(
                 right_cross, max_dB - 5, f"{np.degrees(right_cross):.1f}°",
-                color=purpleColor, ha='center'
+                color=greenColor, ha='center'
             )
 
         # Set the angle limits from -90 to 90 degrees
         self.profile_ax.set_thetalim(-np.pi / 2, np.pi / 2)
         self.profile_ax.set_theta_zero_location("N")
         self.profile_ax.set_theta_direction(-1)  # Counterclockwise direction
-        self.profile_ax.set_xticks(np.radians(np.arange(-90, 91, 30)))
-        self.profile_ax.tick_params(axis='both', colors=greenColor)
-        self.profile_ax.grid(True, color=greenColor)
+        self.profile_ax.set_xticks(np.radians(np.arange(-90, 91, 5)))
+        self.profile_ax.tick_params(axis='both', colors=redColor)
+        self.profile_ax.grid(True, color=redColor)
 
         self.fig.subplots_adjust(left=0.12, right=0.79, top=1.0, bottom=0.04)
         self.profile_ax.set_aspect('auto')

@@ -196,7 +196,7 @@ class Main(QMainWindow):
         self.tumor_freq_range = (1000, 20000)
         self.tumor_freq_default =3000
         self.receiver_freq_range=(10,1500)
-        self.receiver_freq_default=100
+        self.receiver_freq_default=1000
         self.speed_of_receiver=343
     
     def connectingUI(self):
