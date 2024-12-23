@@ -196,7 +196,7 @@ class Main(QMainWindow):
         self.tumor_freq_range = (1000, 20000)
         self.tumor_freq_default =3000
         self.receiver_freq_range=(10,1500)
-        self.receiver_freq_default=500
+        self.receiver_freq_default=100
         self.speed_of_receiver=343
     
     def connectingUI(self):
@@ -233,7 +233,7 @@ class Main(QMainWindow):
             self.distance_label.setText("Receiver Position:")
             self.emitters_label.setText("Receivers Number:")
             self.emitters_spinbox.setRange(1, 64)
-            self.emitters_spinbox.setValue(4)
+            self.emitters_spinbox.setValue(16)
             self.curvature_widget.setParent(None)              
             self.distance_slider.setStyleSheet(sliderStyle)
 
@@ -399,9 +399,9 @@ class Main(QMainWindow):
         self.frequency_label.setText("Frequency (GHz):")
         self.mode_dropdown.setCurrentText("Receiver")
         self.phase_slider.setValue(0)
-        self.distance_slider.setValue(27)
+        self.distance_slider.setValue(7)
         self.curvature_slider.setValue(0)
-        self.emitters_spinbox.setValue(4)
+        self.emitters_spinbox.setValue(16)
         self.initial_state['geometry'] = "Linear"
     
 

@@ -101,7 +101,6 @@ class BeamForming:
         self.map_ax.tick_params(axis='both', colors=greenColor)
         plt.draw()
 
-
     def plot_beam_profile(self, angles, beam_profile):
         self.profile_ax.clear()
         self.profile_ax.set_facecolor(darkColor)
@@ -110,16 +109,40 @@ class BeamForming:
         angles_rad = np.radians(angles)
         self.profile_ax.plot(angles_rad, beam_profile, color=greenColor)
 
+        # Threshold for -3 dB (70.7% of max intensity)
+        threshold_dB = -3  # -3 dB relative to the peak
+        max_dB = np.max(beam_profile)
+        threshold = max_dB + threshold_dB  # Since dB is in log scale, add threshold
+
+        # Find the angles where the beam profile crosses the threshold
+        crossing_indices = np.where(beam_profile >= threshold)[0]
+        if crossing_indices.size > 0:
+            left_cross = angles_rad[crossing_indices[0]]
+            right_cross = angles_rad[crossing_indices[-1]]
+
+            # Plot lines at the -3 dB points
+            self.profile_ax.axvline(left_cross, color=purpleColor, linestyle='--', label="-3 dB Left")
+            self.profile_ax.axvline(right_cross, color=purpleColor, linestyle='--', label="-3 dB Right")
+
+            # Annotate the points
+            self.profile_ax.text(
+                left_cross, max_dB - 5, f"{np.degrees(left_cross):.1f}°",
+                color=purpleColor, ha='center'
+            )
+            self.profile_ax.text(
+                right_cross, max_dB - 5, f"{np.degrees(right_cross):.1f}°",
+                color=purpleColor, ha='center'
+            )
+
         # Set the angle limits from -90 to 90 degrees
         self.profile_ax.set_thetalim(-np.pi / 2, np.pi / 2)
-
-        self.profile_ax.set_theta_zero_location("N") 
+        self.profile_ax.set_theta_zero_location("N")
         self.profile_ax.set_theta_direction(-1)  # Counterclockwise direction
-        self.profile_ax.set_xticks(np.radians(np.arange(-90, 91, 30)))  
+        self.profile_ax.set_xticks(np.radians(np.arange(-90, 91, 30)))
         self.profile_ax.tick_params(axis='both', colors=greenColor)
         self.profile_ax.grid(True, color=greenColor)
 
-        self.fig.subplots_adjust(left=0.12, right=0.79, top=1.0, bottom=0.04)        
+        self.fig.subplots_adjust(left=0.12, right=0.79, top=1.0, bottom=0.04)
         self.profile_ax.set_aspect('auto')
         plt.draw()
 

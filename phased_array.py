@@ -1,5 +1,8 @@
 import numpy as np
 import logging
+
+from scipy.constants import speed_of_light
+
 logging.basicConfig(
     filename="Logging.log",
     level=logging.INFO,
@@ -126,19 +129,89 @@ def compute_beam_profile(Elements_Number, frequency, distance, direction_angle, 
     # Initialize array factor as a complex number array
     array_factor = np.zeros_like(angles, dtype=np.complex128)
 
+    # if mode == "Receiver":
+    #     # angles = np.linspace(-90, 90, 500)
+    #     # Calculate array factor for receiver mode
+    #     for pos in receiver_positions:
+    #         # Distance between receiver and observation point: r = √((x - d·sin(θ))² + (y - d·cos(θ))²)
+    #         distance_to_point = np.hypot(pos[0] - distance * np.sin(direction_rad),
+    #                                      pos[1] - distance * np.cos(direction_rad))
+    #
+    #
+    #         # Phase shift calculation: φ = kr + k(x·sin(θ) - y·cos(θ))
+    #         phase_shift = k * distance_to_point + k * (
+    #                 pos[0] * np.sin(np.radians(angles)) - pos[1] * np.cos(np.radians(angles)))
+    #
+    #         # Accumulate contributions to the array factor
+    #         array_factor += np.exp(1j * phase_shift)
     if mode == "Receiver":
-        # Calculate array factor for receiver mode
-        for pos in receiver_positions:
-            # Distance between receiver and observation point: r = √((x - d·sin(θ))² + (y - d·cos(θ))²)
-            distance_to_point = np.hypot(pos[0] - distance * np.sin(direction_rad),
-                                         pos[1] - distance * np.cos(direction_rad))
 
-            # Phase shift calculation: φ = kr + k(x·sin(θ) - y·cos(θ))
-            phase_shift = k * distance_to_point + k * (
-                    pos[0] * np.sin(np.radians(angles)) - pos[1] * np.cos(np.radians(angles)))
+        # angles = np.linspace(-30, 30, 500)
 
-            # Accumulate contributions to the array factor
-            array_factor += np.exp(1j * phase_shift)
+        # Scale frequency to GHz and calculate wavelength
+        new_frequency = frequency * 1e7
+        wavelength = speed_of_light / new_frequency
+        k_new = 2 * np.pi / wavelength
+        print(receiver_positions)# Wave number
+        Elements_Number = len(receiver_positions)
+
+        window = np.blackman(Elements_Number)  # Blackman-Harris window
+        window /= np.sum(window)  # Normalize the window to ensure correct scaling
+
+        # Ensure receiver positions are valid
+        if len(receiver_positions) != Elements_Number:
+            print("Error: Number of receiver positions does not match Elements_Number.")
+            return
+
+        # Calculate the phase shift for each receiver element
+        for n, pos in enumerate(receiver_positions):
+            if len(pos) != 2:  # Ensure each position has two coordinates [x, y]
+                print(f"Invalid position data at index {n}: {pos}")
+                continue
+
+            # Calculate the phase shift for this element (relative position along X-axis)
+            # The phase shift is affected by the relative position of the receiver and steering angle
+            phase_shift = k_new * pos[0] * np.sin(
+                direction_rad)  # Position along X-axis (relative to steering direction)
+
+            phase_shift *= window[n]  # Apply window to modify the phase shift
+
+            # Calculate gain for each element using the window value (tapered gain)
+            gain_n = window[n]  # Use the window values as gain
+
+            # Now we accumulate contributions to the array factor for all observation angles.
+            for i, angle in enumerate(angles):
+                # Calculate the phase shift for each observation angle based on the receiver position
+                phase_shift_angle = k_new * pos[0] * np.sin(np.radians(angle) - direction_rad)
+
+                # Calculate the complex weight for each element at each angle
+                complex_weight = gain_n * np.exp(1j * (phase_shift + phase_shift_angle))
+
+                # Accumulate the complex weight for each observation angle
+                array_factor[i] += complex_weight  # Sum contributions from all elements
+
+        # Apply tapering window for side lobe reduction
+        # window = np.blackman(len(receiver_positions))
+        # window /= np.sum(window)
+        # # window /= np.sum(window)
+        #
+        # # Calculate weights for steering to the desired direction
+        # receiver_weights = np.exp(-1j * k_new * distance * np.sin(direction_rad) * np.arange(len(receiver_positions)))
+        # receiver_weights *= window  # Apply windowing
+        #
+        # # Iterate over receiver positions and apply weights
+        # for n, pos in enumerate(receiver_positions):
+        #     # Distance between receiver and observation point
+        #     distance_to_point = np.hypot(pos[0] - distance * np.sin(direction_rad),
+        #                                  pos[1] - distance * np.cos(direction_rad))
+        #
+        #     # Phase shift calculation: φ = kr + k(x·sin(θ) - y·cos(θ))
+        #     phase_shift = k_new * distance_to_point + k_new * (
+        #             pos[0] * np.sin(np.radians(angles)) - pos[1] * np.cos(np.radians(angles))
+        #     )
+        #
+        #     # Apply the weight to the array factor for the nth receiver
+        #     array_factor += receiver_weights[n] * np.exp(1j * phase_shift)
 
     else:
         if geometry == "Curved":
