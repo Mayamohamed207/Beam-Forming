@@ -53,15 +53,15 @@
 - **Predefined Scenarios**: Load and modify pre-configured scenarios inspired by:
   - 5G wireless communications.
   
-   ![ ](Readme/5Greciever.png)
+   ![ ](Readme/5G-reciever.png)
    
   - Ultrasound imaging.
     
-    ![ ](Readme/Ultrasound.png)
+    ![ ](Readme/ultrasound.png)
 
   - Tumor ablation techniques.
  
-      ![ ](Readme/Tumorablation.png)
+      ![ ](Readme/Tumor-ablation.png)
 
 
 
