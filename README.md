@@ -33,6 +33,9 @@
       - Geometry of the array:
         - Linear Geometry: Adjust the distance between emitters.
         - Curved Geometry: Modify the curvature of the array.
+
+ ![ ](ReadMe/transmitter.png)
+
   - **Receiving Mode**:
     - Configure parameters for beam reception:
       - Frequency of the received signal.
@@ -40,25 +43,28 @@
       - Number of receivers in the array.
       - Distance between receivers in the array.
 
+ ![ ](ReadMe/reciever.png)
 
-  
-  ![ ](Readme/Multiple.png)
+
 - **Real-Time Parameter Customization**: Adjust parameters in real-time to observe their impact on the beam profile and interference map.
-  
-  ![ ](Readme/live.gif)
 - **Visualization Tools**: Synchronized viewers to display:
   - Constructive/destructive interference maps.
   - Beam profile for both transmitting and receiving modes.
 - **Predefined Scenarios**: Load and modify pre-configured scenarios inspired by:
   - 5G wireless communications.
+  
+   ![ ](Readme/5Greciever.png)
+   
   - Ultrasound imaging.
-  - Tumor ablation techniques.
+    
+    ![ ](Readme/Ultrasound.png)
 
-  ![ ](Readme/glue1.png)
- <p align="center">
-  <img src="Readme/glue2.png" width="500" style="display: inline-block;" alt="Signal Glue 1"/>
-  <img src="Readme/glue3.png" width="500" style="display: inline-block;" alt="Signal Glue 2"/>
-</p>
+  - Tumor ablation techniques.
+ 
+      ![ ](Readme/Tumorablation.png)
+
+
+
 
 ## Tech Stack
 
