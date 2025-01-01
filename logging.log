@@ -7994,3 +7994,201 @@
 2024-12-23 19:33:31,177 - INFO - Mode changed to: Receiver
 2024-12-23 19:33:31,208 - INFO - Beam profile is computed
 2024-12-23 19:33:31,344 - INFO - Wave pattern updated
+2025-01-01 17:51:47,672 - INFO - initialized
+2025-01-01 17:51:47,673 - INFO - UI initialized
+2025-01-01 17:51:48,604 - INFO - Initial state: {'mode': 'Emitter', 'N': 2, 'f': 500, 'distance': 0.042875, 'direction': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 7, 'curvature': 0.0}
+2025-01-01 17:51:48,606 - INFO - Calculated wavelength: 0.686000, dx: 0.068600
+2025-01-01 17:51:48,606 - INFO - Grid initialized with size: 2, wavelength: 0.686, dx: 0.06860000000000001
+2025-01-01 17:51:48,609 - INFO - Beam profile is computed
+2025-01-01 17:51:48,754 - INFO - Wave pattern updated
+2025-01-01 17:51:48,756 - INFO - Beam profile is computed
+2025-01-01 17:51:48,829 - INFO - Wave pattern updated
+2025-01-01 17:51:48,972 - INFO - Connecting UI
+2025-01-01 17:54:09,207 - INFO - initialized
+2025-01-01 17:54:09,207 - INFO - UI initialized
+2025-01-01 17:54:09,546 - INFO - Initial state: {'mode': 'Emitter', 'N': 2, 'f': 500, 'distance': 0.042875, 'direction': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 7, 'curvature': 0.0}
+2025-01-01 17:54:09,547 - INFO - Calculated wavelength: 0.686000, dx: 0.068600
+2025-01-01 17:54:09,547 - INFO - Grid initialized with size: 2, wavelength: 0.686, dx: 0.06860000000000001
+2025-01-01 17:54:09,548 - INFO - Beam profile is computed
+2025-01-01 17:54:09,628 - INFO - Wave pattern updated
+2025-01-01 17:54:09,630 - INFO - Beam profile is computed
+2025-01-01 17:54:09,698 - INFO - Wave pattern updated
+2025-01-01 17:54:09,824 - INFO - Connecting UI
+2025-01-01 17:55:08,548 - INFO - initialized
+2025-01-01 17:55:08,548 - INFO - UI initialized
+2025-01-01 17:55:08,790 - INFO - Initial state: {'mode': 'Emitter', 'N': 2, 'f': 500, 'distance': 0.042875, 'direction': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 7, 'curvature': 0.0}
+2025-01-01 17:55:08,790 - INFO - Calculated wavelength: 0.686000, dx: 0.068600
+2025-01-01 17:55:08,790 - INFO - Grid initialized with size: 2, wavelength: 0.686, dx: 0.06860000000000001
+2025-01-01 17:55:08,791 - INFO - Beam profile is computed
+2025-01-01 17:55:08,871 - INFO - Wave pattern updated
+2025-01-01 17:55:08,873 - INFO - Beam profile is computed
+2025-01-01 17:55:08,936 - INFO - Wave pattern updated
+2025-01-01 17:55:09,064 - INFO - Connecting UI
+2025-01-01 17:55:55,662 - INFO - initialized
+2025-01-01 17:55:55,662 - INFO - UI initialized
+2025-01-01 17:55:55,980 - INFO - Initial state: {'mode': 'Emitter', 'N': 2, 'f': 500, 'distance': 0.042875, 'direction': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 7, 'curvature': 0.0}
+2025-01-01 17:55:55,981 - INFO - Calculated wavelength: 0.686000, dx: 0.068600
+2025-01-01 17:55:55,981 - INFO - Grid initialized with size: 2, wavelength: 0.686, dx: 0.06860000000000001
+2025-01-01 17:55:55,982 - INFO - Beam profile is computed
+2025-01-01 17:55:56,061 - INFO - Wave pattern updated
+2025-01-01 17:55:56,062 - INFO - Beam profile is computed
+2025-01-01 17:55:56,126 - INFO - Wave pattern updated
+2025-01-01 17:55:56,260 - INFO - Connecting UI
+2025-01-01 18:15:07,757 - INFO - initialized
+2025-01-01 18:15:07,757 - INFO - UI initialized
+2025-01-01 18:15:08,597 - INFO - Initial state: {'mode': 'Emitter', 'N': 2, 'f': 500, 'distance': 0.042875, 'direction': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 7, 'curvature': 0.0}
+2025-01-01 18:15:08,597 - INFO - Calculated wavelength: 0.686000, dx: 0.068600
+2025-01-01 18:15:08,597 - INFO - Grid initialized with size: 2, wavelength: 0.686, dx: 0.06860000000000001
+2025-01-01 18:15:08,613 - INFO - Beam profile is computed
+2025-01-01 18:15:08,709 - INFO - Wave pattern updated
+2025-01-01 18:15:08,725 - INFO - Beam profile is computed
+2025-01-01 18:15:08,788 - INFO - Wave pattern updated
+2025-01-01 18:15:08,932 - INFO - Connecting UI
+2025-01-01 18:15:12,298 - INFO - Loaded scenario: 5G_Receiver Mode
+2025-01-01 18:15:12,302 - INFO - Beam profile is computed
+2025-01-01 18:15:12,370 - INFO - Wave pattern updated
+2025-01-01 18:15:12,370 - INFO - Speed updated to: 343
+2025-01-01 18:15:12,374 - INFO - Beam profile is computed
+2025-01-01 18:15:12,473 - INFO - Wave pattern updated
+2025-01-01 18:15:12,651 - INFO - Beam profile is computed
+2025-01-01 18:15:12,754 - INFO - Wave pattern updated
+2025-01-01 18:15:12,943 - INFO - Beam profile is computed
+2025-01-01 18:15:13,041 - INFO - Wave pattern updated
+2025-01-01 18:15:13,218 - INFO - Calculated wavelength: 0.343000, dx: 0.034300
+2025-01-01 18:15:13,218 - INFO - Grid initialized with size: 2, wavelength: 0.343, dx: 0.034300000000000004
+2025-01-01 18:15:13,219 - INFO - Speed updated to: 343
+2025-01-01 18:15:13,220 - INFO - Mode changed to: Receiver
+2025-01-01 18:15:13,236 - INFO - Beam profile is computed
+2025-01-01 18:15:13,360 - INFO - Wave pattern updated
+2025-01-01 18:15:13,571 - INFO - Beam profile is computed
+2025-01-01 18:15:13,725 - INFO - Wave pattern updated
+2025-01-01 18:15:13,932 - INFO - Speed updated to: 343
+2025-01-01 18:15:13,932 - INFO - Mode changed to: Receiver
+2025-01-01 18:15:13,949 - INFO - Beam profile is computed
+2025-01-01 18:15:14,077 - INFO - Wave pattern updated
+2025-01-01 19:01:32,415 - INFO - initialized
+2025-01-01 19:01:32,415 - INFO - UI initialized
+2025-01-01 19:01:33,028 - INFO - Initial state: {'mode': 'Emitter', 'N': 2, 'f': 500, 'distance': 0.042875, 'direction': 30, 'geometry': 'Linear', 'scenario': 'Default Mode', 'sizeX': 5, 'sizeY': 7, 'curvature': 0.0}
+2025-01-01 19:01:33,028 - INFO - Calculated wavelength: 0.686000, dx: 0.068600
+2025-01-01 19:01:33,028 - INFO - Grid initialized with size: 2, wavelength: 0.686, dx: 0.06860000000000001
+2025-01-01 19:01:33,031 - INFO - Beam profile is computed
+2025-01-01 19:01:33,118 - INFO - Wave pattern updated
+2025-01-01 19:01:33,121 - INFO - Beam profile is computed
+2025-01-01 19:01:33,186 - INFO - Wave pattern updated
+2025-01-01 19:01:33,334 - INFO - Connecting UI
+2025-01-01 19:02:36,292 - INFO - Loaded scenario: 5G_Receiver Mode
+2025-01-01 19:02:36,292 - INFO - Beam profile is computed
+2025-01-01 19:02:36,371 - INFO - Wave pattern updated
+2025-01-01 19:02:36,371 - INFO - Speed updated to: 343
+2025-01-01 19:02:36,375 - INFO - Beam profile is computed
+2025-01-01 19:02:36,467 - INFO - Wave pattern updated
+2025-01-01 19:02:36,695 - INFO - Beam profile is computed
+2025-01-01 19:02:36,792 - INFO - Wave pattern updated
+2025-01-01 19:02:37,018 - INFO - Beam profile is computed
+2025-01-01 19:02:37,113 - INFO - Wave pattern updated
+2025-01-01 19:02:37,320 - INFO - Calculated wavelength: 0.343000, dx: 0.034300
+2025-01-01 19:02:37,320 - INFO - Grid initialized with size: 2, wavelength: 0.343, dx: 0.034300000000000004
+2025-01-01 19:02:37,320 - INFO - Speed updated to: 343
+2025-01-01 19:02:37,320 - INFO - Mode changed to: Receiver
+2025-01-01 19:02:37,336 - INFO - Beam profile is computed
+2025-01-01 19:02:37,464 - INFO - Wave pattern updated
+2025-01-01 19:02:37,716 - INFO - Beam profile is computed
+2025-01-01 19:02:37,872 - INFO - Wave pattern updated
+2025-01-01 19:02:38,129 - INFO - Speed updated to: 343
+2025-01-01 19:02:38,129 - INFO - Mode changed to: Receiver
+2025-01-01 19:02:38,144 - INFO - Beam profile is computed
+2025-01-01 19:02:38,288 - INFO - Wave pattern updated
+2025-01-01 19:03:15,853 - INFO - Loaded scenario: Ultrasound
+2025-01-01 19:03:15,876 - INFO - Beam profile is computed
+2025-01-01 19:03:16,009 - INFO - Wave pattern updated
+2025-01-01 19:03:16,009 - INFO - Speed updated to: 1500
+2025-01-01 19:03:16,011 - INFO - Mode changed to: Transmitter
+2025-01-01 19:03:16,029 - INFO - Beam profile is computed
+2025-01-01 19:03:16,105 - INFO - Wave pattern updated
+2025-01-01 19:03:16,232 - INFO - Beam profile is computed
+2025-01-01 19:03:16,350 - INFO - Wave pattern updated
+2025-01-01 19:03:16,502 - INFO - Beam profile is computed
+2025-01-01 19:03:16,774 - INFO - Wave pattern updated
+2025-01-01 19:03:17,041 - INFO - Calculated wavelength: 0.050000, dx: 0.005000
+2025-01-01 19:03:17,041 - INFO - Grid initialized with size: 2, wavelength: 0.05, dx: 0.005
+2025-01-01 19:03:17,043 - INFO - Mode changed to: Transmitter
+2025-01-01 19:03:17,059 - INFO - Beam profile is computed
+2025-01-01 19:03:17,248 - INFO - Wave pattern updated
+2025-01-01 19:03:17,471 - INFO - Beam profile is computed
+2025-01-01 19:03:17,648 - INFO - Wave pattern updated
+2025-01-01 19:03:32,217 - INFO - Loaded scenario: Tumor Ablation
+2025-01-01 19:03:32,243 - INFO - Beam profile is computed
+2025-01-01 19:03:32,415 - INFO - Wave pattern updated
+2025-01-01 19:03:32,415 - INFO - Speed updated to: 1500
+2025-01-01 19:03:32,436 - INFO - Beam profile is computed
+2025-01-01 19:03:32,572 - INFO - Wave pattern updated
+2025-01-01 19:03:32,700 - WARNING - posx and posy should be finite values
+2025-01-01 19:03:32,700 - WARNING - posx and posy should be finite values
+2025-01-01 19:03:32,716 - INFO - Beam profile is computed
+2025-01-01 19:03:32,906 - INFO - Wave pattern updated
+2025-01-01 19:03:33,212 - INFO - Beam profile is computed
+2025-01-01 19:03:33,378 - INFO - Wave pattern updated
+2025-01-01 19:03:33,486 - INFO - Calculated wavelength: 0.500000, dx: 0.050000
+2025-01-01 19:03:33,486 - INFO - Grid initialized with size: 2, wavelength: 0.5, dx: 0.05
+2025-01-01 19:03:33,487 - INFO - Mode changed to: Transmitter
+2025-01-01 19:03:33,506 - INFO - Beam profile is computed
+2025-01-01 19:03:33,583 - INFO - Wave pattern updated
+2025-01-01 19:03:33,729 - INFO - Beam profile is computed
+2025-01-01 19:03:33,799 - INFO - Wave pattern updated
+2025-01-01 19:03:46,246 - INFO - Loaded scenario: 5G_Transmitter Mode
+2025-01-01 19:03:46,269 - INFO - Beam profile is computed
+2025-01-01 19:03:46,338 - INFO - Wave pattern updated
+2025-01-01 19:03:46,338 - INFO - Speed updated to: 300000000.0
+2025-01-01 19:03:46,354 - INFO - Beam profile is computed
+2025-01-01 19:03:46,424 - INFO - Wave pattern updated
+2025-01-01 19:03:46,537 - INFO - Beam profile is computed
+2025-01-01 19:03:46,593 - INFO - Wave pattern updated
+2025-01-01 19:03:46,720 - INFO - Beam profile is computed
+2025-01-01 19:03:46,796 - INFO - Wave pattern updated
+2025-01-01 19:03:46,916 - WARNING - posx and posy should be finite values
+2025-01-01 19:03:46,916 - WARNING - posx and posy should be finite values
+2025-01-01 19:03:46,916 - INFO - Calculated wavelength: 1.500000, dx: 0.150000
+2025-01-01 19:03:46,916 - INFO - Grid initialized with size: 2, wavelength: 1.5, dx: 0.15
+2025-01-01 19:03:46,916 - INFO - Mode changed to: Transmitter
+2025-01-01 19:03:46,918 - INFO - Beam profile is computed
+2025-01-01 19:03:46,967 - INFO - Wave pattern updated
+2025-01-01 19:03:47,053 - INFO - Beam profile is computed
+2025-01-01 19:03:47,100 - INFO - Wave pattern updated
+2025-01-01 19:08:00,543 - INFO - Loaded scenario: 5G_Receiver Mode
+2025-01-01 19:08:00,546 - INFO - Beam profile is computed
+2025-01-01 19:08:00,649 - INFO - Wave pattern updated
+2025-01-01 19:08:00,649 - INFO - Speed updated to: 343
+2025-01-01 19:08:00,649 - INFO - Speed updated to: 343
+2025-01-01 19:08:00,664 - INFO - Beam profile is computed
+2025-01-01 19:08:00,742 - INFO - Wave pattern updated
+2025-01-01 19:08:00,897 - INFO - Mode changed to: Receiver
+2025-01-01 19:08:00,911 - INFO - Beam profile is computed
+2025-01-01 19:08:00,987 - INFO - Wave pattern updated
+2025-01-01 19:08:01,130 - INFO - Calculated wavelength: 0.343000, dx: 0.034300
+2025-01-01 19:08:01,131 - INFO - Grid initialized with size: 2, wavelength: 0.343, dx: 0.034300000000000004
+2025-01-01 19:08:01,131 - INFO - Speed updated to: 343
+2025-01-01 19:08:01,131 - INFO - Mode changed to: Receiver
+2025-01-01 19:08:01,149 - INFO - Beam profile is computed
+2025-01-01 19:08:01,298 - INFO - Wave pattern updated
+2025-01-01 19:08:01,549 - INFO - Beam profile is computed
+2025-01-01 19:08:01,675 - INFO - Wave pattern updated
+2025-01-01 19:08:20,959 - INFO - Beam profile is computed
+2025-01-01 19:08:21,118 - INFO - Wave pattern updated
+2025-01-01 19:08:24,750 - INFO - Beam profile is computed
+2025-01-01 19:08:24,916 - INFO - Wave pattern updated
+2025-01-01 19:08:28,731 - INFO - Beam profile is computed
+2025-01-01 19:08:28,905 - INFO - Wave pattern updated
+2025-01-01 19:08:29,286 - INFO - Beam profile is computed
+2025-01-01 19:08:29,445 - INFO - Wave pattern updated
+2025-01-01 19:08:29,747 - INFO - Beam profile is computed
+2025-01-01 19:08:29,906 - INFO - Wave pattern updated
+2025-01-01 19:08:31,989 - INFO - Beam profile is computed
+2025-01-01 19:08:32,219 - INFO - Wave pattern updated
+2025-01-01 19:08:32,639 - INFO - Beam profile is computed
+2025-01-01 19:08:32,822 - INFO - Wave pattern updated
+2025-01-01 19:08:33,196 - INFO - Beam profile is computed
+2025-01-01 19:08:33,351 - INFO - Wave pattern updated
+2025-01-01 19:08:42,591 - INFO - Beam profile is computed
+2025-01-01 19:08:42,715 - INFO - Wave pattern updated
+2025-01-01 19:08:44,664 - INFO - Beam profile is computed
+2025-01-01 19:08:44,792 - INFO - Wave pattern updated

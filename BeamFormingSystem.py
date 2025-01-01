@@ -139,8 +139,8 @@ class BeamForming:
         self.profile_ax.set_theta_zero_location("N")
         self.profile_ax.set_theta_direction(-1)  # Counterclockwise direction
         self.profile_ax.set_xticks(np.radians(np.arange(-90, 91, 5)))
-        self.profile_ax.tick_params(axis='both', colors=redColor)
-        self.profile_ax.grid(True, color=redColor)
+        self.profile_ax.tick_params(axis='both', colors=greenColor)
+        self.profile_ax.grid(True, color=greenColor)
 
         self.fig.subplots_adjust(left=0.12, right=0.79, top=1.0, bottom=0.04)
         self.profile_ax.set_aspect('auto')
