@@ -53,15 +53,15 @@
 - **Predefined Scenarios**: Load and modify pre-configured scenarios inspired by:
   - 5G wireless communications.
   
-   ![ ](Readme/5G-reciever.png)
+![ ](ReadMe/5G-reciever.png)
    
   - Ultrasound imaging.
     
-    ![ ](Readme/ultrasound.png)
+![ ](ReadMe/ultrasound.png)
 
   - Tumor ablation techniques.
  
-      ![ ](Readme/Tumor-ablation.png)
+![ ](ReadMe/Tumor-ablation.png)
 
 
 
@@ -131,7 +131,7 @@ This will start the **2D beam-forming simulator** application locally.
 
 ## Learn More
 
-To learn more about PyQt5 and Beamforming principles, check out their official documentation:
+To learn more about PyQt5 and Beamforming principles, check out these recources:
 
 - [PyQt5 Documentation](https://riverbankcomputing.com/software/pyqt/intro)
 - [Beamforming Basics](https://www.youtube.com/watch?v=A1n5Hhwtz78)
